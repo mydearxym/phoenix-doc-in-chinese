@@ -38,3 +38,32 @@ $ mix archive.install https://github.com/phoenixframework/phoenix/releases/downl
 > $ mix archive.install /path/to/local/phoenix_new.ez
 > ```
 
+
+##### Plug, Cowboy, and Ecto
+这些是 Phonenix 自带的组件，我们并不需要显示的去安装他们，如果我们使用`mix`安装第三方依赖以及生成项目的话，`mix`会自动帮我们安装好，否则，`Phoenix`会给予提示。
+
+##### node.js  (>= 0.12.0)
+Node is an optional dependency. Phoenix will use brunch.io to compile static assets (javascript, css, etc), by default. Brunch.io uses the node package manager (npm) to install its dependencies, and npm requires node.js.
+
+If we don't have any static assets, or we want to use another build tool, we can pass the --no-brunch flag when creating a new application and node won't be required at all.
+
+node是一个可选的依赖包。 `Phoenix`使用 [brunch.io](http://brunch.io/) 打包静态文件（javascript,css,等等），而 brunch 工具依赖于 node.js.
+
+如果我们的应用没有静态资源或者我们想用其他的构建打包工具，我们可以在创建项目的时候传递`--no-brunch`选项，在这种情况下，不需要安装node.js。
+
+这里译者省去了`node.js`的安装部分。。。
+
+##### PostgreSQL
+
+`Phonenix` 默认使用`PostgreSQL`关系型数据库, 但我们也可以在创建项目时使用 `--database mysal` 选项转而使用MySQL。
+
+在接下来的章节中使用 Ecto models 时，我们会默认使用 `PostgerSQL` 和 `Postgrex 适配器`,为了跟上这些例子，我们应该安装 `PostgerSQL`, 安装指南[参见这里](https://wiki.postgresql.org/wiki/Detailed_installation_guides)
+
+`Postgrex` 是 `Phoenix`的默认依赖，会在我们启动项目的时候自动安装。
+
+##### inotify-tools (for linux users)
+
+这个工具是 `Phoenix` 监测文件系统用于实现实时代码刷新的(`live code reloading`)。(Mac 和 Win用户不需要理会)。
+
+Linux用户的[安装指南](https://github.com/rvoicilas/inotify-tools/wiki)
+
