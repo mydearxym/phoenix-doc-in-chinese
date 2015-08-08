@@ -1,4 +1,3 @@
-
 ### overview
 
 [Phoneix](http://www.phoenixframework.org/) 是一个基于 [Elixir](http://elixir-lang.org/) 语言的遵循 MVC 模式的web开发框架。因此如果你有其他web开发框架比如 RoR 或者 Django的使用经验，其中的很多组件和概念会看起来很眼熟。
