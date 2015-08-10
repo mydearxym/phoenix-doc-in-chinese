@@ -22,6 +22,7 @@ phoenix 框架的中文文档
 
 [elixir视频教程](http://elixir-cn.com/categories/5)
 
+[ionichina](http://ionichina.com/)  
 
 
 
