@@ -20,6 +20,8 @@ phoenix 框架的中文文档
 
 [React Native 客户端！](https://cnodejs.org/topic/559bd1b91e5c761761468884)
 
+[elixir视频教程](http://elixir-cn.com/categories/5)
+
 
 
 
