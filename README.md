@@ -15,3 +15,8 @@ phoenix 框架的中文文档
 [论坛技术分析](https://cnodejs.org/topic/535601a20d7d0faf140303d8)
 
 
+[coding 2.0界面与设计](https://blog.coding.net/blog/coding2-feasibility-trial)
+
+
+
+
