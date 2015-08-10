@@ -26,6 +26,7 @@ phoenix 框架的中文文档
 
 [参考php社区](https://phphub.org/?source=ionichina)
 
+[好文](https://ruby-china.org/topics/21520) 
 
 
 
