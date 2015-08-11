@@ -29,6 +29,6 @@ phoenix 框架的中文文档
 [好文](https://ruby-china.org/topics/21520) 
 
 
-
+[meteor中文文档](https://github.com/MeteorHub/meteor-doc-cn)
 
 
