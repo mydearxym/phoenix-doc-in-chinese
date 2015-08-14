@@ -1,10 +1,10 @@
-#### Intallation
+### Intallation
 
 在之前的 Overview 章节中我们已经大致了解了 Phoenix 的生态系统和各组件之间的相互关联。现在，在开始正式学习之前，让我们来安装一些必要的软件。
 
 请确保下面列出的软件包已经安装在您的系统中，以避免由此导致的令人沮丧的问题。
 
-##### Elixir
+#### Elixir
 
 `Phoenix`和我们即将编写的应用都是基于 Elixir语言。如果你需要帮助，Elixir 的官网上有专门的[安装引导](http://elixir-lang.org/install.html)。
 
@@ -15,13 +15,13 @@
 $ mix local.hex
 ```
 
-##### Erlang
+#### Erlang
 
 Elixir 代码会编译成 Erlang 的字节码，如果没有 Erlang，Elixir将无法运行在Erlang虚拟机上。
 
 [Elixir的安装指导](http://elixir-lang.org/install.html)里有明确的步骤，这里不再赘述。
 
-##### Phoenix 
+#### Phoenix 
 
 Once we have Elixir and Erlang, we are ready to install the Phoenix mix archive. A mix archive is a zip file which contains an application as well as its compiled beam files. It is tied to a specific version of the application. The archive is what we will use to generate a new, base Phoenix application which we can build from.
 
@@ -39,13 +39,10 @@ $ mix archive.install https://github.com/phoenixframework/phoenix/releases/downl
 > ```
 
 
-##### Plug, Cowboy, and Ecto
+#### Plug, Cowboy, and Ecto
 这些是 Phonenix 自带的组件，我们并不需要显示的去安装他们，如果我们使用`mix`安装第三方依赖以及生成项目的话，`mix`会自动帮我们安装好，否则，`Phoenix`会给予提示。
 
-##### node.js  (>= 0.12.0)
-Node is an optional dependency. Phoenix will use brunch.io to compile static assets (javascript, css, etc), by default. Brunch.io uses the node package manager (npm) to install its dependencies, and npm requires node.js.
-
-If we don't have any static assets, or we want to use another build tool, we can pass the --no-brunch flag when creating a new application and node won't be required at all.
+#### node.js  (>= 0.12.0)
 
 node是一个可选的依赖包。 `Phoenix`使用 [brunch.io](http://brunch.io/) 打包静态文件（javascript,css,等等），而 brunch 工具依赖于 node.js.
 
@@ -53,7 +50,7 @@ node是一个可选的依赖包。 `Phoenix`使用 [brunch.io](http://brunch.io/
 
 这里译者省去了`node.js`的安装部分。。。
 
-##### PostgreSQL
+#### PostgreSQL
 
 `Phonenix` 默认使用`PostgreSQL`关系型数据库, 但我们也可以在创建项目时使用 `--database mysal` 选项转而使用MySQL。
 
@@ -61,7 +58,7 @@ node是一个可选的依赖包。 `Phoenix`使用 [brunch.io](http://brunch.io/
 
 `Postgrex` 是 `Phoenix`的默认依赖，会在我们启动项目的时候自动安装。
 
-##### inotify-tools (for linux users)
+#### inotify-tools (for linux users)
 
 这个工具是 `Phoenix` 监测文件系统用于实现实时代码刷新的(`live code reloading`)。(Mac 和 Win用户不需要理会)。
 
