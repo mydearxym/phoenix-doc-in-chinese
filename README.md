@@ -6,6 +6,7 @@ phoenix 框架的中文文档
 
 [主页](http://www.phoenixframework.org/docs/controllers)
 
+[github](https://github.com/phoenixframework/phoenix_guides)
 
 [Elixir中文](https://github.com/elixir-lang-china/elixir_guide_cn)
 
