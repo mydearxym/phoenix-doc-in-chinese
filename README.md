@@ -13,6 +13,9 @@ phoenix 框架的中文文档
 [Elixir中文](https://github.com/elixir-lang-china/elixir_guide_cn)
 
 
+[Elixir opt中文](https://github.com/mydearxym/elixir_adv)
+
+
 [论坛](https://github.com/cnodejs/nodeclub)
 
 [论坛技术分析](https://cnodejs.org/topic/535601a20d7d0faf140303d8)
