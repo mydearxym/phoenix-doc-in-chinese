@@ -8,6 +8,8 @@ phoenix 框架的中文文档
 
 [github](https://github.com/phoenixframework/phoenix_guides)
 
+[Elixir gitbook](http://udn.yyuap.com/doc/elixir_guide_cn/getting_started/Chapter20.html)
+
 [Elixir中文](https://github.com/elixir-lang-china/elixir_guide_cn)
 
 
