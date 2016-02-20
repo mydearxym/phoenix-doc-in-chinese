@@ -6,7 +6,7 @@
 在我们开始前，让我们先来看看 [phoenix 的 安装指南](http://www.phoenixframework.org/docs/installation), 在安装了必要的依赖后，我们就可以躁起来了。
 
 
-现在，我们的机器上应该已经安装好了 `Elixir`, `Erlang`, `Hex`和`Phoenix工具集`,同时 `PostgreSQL`和`Node.js`也应该准备就绪了。
+现在，我们的机器上应该已经安装好了 `Elixir`, `Erlang`, `Hex` 和 `Phoenix工具集`,同时 `PostgreSQL`和`Node.js`也应该准备就绪了。
 
 让我们开始吧！
 
