@@ -1,12 +1,14 @@
-Phoenix views have two main jobs. First and foremost, they render templates (this includes layouts). The core function involved in rendering, `render/3`, is defined in Phoenix itself in the `Phoenix.View` module. Views also provide functions which take raw data and make it easier for templates to consume. If you are familiar with decorators or the facade pattern, this is similar.
 
-Phoenix assumes a strong naming convention from controllers to views to the templates they render. The `PageController` requires a `PageView` to render templates in the `web/templates/page` directory.
+Phoenix 视图 (views) 有两个主要的工作，第一个，也是最重要的一个是渲染 `模板(template)`, 这里用到的核心函数 `render/3` 是由 `Phoenix.View` 定义的。另外, 视图 (View) 提供一些函数将原始数据转换成 视图(templates) 易于识别的格式 (原文: Views also provide functions which take raw data and make it easier for templates to consume. ), 如果你熟悉装饰器或者 facade pattern (更好的翻译？), 你会发现这很类似。
 
-If we want to, we can change the directory Phoenix considers to be the template root. Phoenix provides a `view/0` function in the `HelloPhoenix.Web` module defined in `web/web.ex`. The first line of `view/0` allows us to change our root directory by changing the value assigned to the `:root` key.
+Phoenix 遵循习惯优于配置的原则，即 `PageController` 需要一个 `PageView` 来渲染位于 `web/templates/page`目录下的模板。
 
-A newly generated Phoenix application has three view modules - `ErrorView`, `LayoutView`, and `PageView` -  which are all in the, `web/views` directory.
+如果你愿意，你甚至可以改变模板根目录 (the template root)。Phoenix 为我们提供了一个 `view/0` 函数( 用法是将目录名称赋值给 :key 键 ) 用来改变 root 目录，该函数定义在 `HelloPhoenix.Web` 模块的 `web/web.ex` 文件中。
 
-Let's take a quick look at the `LayoutView`.
+
+一个新生成的 Phoenix 应用有三个默认视图模块 (view modules) - `ErrorView`, `LayoutView`, 以及 `PageView`, 它们位于 `web/views` 目录下。
+
+让我们看看 `LayoutView`。
 
 ```elixir
 defmodule HelloPhoenix.LayoutView do
@@ -14,23 +16,23 @@ defmodule HelloPhoenix.LayoutView do
 end
 ```
 
-That's simple enough. There's only one line, `use HelloPhoenix.Web, :view`. This line calls the `view/0` function we just saw above. Besides allowing us to change our template root, `view/0` exercises the `__using__` macro in the `Phoenix.View` module. It also handles any module imports or aliases our application's view modules might need.
+很简单，只有一行代码, `use HelloPhoenix.Web, :view`。这行代码调用了我们上面提到的 `view/0` 函数, 同时它也允许改变模板的根目录，`view/0` 使用了 `__using__` 宏( 定义在 `Phoenix.View` 中). 它同时会为我们处理好(下一步可能用到的)引入的模块或者 view 模块中的别名等。
 
-At the top of this guide, we mentioned that views are a place to put functions for use in our templates. Let's experiment with that a little bit.
+在这篇文档的最开头，我们提到了可以在视图（views）里放置一些在 templates 中使用的函数，我们来尝试一下。
 
-Let's open up our application layout template, `templates/layout/app.html.eex`, and change this line,
+我们打开文件 `templates/layout/app.html.eex` , 然后改变这行代码。
 
 ```html
 <title>Hello Phoenix!</title>
 ```
 
-to call a `title/0` function, like this.
+让它能调用 `title/0` 函数，像这样。
 
 ```elixir
 <title><%= title %></title>
 ```
 
-Now let's add a `title/0` function to our `LayoutView`.
+然后在 `LayoutView` 中添加 `title/0` 函数。
 
 ```elixir
 defmodule HelloPhoenix.LayoutView do
@@ -42,15 +44,17 @@ defmodule HelloPhoenix.LayoutView do
 end
 ```
 
-When we reload the Welcome to Phoenix page, we should see our new title.
+当我们刷新那个欢迎页面，我们会看到一个新的标题。
 
-The `<%=` and `%>` are from the Elixir [EEx](http://elixir-lang.org/docs/stable/eex/) project. They enclose executable Elixir code within a template. The `=` tells EEx to print the result. If the `=` is not there, EEx will still execute the code, but there will be no output. In our example, we are calling the `title/0` function from our `LayoutView` and printing the output into the title tag.
+`<%=` 和 `%>` 来自 Elixir [EEx](http://elixir-lang.org/docs/stable/eex/) 工程，他们把可执行的 Elixir 代码包裹在其中，`=` 符号告诉 EEx 输出出结果，如果不加 `=` 符号, EEx 依然会执行代码，只是不会将结果输出出来。在这个例子中，我们调用 `LayoutView` 中的 `title/0` 函数，然后将结果输出到模板的 title 标签 ( title tag ) 去中。
+
 
 Note that we didn't need to fully qualify `title/0` with `HelloPhoenix.LayoutView` because our `LayoutView` actually does the rendering.
 
-When we `use HelloPhoenix.Web, :view`, we get other conveniences as well. Since the `view/0` function imports `HelloPhoenix.Router.Helpers`, we don't have to fully qualify path helpers in templates. Let's see how that works by changing the template for our Welcome to Phoenix page.
 
-Let's open up the `templates/page/index.html.eex` and locate this stanza.
+由于我们使用了 `use HelloPhoenix.Web, :view`, 我们还得到了额外的好处，因为 `view/0` 函数 imports 了 `HelloWhoenix.Router.Helpers`, 我们就不用再在 templates 显式的引用 path helpers 了，我们改变一下 欢迎页面的 template 来看一个实际的例子。
+
+我们打开 `templates/page/index.html.eex` 看一看。
 
 ```html
 <div class="jumbotron">
@@ -59,7 +63,7 @@ Let's open up the `templates/page/index.html.eex` and locate this stanza.
 </div>
 ```
 
-Then let's add a line with a link back to the same page. (The objective is to see how path helpers respond in a template, not to add any functionality.)
+现在我们加一行超链接使其能返回同一页（这个功能没什么实际的意义，只是为了演示 path helpers 在 template 中是怎样工作的。）
 
 ```html
 <div class="jumbotron">
@@ -69,13 +73,14 @@ Then let's add a line with a link back to the same page. (The objective is to se
 </div>
 ```
 
-Now we can reload the page and view source to see what we have.
+刷新页面后，当我们查看网页源代码时，我们会看到：
 
 ```html
 <a href="/">Link back to this page</a>
 ```
 
-Great, `page_path/2` evaluated to `/` as we would expect, and we didn't need to qualify it with `HelloPhoenix.View`.
+不错， `page_path/2` 按我们希望的被编译成了 `/`, 并且我们没有显式的引入 `HelloPhoenix.View` (原文：and we didn't need to qualify it with `HelloPhoenix.View`.)
+
 
 ### More About Views
 
