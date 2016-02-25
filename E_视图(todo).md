@@ -275,10 +275,7 @@ end
 
 我们重新访问 [http://localhost:4000/such/a/wrong/path](http://localhost:4000/such/a/wrong/path), 会得到一个不错的页面了。
 
-
-
-
-It is worth noting that we did not render our `not_found.html.eex` template through our application layout, even though we want our error page to have the look and feel of the rest of our site. The main reason is that it's easy to run into edge case issues while handling errors globally.
+需要指出的是，尽管我们想让错误页面和这个网站的风格保持一致，但这里并没有将 `not_found.html.eex` 模板装入应用的布局中。 (之后一句不知道怎么翻：The main reason is that it's easy to run into edge case issues while handling errors globally.)
 
 如果我们想在应用的布局已经 `not_found.html.eex` 模板之间减少重复，我们可以复用 header 和 footer 的部分，详情可以参考 [Template Guide](http://www.phoenixframework.org/docs/templates#section-shared-templates-across-views)。
 
