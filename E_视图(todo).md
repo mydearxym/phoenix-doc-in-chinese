@@ -82,13 +82,13 @@ Note that we didn't need to fully qualify `title/0` with `HelloPhoenix.LayoutVie
 不错， `page_path/2` 按我们希望的被编译成了 `/`, 并且我们没有显式的引入 `HelloPhoenix.View` (原文：and we didn't need to qualify it with `HelloPhoenix.View`.)
 
 
-### More About Views
+### 关于视图的更多话题 ()More About Views)
 
-You might be wondering how views are able to work so closely with templates.
+你也许会好奇视图(views) 和模板(templates) 是怎样一起紧密协同工作的。
 
-The `Phoenix.View` module gains access to template behavior via the `use Phoenix.Template` line in its `__using__/1` macro. `Phoenix.Template` provides many convenience methods for working with templates - finding them, extracting their names and paths, and much more.
+`Phoenix.View` 通过这行 `use Phoenix.Template` 宏获得模板（template, 也就是 `Phoenix.Template` ）的提供的各种方便的方法，比如 -- 查找，抽象名字和路径等等。
 
-Let's experiment a little with one of the generated views Phoenix provides us, `web/views/page_view.ex`. We'll add a `message/0` function to it, like this.
+我们在 Phoenix 默认生成的 `web/views/page_view.ex` 文件中做个小实验，我们增加一个 `message/0` 函数，像这样：
 
 ```elixir
 defmodule HelloPhoenix.PageView do
@@ -100,32 +100,32 @@ defmodule HelloPhoenix.PageView do
 end
 ```
 
-Now let's create a new template to play around with, `web/templates/page/test.html.eex`.
+然后我们创建一个新的模板 `web/templates/page/test.html.eex`。
 
 ```html
 This is the message: <%= message %>
 ```
-
-This doesn't correspond to any action in our controller, but we'll exercise it in an `iex` session. At the root of our project, we can run `iex -S mix`, and then explicitly render our template.
+这个模板并不对应我们 controller 中的任何 action, 但我们可以在交互式的 `iex` 中运行它，在项目根目录下，运行 `iex -S mix`, 然后明确的渲染我们的模板。
 
 ```console
 iex(1)> Phoenix.View.render(HelloPhoenix.PageView, "test.html", %{})
   {:safe, [["" | "This is the message: "] | "Hello from the view!"]}
 ```
-As we can see, we're calling `render/3` with the individual view responsible for our test template, the name of our test template, and an empty map representing any data we might have wanted to pass in.
 
-The return value is a tuple beginning with the atom `:safe` and the resultant string of the interpolated template.
+如你所见, 我们调用的 `render/3` 函数接受三个参数，独立的视图(HelloPhoenix.PageView), 我们模板的名字，以及一个供传递可能参数的键值对。
 
-"Safe" here means that Phoenix has escaped the contents of our rendered template. Phoenix defines its own `Phoenix.HTML.Safe` protocol with implementations for atoms, bitstrings, lists, integers, floats, and tuples to handle this escaping for us as our templates are rendered into strings.
+返回值是一个以 `:safe` 原子开头的元组 (tuple), 包含模板中插值字符的返回值(原文：the resultant string of the interpolated template)。
 
-What happens if we assign some key value pairs to the third argument of `render/3`? In order to find out, we need to change the template just a bit.
+这里的 "Safe" 是指 Phoenix 已经帮我们转义了 (escaped)  模板中返回的内容。Phoenix 定义了自己的 `Phoenix.HTML.Safe` 协议，并将其实现到 atoms, bitstrings, list, integers, floats, 和 tuples 来接收从模板内容转义到字符串的内容。(原文：Phoenix defines its own `Phoenix.HTML.Safe` protocol with implementations for atoms, bitstrings, lists, integers, floats, and tuples to handle this escaping for us as our templates are rendered into strings.)
+
+如果我们给`render/3` 传递第三个参数会发生什么呢？ 我们先改变一下模板 (template)。
 
 ```html
 I came from assigns: <%= @message %>
 This is the message: <%= message %>
 ```
 
-Note the `@` in the top line. Now if we change our function call, we see a different rendering after recompiling `PageView` module.
+注意上面那行中的 `@` 符号, 现在当我们改变函数调用，就会看到 `PageView` 模块渲染出了不同的结果。
 
 ```console
 iex(2)> r HelloPhoenix.PageView
@@ -137,7 +137,7 @@ iex(3)> Phoenix.View.render(HelloPhoenix.PageView, "test.html", message: "Assign
   [[[["" | "I came from assigns: "] | "Assigns has an @."] |
   "\nThis is the message: "] | "Hello from the view!"]}
  ```
-Let's test out the HTML escaping, just for fun.
+ 我们再测试一下 HTML 的转义, just for fun 。
 
 ```console
 iex(4)> Phoenix.View.render(HelloPhoenix.PageView, "test.html", message: "<script>badThings();</script>")
@@ -147,7 +147,7 @@ iex(4)> Phoenix.View.render(HelloPhoenix.PageView, "test.html", message: "<scrip
     "\nThis is the message: "] | "Hello from the view!"]}
 ```
 
-If we need only the rendered string, without the whole tuple, we can use the `render_to_iodata/3`.
+如果我们只想得到字符串而不是整个元组，我们可以使用 `render_to_iodata/3`。
 
  ```console
  iex(5)> Phoenix.View.render_to_iodata(HelloPhoenix.PageView, "test.html", message: "Assigns has an @.")
@@ -155,21 +155,21 @@ If we need only the rendered string, without the whole tuple, we can use the `re
    "\nThis is the message: "] | "Hello from the view!"]
   ```
 
-### A Word About Layouts
+### 关于布局 ( A Word About Layouts )
 
-Layouts are just templates. They have a view, just like other templates. In a newly generated app, this is `web/views/layout_view.ex`. You may be wondering how the string resulting from a rendered view ends up inside a layout. That's a great question!
+布局 (Layouts) 实际上就是 模板 (templates), 所以它也有视图(view), 就像其他模板一样。 在新生成的应用中，就是 `web/views/layout_view.ex`。你也许会好奇渲染出的内容是怎么被塞进布局 (Layouts) 中的。
 
-If we look at `web/templates/layout/app.html.eex`, just about in the middle of the `<body>`, we will see this.
+我们看看 `web/templates/layout/app.html.eex` 文件，大概在 `<body>` 的中间部分，有这样一行代码。
 
 ```html
 <%= render @view_module, @view_template, assigns %>
 ```
+这里就是模板渲染成字符串后被装进 Layout 的地方。
 
-This is where the view module and its template from the controller are rendered to a string and placed in the layout.
 
-### The ErrorView
+### 错误页面 (The ErrorView)
 
-Phoenix recently added a new view to every generated application, the `ErrorView` which lives in `web/views/error_view.ex`. The purpose of the `ErrorView` is to handle two of the most common errors - `404 not found` and `500 internal error` - in a general way, from one centralized location. Let's see what it looks like.
+Phoenix 最近为每个生成的应用添加了一个新的视图 (view), 即`ErrorView` (位置在 `web/views/error_view.ex` )。它的作用主要是处理两种最常见的错误 -- `404 not found` 以及 `500 internal error` -- 让我们看看这个文件的内容。
 
 ```elixir
 defmodule HelloPhoenix.ErrorView do
@@ -191,7 +191,8 @@ defmodule HelloPhoenix.ErrorView do
 end
 ```
 
-Before we dive into this, let's see what the rendered `404 not found` message looks like in a browser. In the development environment, Phoenix will debug errors by default, showing us a very informative debugging page. What we want here, however, is to see what page the application would serve in production. In order to do that we need to set `debug_errors: false` in `config/dev.exs`.
+在我们深入探讨之前，先来看看这个 `404 not found` 在浏览器中是怎样的。在开发环境(development enviroment)下, Phoenix 会默认调试错误，并展示给我们一个详细的 debug 页面，这也是我们想要的，但是，我现在想看的是在生产环境下的页面的样子，我们需要设置 `config/dev.exs` 文件中的 `debug_errors : false`。
+
 
 ```elixir
 use Mix.Config
@@ -203,13 +204,14 @@ config :hello_phoenix, HelloPhoenix.Endpoint,
   . . .
 ```
 
-After modifying our config file, we need to restart our server in order for this change to take effect. After restarting the server, let's go to [http://localhost:4000/such/a/wrong/path](http://localhost:4000/such/a/wrong/path) for a running local application and see what we get.
+改变配置后，我们需要重启一下服务器，然后访问 [http://localhost:4000/such/a/wrong/path](http://localhost:4000/such/a/wrong/path) 。
 
-Ok, that's not very exciting. We get the bare string "Page not found", displayed without any markup or styling.
+我们只是看到了一个没有任何标签的  "Page not found" 裸字符串。
 
-Let's see if we can use what we already know about views to make this a more interesting error page.
+现在让我们用已经学到的一些 views 的知识来装修一下这个页面。
 
-The first question is, where does that error string come from? The answer is right in the `ErrorView`.
+首先，我们要搞清楚这个字符串来自哪里？ 答案很明显，在 `ErrorView` ：
+
 
 ```elixir
 def render("404.html", _assigns) do
@@ -217,13 +219,13 @@ def render("404.html", _assigns) do
 end
 ```
 
-Great, so we have a `render/2` function that takes a template and an `assigns` map, which we ignore. Where is this `render/2` function being called from?
+注意这里的  `render` 函数, 它接收一个模板的名字以及一个 `assigns` 键值对（这个例子中被忽略）。 这个 render 函数实在什么地方被调用的呢？
 
-The answer is the `render/5` function defined in the `Phoenix.Endpoint.ErrorHandler` module. The whole purpose of this module is to catch errors and render them with a view, in our case, the `HelloPhoenix.ErrorView`.
+`render` 函数定义在 `Phoenix.Endpoint.ErrorHandler` 模块中。这个模块的使命就是捕捉错误并用一个视图将它们渲染出来，在这里，就是 `HelloPhoenix.ErrorView`。
 
-Now that we understand how we got here, let's make a better error page.
+知道了所以然，我们来编写一个更好的错误页面吧。
 
-Phoenix generates an `ErrorView` for us, but it doesn't give us a `web/templates/error` directory. Let's create one now. Inside our new directory, let's add a template, `not_found.html.eex` and give it some markup - a mixture of our application layout and a new `div` with our message to the user.
+Phoenix 默认为我们提供了 `ErrorView`, 但是却并没有为我们生成 `web/templates/error` 目录。现在我们自己创建这个目录，并在其中添加一个模板 `not_found.html.eex`, 内容如下:
 
 
 ```html
@@ -263,9 +265,7 @@ Phoenix generates an `ErrorView` for us, but it doesn't give us a `web/templates
 </html>
 ```
 
-Now we can use the `render/2` function we saw above when we were experimenting with rendering in the `iex` session.
-
-Our `render/2` function should look like this when we've modified it.
+现在我们可以在之前的 `iex` 会话中使用  `render/2` 函数了，改动如下：
 
 ```elixir
 def render("404.html", _assigns) do
@@ -273,12 +273,18 @@ def render("404.html", _assigns) do
 end
 ```
 
-When we go back to [http://localhost:4000/such/a/wrong/path](http://localhost:4000/such/a/wrong/path), we should see a much nicer error page.
+我们重新访问 [http://localhost:4000/such/a/wrong/path](http://localhost:4000/such/a/wrong/path), 会得到一个不错的页面了。
+
+
+
 
 It is worth noting that we did not render our `not_found.html.eex` template through our application layout, even though we want our error page to have the look and feel of the rest of our site. The main reason is that it's easy to run into edge case issues while handling errors globally.
 
-If we want to minimize duplication between our application layout and our `not_found.html.eex` template, we can implement shared templates for our header and footer. Please see the [Template Guide](http://www.phoenixframework.org/docs/templates#section-shared-templates-across-views) for more information.
+如果我们想在应用的布局已经 `not_found.html.eex` 模板之间减少重复，我们可以复用 header 和 footer 的部分，详情可以参考 [Template Guide](http://www.phoenixframework.org/docs/templates#section-shared-templates-across-views)。
 
-Of course, we can do these same steps with the `def render("500.html", _assigns) do` clause in our `ErrorView` as well.
+类似的我们可以在 `ErrorView` 中定义 `def render("500.html", _assigns) do` 。
 
-We can also use the `assigns` map passed into any `render/2` clause in the `ErrorView`, instead of discarding it, in order to display more information in our templates.
+如果我们想在模板中显示更多信息，还可以使用 `assigns` 传递参数给 `ErrorView` 中的 `render/2` 函数.
+
+
+
