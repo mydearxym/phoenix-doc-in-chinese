@@ -1,12 +1,11 @@
 
 ### 起步
 
-第一章的目标是让我们的`Phoenix`应用尽快跑起来。在开始之前，新参照之前的章节先安装好必要的环境。
+第一章的目标是让我们的`Phoenix`应用尽快跑起来。
 
 在我们开始前，让我们先来看看 [phoenix 的 安装指南](http://www.phoenixframework.org/docs/installation), 在安装了必要的依赖后，我们就可以躁起来了。
 
-
-现在，我们的机器上应该已经安装好了 `Elixir`, `Erlang`, `Hex` 和 `Phoenix工具集`,同时 `PostgreSQL`和`Node.js`也应该准备就绪了。
+现在，我们的机器上应该已经安装好了 `Elixir`, `Erlang`, `Hex` 和 `Phoenix工具集`, 同时 `PostgreSQL`和`Node.js`也应该准备就绪了。
 
 让我们开始吧！
 
@@ -58,7 +57,8 @@ $ mix phoenix.server
 $ iex -S mix phoenix.server
 ```
 
-Phoenix 会假设我们的 PostgreSQL 数据库有一个 `postgres` 账户（有相应的权限和密码），如果你对这个有疑问，请查看 [ecto.create](http://www.phoenixframework.org/docs/mix-tasks#section--ecto-create-) 任务.
+Phoenix 会假设我们的 PostgreSQL 数据库有一个 `postgres` 账户（有相应的权限和密码），如果你对这个有疑问，
+请查看 [ecto.create](http://www.phoenixframework.org/docs/mix-tasks#section--ecto-create-) 任务.
 
 进入我们刚才创建的项目目录。
 
