@@ -1,0 +1,777 @@
+
+<!DOCTYPE HTML>
+<html lang="" >
+    <head>
+        <title>H_ecto模型 · GitBook</title>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="generator" content="GitBook 3.2.0">
+        
+        
+        
+    
+    <link rel="stylesheet" href="gitbook/style.css">
+
+    
+            
+                
+                <link rel="stylesheet" href="gitbook/gitbook-plugin-highlight/website.css">
+                
+            
+                
+                <link rel="stylesheet" href="gitbook/gitbook-plugin-search/search.css">
+                
+            
+                
+                <link rel="stylesheet" href="gitbook/gitbook-plugin-fontsettings/website.css">
+                
+            
+        
+
+    
+
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+        
+    
+    
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="gitbook/images/apple-touch-icon-precomposed-152.png">
+    <link rel="shortcut icon" href="gitbook/images/favicon.ico" type="image/x-icon">
+
+    
+    
+    <link rel="prev" href="G_通道.html" />
+    
+
+    </head>
+    <body>
+        
+<div class="book">
+    <div class="book-summary">
+        
+            
+<div id="book-search-input" role="search">
+    <input type="text" placeholder="Type to search" />
+</div>
+
+            
+                <nav role="navigation">
+                
+
+
+<ul class="summary">
+    
+    
+
+    
+
+    
+        
+        
+    
+        <li class="chapter " data-level="1.1" data-path="./">
+            
+                <a href="./">
+            
+                    
+                    介绍
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2" data-path="概览.html">
+            
+                <a href="概览.html">
+            
+                    
+                    基础内容
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.2.1" data-path="概览.html">
+            
+                <a href="概览.html">
+            
+                    
+                    概览
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.2" data-path="安装.html">
+            
+                <a href="安装.html">
+            
+                    
+                    安装依赖
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.3" data-path="学习资源.html">
+            
+                <a href="学习资源.html">
+            
+                    
+                    学习资源
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.4" data-path="A_起步.html">
+            
+                <a href="A_起步.html">
+            
+                    
+                    A_起步
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.5" data-path="B_添加页面.html">
+            
+                <a href="B_添加页面.html">
+            
+                    
+                    B_添加页面
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.6" data-path="C_路由.html">
+            
+                <a href="C_路由.html">
+            
+                    
+                    C_路由
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.7" data-path="D_控制器.html">
+            
+                <a href="D_控制器.html">
+            
+                    
+                    D_控制器
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.8" data-path="DD_Plug.html">
+            
+                <a href="DD_Plug.html">
+            
+                    
+                    DD_Plug
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.9" data-path="E_视图.html">
+            
+                <a href="E_视图.html">
+            
+                    
+                    E_视图
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.10" data-path="F_模板.html">
+            
+                <a href="F_模板.html">
+            
+                    
+                    F_模板
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.11" data-path="G_通道.html">
+            
+                <a href="G_通道.html">
+            
+                    
+                    G_通道
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter active" data-level="1.2.12" data-path="H_ecto模型.html">
+            
+                <a href="H_ecto模型.html">
+            
+                    
+                    H_ecto模型
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+
+    
+
+    <li class="divider"></li>
+
+    <li>
+        <a href="https://www.gitbook.com" target="blank" class="gitbook-link">
+            Published with GitBook
+        </a>
+    </li>
+</ul>
+
+
+                </nav>
+            
+        
+    </div>
+
+    <div class="book-body">
+        
+            <div class="body-inner">
+                
+                    
+
+<div class="book-header" role="navigation">
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href="." >H_ecto模型</a>
+    </h1>
+</div>
+
+
+
+
+                    <div class="page-wrapper" tabindex="-1" role="main">
+                        <div class="page-inner">
+                            
+<div id="book-search-results">
+    <div class="search-noresults">
+    
+                                <section class="normal markdown-section">
+                                
+                                <p>Most web applications today need some form of data storage. In the Elixir ecosystem, we have Ecto to enable this. Ecto currently has adapters for the following databases:</p><ul><li>PostgreSQL
+</li>
+<li>MySQL
+</li>
+<li>MSSQL
+</li>
+<li>SQLite3
+</li>
+<li>MongoDB
+</li></ul>
+<p>Newly generated Phoenix applications integrate both Ecto and the PostgreSQL adapter by default.</p><p>This guide assumes that we have generated our new application with Ecto. If we&apos;re using an older Phoenix app, or we used the <code>--no-ecto</code> option to generate our application, all is not lost. Please follow the instructions in the &quot;Integrating Ecto into an Existing Application&quot; section below.</p><p>This guide also assumes that we will be using PostgreSQL. For instructions on switching to MySQL, please see the <a href="http://www.phoenixframework.org/docs/using-mysql" target="_blank">Using MySQL Guide</a>.</p><p>Now that we all have Ecto and Postgrex installed and configured, the easiest way to use Ecto models is to generate a resource through the <code>phoenix.gen.html</code> task. Let&apos;s generate a <code>User</code> resource with <code>name</code>, <code>email</code>, <code>bio</code>, and <code>number_of_pets</code> fields.</p><pre><code class="lang-console">$ mix phoenix.gen.html User users name:string email:string bio:string number_of_pets:integer
+* creating priv/repo/migrations/20150409213440_create_user.exs
+* creating web/models/user.ex
+* creating test/models/user_test.exs
+* creating web/controllers/user_controller.ex
+* creating web/templates/user/edit.html.eex
+* creating web/templates/user/form.html.eex
+* creating web/templates/user/index.html.eex
+* creating web/templates/user/new.html.eex
+* creating web/templates/user/show.html.eex
+* creating web/views/user_view.ex
+* creating test/controllers/user_controller_test.exs
+
+Add the resource to your browser scope in web/router.ex:
+
+    resources &quot;/users&quot;, UserController
+
+and then update your repository by running migrations:
+
+    $ mix ecto.migrate</code></pre>
+<p>Notice that we get a lot for free with this task - a migration, a controller, a controller test, a model, a model test, a view, and a number of templates.</p><p>Let&apos;s follow the instructions the task gives us and insert the <code>resources &quot;/users&quot;, UserController</code> line in the router <code>web/router.ex</code>.</p><pre><code class="lang-elixir"><span class="hljs-class"><span class="hljs-keyword">defmodule</span> <span class="hljs-title">HelloPhoenix</span></span>.Router <span class="hljs-keyword">do</span>
+  <span class="hljs-keyword">use</span> HelloPhoenix.Web, <span class="hljs-symbol">:router</span>
+. . .
+
+  scope <span class="hljs-string">&quot;/&quot;</span>, HelloPhoenix <span class="hljs-keyword">do</span>
+    pipe_through <span class="hljs-symbol">:browser</span> <span class="hljs-comment"># Use the default browser stack</span>
+
+    get <span class="hljs-string">&quot;/&quot;</span>, PageController, <span class="hljs-symbol">:index</span>
+    resources <span class="hljs-string">&quot;/users&quot;</span>, UserController
+  <span class="hljs-keyword">end</span>
+
+. . .
+<span class="hljs-keyword">end</span></code></pre>
+<p>With the resource route in place, it&apos;s time to run our migration.</p><pre><code class="lang-console">$ mix ecto.migrate
+Compiled lib/hello_phoenix.ex
+Compiled web/models/user.ex
+Compiled web/views/error_view.ex
+Compiled web/controllers/page_controller.ex
+Compiled web/views/page_view.ex
+Compiled web/router.ex
+Compiled web/views/layout_view.ex
+Compiled web/controllers/user_controller.ex
+Compiled lib/hello_phoenix/endpoint.ex
+Compiled web/views/user_view.ex
+Generated hello_phoenix.app
+** (Postgrex.Error) FATAL (invalid_catalog_name): database &quot;hello_phoenix_dev&quot; does not exist
+    lib/ecto/adapters/sql/worker.ex:29: Ecto.Adapters.SQL.Worker.query!/4
+    lib/ecto/adapters/sql.ex:187: Ecto.Adapters.SQL.use_worker/3
+    lib/ecto/adapters/postgres.ex:58: Ecto.Adapters.Postgres.ddl_exists?/3
+    lib/ecto/migration/schema_migration.ex:19: Ecto.Migration.SchemaMigration.ensure_schema_migrations_table!/1
+    lib/ecto/migrator.ex:36: Ecto.Migrator.migrated_versions/1
+    lib/ecto/migrator.ex:134: Ecto.Migrator.run/4
+    (mix) lib/mix/cli.ex:55: Mix.CLI.run_task/2</code></pre>
+<p>Oops! This error message means that we haven&apos;t created the database that Ecto expects by default. In our case, the database we need is called <code>hello_phoenix_dev</code> - that is the name of our application with a <code>_dev</code> suffix indicating that it is our development database.</p><p>Ecto has an easy way to do this. We just run the <code>ecto.create</code> task.</p><pre><code class="lang-console">$ mix ecto.create
+The database for repo HelloPhoenix.Repo has been created.</code></pre>
+<p>Mix assumes that we are in the development environment unless we tell it otherwise with <code>MIX_ENV=another_environment</code>. Our Ecto task will get its environment from Mix, and that&apos;s how we get the correct suffix to our database name.</p><p>Now our migration should run more smoothly.</p><pre><code class="lang-console">$ mix ecto.migrate
+[info] == Running HelloPhoenix.Repo.Migrations.CreateUser.change/0 forward
+[info] create table users
+[info] == Migrated in 0.3s</code></pre>
+<p>Before we get too far into the details, let&apos;s have some fun! We can start our server with <code>mix phoenix.server</code> at the root of our project and then head to the <a href="http://localhost:4000/users" target="_blank">users index</a> page. We can click on &quot;New user&quot; to create new users, then show, edit, or delete them. By default, Ecto considers all of the fields on our model to be required. (We&apos;ll see how to change that in a bit.) If we don&apos;t provide some of them when creating or updating, we&apos;ll see a nice error message telling us all of the fields we missed. Our resource generating task has given us a complete scaffold for manipulating user records in the database and displaying the results.</p><p>Ok, now back to the details.</p><p>If we log in to our database server, and connect to our <code>hello_phoenix_dev</code> database, we should see our <code>users</code> table. Ecto assumes that we want an integer column called <code>id</code> as our primary key, so we should see a sequence generated for that as well.</p><pre><code class="lang-console">=# \connect hello_phoenix_dev
+You are now connected to database &quot;hello_phoenix_dev&quot; as user &quot;postgres&quot;.
+hello_phoenix_dev=# \d
+List of relations
+Schema |       Name        |   Type   |  Owner
+--------+-------------------+----------+----------
+public | schema_migrations | table    | postgres
+public | users             | table    | postgres
+public | users_id_seq      | sequence | postgres
+(3 rows)</code></pre>
+<p>If we take a look at the migration generated by <code>phoenix.gen.html</code> in <code>priv/repo/migrations</code>, we&apos;ll see that it will add the columns we specified. It will also add timestamp columns for <code>inserted_at</code> and <code>updated_at</code> which come from the <code>timestamps/0</code> function.</p><pre><code class="lang-elixir"><span class="hljs-class"><span class="hljs-keyword">defmodule</span> <span class="hljs-title">HelloPhoenix</span></span>.Repo.Migrations.CreateUser <span class="hljs-keyword">do</span>
+  <span class="hljs-keyword">use</span> Ecto.Migration
+
+  <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">change</span></span> <span class="hljs-keyword">do</span>
+    create table(<span class="hljs-symbol">:users</span>) <span class="hljs-keyword">do</span>
+      add <span class="hljs-symbol">:name</span>, <span class="hljs-symbol">:string</span>
+      add <span class="hljs-symbol">:email</span>, <span class="hljs-symbol">:string</span>
+      add <span class="hljs-symbol">:bio</span>, <span class="hljs-symbol">:string</span>
+      add <span class="hljs-symbol">:number_of_pets</span>, <span class="hljs-symbol">:integer</span>
+
+      timestamps
+    <span class="hljs-keyword">end</span>
+  <span class="hljs-keyword">end</span>
+<span class="hljs-keyword">end</span>
+</code></pre>
+<p>And here&apos;s what that translates to in the actual <code>users</code> table.</p><pre><code class="lang-console">hello_phoenix_dev=# \d users
+Table &quot;public.users&quot;
+Column     |            Type             | Modifiers
+----------------+-----------------------------+----------------------------------------------------
+id             | integer                     | not null default nextval(&apos;users_id_seq&apos;::regclass)
+name           | character varying(255)      |
+email          | character varying(255)      |
+bio            | character varying(255)      |
+number_of_pets | integer                     |
+inserted_at    | timestamp without time zone | not null
+updated_at     | timestamp without time zone | not null
+Indexes:
+&quot;users_pkey&quot; PRIMARY KEY, btree (id)</code></pre>
+<p>Notice that we do get an <code>id</code> column as our primary key by default, even though it isn&apos;t listed as a field in our migration.</p><h4 id="the-repo">The Repo</h4><p>Our <code>HelloPhoenix.Repo</code> module is the foundation we need to work with databases in a Phoenix application. Phoenix generated it for us here <code>lib/hello_phoenix/repo.ex</code>, and this is what it looks like.</p><pre><code class="lang-elixir"><span class="hljs-class"><span class="hljs-keyword">defmodule</span> <span class="hljs-title">HelloPhoenix</span></span>.Repo <span class="hljs-keyword">do</span>
+  <span class="hljs-keyword">use</span> Ecto.Repo, <span class="hljs-symbol">otp_app:</span> <span class="hljs-symbol">:hello_phoenix</span>
+<span class="hljs-keyword">end</span></code></pre>
+<p>Our repo has two main tasks - to bring in all the common query functions from <code>Ecto.Repo</code> and to set the <code>otp_app</code> name equal to our application name.</p><p>When <code>phoenix.new</code> generated our application, it generated some basic configuration as well. Let&apos;s look at <code>config/dev.exs</code>.</p><pre><code class="lang-elixir">. . .
+<span class="hljs-comment"># Configure your database</span>
+config <span class="hljs-symbol">:hello_phoenix</span>, HelloPhoenix.Repo,
+<span class="hljs-symbol">adapter:</span> Ecto.Adapters.Postgres,
+<span class="hljs-symbol">username:</span> <span class="hljs-string">&quot;postgres&quot;</span>,
+<span class="hljs-symbol">password:</span> <span class="hljs-string">&quot;postgres&quot;</span>,
+<span class="hljs-symbol">database:</span> <span class="hljs-string">&quot;hello_phoenix_dev&quot;</span>
+. . .</code></pre>
+<p>It begins by configuring our <code>otp_app</code> name and repo module. Then it sets the adapter - Postgres, in our case. It also sets our login credentials. Of course, we can change these to match our actual credentials if they are different.</p><p>We also have similar configuration in <code>config/test.exs</code> and <code>config/prod.secret.exs</code> which can also be changed to match our actual credentials.</p><h4 id="the-model">The Model</h4><p>Ecto models have several functions. Each model defines the fields of our schema as well as their types. They each define a struct with the same fields in our schema. Models are where we define relationships with other models. Our <code>User</code> model might have many <code>Post</code> models, and each <code>Post</code> would belong to a <code>User</code>. Models also handle data validation and type casting with changesets.</p><p>Here is the <code>User</code> model that Phoenix generated for us.</p><pre><code class="lang-elixir"><span class="hljs-class"><span class="hljs-keyword">defmodule</span> <span class="hljs-title">HelloPhoenix</span></span>.User <span class="hljs-keyword">do</span>
+  <span class="hljs-keyword">use</span> HelloPhoenix.Web, <span class="hljs-symbol">:model</span>
+
+  schema <span class="hljs-string">&quot;users&quot;</span> <span class="hljs-keyword">do</span>
+    field <span class="hljs-symbol">:name</span>, <span class="hljs-symbol">:string</span>
+    field <span class="hljs-symbol">:email</span>, <span class="hljs-symbol">:string</span>
+    field <span class="hljs-symbol">:bio</span>, <span class="hljs-symbol">:string</span>
+    field <span class="hljs-symbol">:number_of_pets</span>, <span class="hljs-symbol">:integer</span>
+
+    timestamps
+  <span class="hljs-keyword">end</span>
+
+  <span class="hljs-variable">@required_fields</span> ~w(name email bio number_of_pets)
+  <span class="hljs-variable">@optional_fields</span> ~w()
+
+  <span class="hljs-variable">@doc</span> <span class="hljs-string">&quot;&quot;</span><span class="hljs-string">&quot;
+  Creates a changeset based on the `model` and `params`.
+
+  If no params are provided, an invalid changeset is returned
+  with no validation performed.
+  &quot;</span><span class="hljs-string">&quot;&quot;</span>
+  <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">changeset</span></span>(model, params \\ <span class="hljs-symbol">:empty</span>) <span class="hljs-keyword">do</span>
+    model
+    |&gt; cast(params, <span class="hljs-variable">@required_fields</span>, <span class="hljs-variable">@optional_fields</span>)
+  <span class="hljs-keyword">end</span>
+<span class="hljs-keyword">end</span>
+</code></pre>
+<p>The schema block at the top of the model should be pretty self-explanatory. We&apos;ll take a look at changesets next.</p><h4 id="changesets-and-validations">Changesets and Validations</h4><p>Changesets define a pipeline of transformations our data needs to undergo before it will be ready for our application to use. These transformations might include type casting, validation, and filtering out any extraneous parameters.</p><p>Let&apos;s take a closer look at our default changeset.</p><pre><code class="lang-elixir"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">changeset</span></span>(model, params \\ <span class="hljs-symbol">:empty</span>) <span class="hljs-keyword">do</span>
+  model
+  |&gt; cast(params, <span class="hljs-variable">@required_fields</span>, <span class="hljs-variable">@optional_fields</span>)
+<span class="hljs-keyword">end</span></code></pre>
+<p>At this point, we only have one transformation in our pipeline. This <code>cast/4</code> function&apos;s main job is to separate required fields from optional ones. We define the fields for each category in the module attributes <code>@required_fields</code> and <code>@optional_fields</code>. By default all of the fields are required.</p><p>Let&apos;s take a look at two ways to validate that this is the case. The first and easiest way is to simply start our application by running the <code>mix phoenix.server</code> task at the root of our project. Then we can go to the <a href="http://localhost:4000/users/new" target="_blank">new users page</a> and click the &quot;submit&quot; button without filling in any fields. We should get an error telling us that something went wrong and enumerating all the fields which can&apos;t be blank. That should be all the fields in our schema at this point.</p><p>We can also verify this in iex. Let&apos;s stop our server and start it again with <code>iex -S mix phoenix.server</code>. In order to minimize typing and make this easier to read, let&apos;s alias our <code>HelloPhoenix.User</code> model.</p><pre><code class="lang-console">iex(1)&gt; alias HelloPhoenix.User
+nil</code></pre>
+<p>Then let&apos;s create a changeset from our model with an empty <code>User</code> struct, and an empty map of parameters.</p><pre><code class="lang-console">iex(2)&gt; changeset = User.changeset(%User{}, %{})
+%Ecto.Changeset{action: nil, changes: %{}, constraints: [],
+ errors: [name: &quot;can&apos;t be blank&quot;, email: &quot;can&apos;t be blank&quot;,
+  bio: &quot;can&apos;t be blank&quot;, number_of_pets: &quot;can&apos;t be blank&quot;], filters: %{},
+ model: %HelloPhoenix.User{__meta__: #Ecto.Schema.Metadata&lt;:built&gt;, bio: nil,
+  email: nil, id: nil, inserted_at: nil, name: nil, number_of_pets: nil,
+  updated_at: nil}, optional: [], params: %{}, repo: nil,
+ required: [:name, :email, :bio, :number_of_pets],
+ types: %{bio: :string, email: :string, id: :id, inserted_at: Ecto.DateTime,
+   name: :string, number_of_pets: :integer, updated_at: Ecto.DateTime},
+ valid?: false, validations: []}</code></pre>
+<p>Once we have a changeset, we can ask it if it is valid.</p><pre><code class="lang-console">iex(3)&gt; changeset.valid?
+false</code></pre>
+<p>Since this one is not valid, we can ask it what the errors are.</p><pre><code class="lang-console">iex(4)&gt; changeset.errors
+[name: &quot;can&apos;t be blank&quot;, email: &quot;can&apos;t be blank&quot;,
+bio: &quot;can&apos;t be blank&quot;, number_of_pets: &quot;can&apos;t be blank&quot;]</code></pre>
+<p>It gives us the same list of fields that can&apos;t be blank that we got from the front end of our application.</p><p>Now let&apos;s test this by moving the <code>number_of_pets</code> field from <code>@required_fields</code> to <code>@optional_fields</code>.</p><pre><code class="lang-elixir"><span class="hljs-variable">@required_fields</span> ~w(name email bio)
+<span class="hljs-variable">@optional_fields</span> ~w(number_of_pets)</code></pre>
+<p>Now either method of verification should tell us that only <code>name</code>, <code>email</code>, and <code>bio</code> can&apos;t be blank.</p><p>What happens if we pass a key/value pair that is in neither <code>@required_fields</code> nor <code>@optional_fields</code>? Let&apos;s find out.</p><p>In a new <code>iex -S mix phoenix.server</code> session, we should alias our module again.</p><pre><code class="lang-console">iex(1)&gt; alias HelloPhoenix.User
+nil</code></pre>
+<p>Lets create a <code>params</code> map with valid values plus an extra <code>random_key: &quot;random value&quot;</code>.</p><pre><code class="lang-console">iex(2)&gt; params = %{name: &quot;Joe Example&quot;, email: &quot;joe@example.com&quot;, bio: &quot;An example to all&quot;, number_of_pets: 5, random_key: &quot;random value&quot;}
+%{email: &quot;joe@example.com&quot;, name: &quot;Joe Example&quot;, bio: &quot;An example to all&quot;,
+number_of_pets: 5, random_key: &quot;random value&quot;}</code></pre>
+<p>Then let&apos;s use our new <code>params</code> map to create a changeset.</p><pre><code class="lang-console">iex(3)&gt; changeset = User.changeset(%User{}, params)
+%Ecto.Changeset{action: nil,
+ changes: %{bio: &quot;An example to all&quot;, email: &quot;joe@example.com&quot;,
+   name: &quot;Joe Example&quot;, number_of_pets: 5}, constraints: [], errors: [],
+ filters: %{},
+ model: %HelloPhoenix.User{__meta__: #Ecto.Schema.Metadata&lt;:built&gt;, bio: nil,
+  email: nil, id: nil, inserted_at: nil, name: nil, number_of_pets: nil,
+  updated_at: nil}, optional: [:number_of_pets],
+ params: %{&quot;bio&quot; =&gt; &quot;An example to all&quot;, &quot;email&quot; =&gt; &quot;joe@example.com&quot;,
+   &quot;name&quot; =&gt; &quot;Joe Example&quot;, &quot;number_of_pets&quot; =&gt; 5,
+   &quot;random_key&quot; =&gt; &quot;random value&quot;}, repo: nil, required: [:name, :email, :bio],
+ types: %{bio: :string, email: :string, id: :id, inserted_at: Ecto.DateTime,
+   name: :string, number_of_pets: :integer, updated_at: Ecto.DateTime},
+ valid?: true, validations: []}</code></pre>
+<p>Our new changeset is valid.</p><pre><code class="lang-console">iex(4)&gt; changeset.valid?
+true</code></pre>
+<p>We can also check the changeset&apos;s changes - the map we get after all of the transformations are complete.</p><pre><code class="lang-console">iex(9)&gt; changeset.changes
+%{bio: &quot;An example to all&quot;, email: &quot;joe@example.com&quot;, name: &quot;Joe Example&quot;,
+number_of_pets: 5}</code></pre>
+<p>Notice that our <code>random_key</code> and <code>random_value</code> have been removed from our final changeset.</p><p>We can validate more than just whether a field is required or not. Let&apos;s take a look at some finer-grained validations.</p><p>What if we had a requirement that all biographies in our system must be at least two characters long? We can do this easily by adding another transformation to the pipeline in our changeset which validates the length of the <code>bio</code> field.</p><pre><code class="lang-elixir"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">changeset</span></span>(model, params \\ <span class="hljs-symbol">:empty</span>) <span class="hljs-keyword">do</span>
+  model
+  |&gt; cast(params, <span class="hljs-variable">@required_fields</span>, <span class="hljs-variable">@optional_fields</span>)
+  |&gt; validate_length(<span class="hljs-symbol">:bio</span>, <span class="hljs-symbol">min:</span> <span class="hljs-number">2</span>)
+<span class="hljs-keyword">end</span></code></pre>
+<p>Now if we try to add a new user through the front end of the application with a bio of &quot;A&quot;, we should see this error message at the top of the page.</p><pre><code class="lang-text">Oops, something went wrong! Please check the errors below:
+Bio should be at least 2 characters</code></pre>
+<p>If we also have a requirement for the maximum length that a bio can have, we can simply add another validation.</p><pre><code class="lang-elixir"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">changeset</span></span>(model, params \\ <span class="hljs-symbol">:empty</span>) <span class="hljs-keyword">do</span>
+  model
+  |&gt; cast(params, <span class="hljs-variable">@required_fields</span>, <span class="hljs-variable">@optional_fields</span>)
+  |&gt; validate_length(<span class="hljs-symbol">:bio</span>, <span class="hljs-symbol">min:</span> <span class="hljs-number">2</span>)
+  |&gt; validate_length(<span class="hljs-symbol">:bio</span>, <span class="hljs-symbol">max:</span> <span class="hljs-number">140</span>)
+<span class="hljs-keyword">end</span></code></pre>
+<p>Now if we try to add a new user with a 141 character bio, we would see this error.</p><pre><code class="lang-text">Oops, something went wrong! Please check the errors below:
+Bio should be at most 140 characters</code></pre>
+<p>Let&apos;s say we want to perform at least some rudimentary format validation on the <code>email</code> field. All we want to check for is the presence of the &quot;@&quot;. The <code>validate_format/3</code> function is just what we need.</p><pre><code class="lang-elixir"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">changeset</span></span>(model, params \\ <span class="hljs-symbol">:empty</span>) <span class="hljs-keyword">do</span>
+  model
+  |&gt; cast(params, <span class="hljs-variable">@required_fields</span>, <span class="hljs-variable">@optional_fields</span>)
+  |&gt; validate_length(<span class="hljs-symbol">:bio</span>, <span class="hljs-symbol">min:</span> <span class="hljs-number">2</span>)
+  |&gt; validate_length(<span class="hljs-symbol">:bio</span>, <span class="hljs-symbol">max:</span> <span class="hljs-number">140</span>)
+  |&gt; validate_format(<span class="hljs-symbol">:email</span>, ~r/@/)
+<span class="hljs-keyword">end</span></code></pre>
+<p>If we try to create a user with an email of &quot;personexample.com&quot;, we should see an error message like the following.</p><pre><code class="lang-text">Oops, something went wrong! Please check the errors below:
+Email has invalid format</code></pre>
+<p>There are many more validations and transformations we can perform in a changeset. Please see the <a href="http://hexdocs.pm/ecto/Ecto.Changeset.html" target="_blank">Ecto Changeset documentation</a> for more information.</p><h4 id="controller-usage">Controller Usage</h4><p>At this point, let&apos;s see how we can actually use Ecto in our application. Luckily, Phoenix gave us an example of this when we ran <code>mix phoenix.gen.html</code>, the <code>HelloPhoenix.UserController</code>.</p><p>Let&apos;s work through the generated controller action by action to see how Ecto is used.</p><p>Before we get to the first action, let&apos;s look at two important lines at the top of the file.</p><pre><code class="lang-elixir"><span class="hljs-class"><span class="hljs-keyword">defmodule</span> <span class="hljs-title">HelloPhoenix</span></span>.UserController <span class="hljs-keyword">do</span>
+. . .
+  <span class="hljs-keyword">alias</span> HelloPhoenix.User
+
+  plug <span class="hljs-symbol">:scrub_params</span>, <span class="hljs-string">&quot;user&quot;</span> <span class="hljs-keyword">when</span> action <span class="hljs-keyword">in</span> [<span class="hljs-symbol">:create</span>, <span class="hljs-symbol">:update</span>]
+. . .
+<span class="hljs-keyword">end</span></code></pre>
+<p>We alias <code>HelloPhoenix.User</code> so that we can name our structs <code>%User{}</code> instead of <code>%HelloPhoenix.User{}</code>.</p><p>We also plug the <code>Phoenix.Controller.scrub_params/2</code> to pre-process our params a bit before they come to an action. <code>scrub_params/2</code> does a couple of useful things for us. It makes sure that all of the required fields are present, and raises an error for each that is missing. It will also recursively change any empty strings to nils.</p><p>On to our first action, <code>index</code>.</p><pre><code class="lang-elixir"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">index</span></span>(conn, _params) <span class="hljs-keyword">do</span>
+  users = Repo.all(User)
+  render(conn, <span class="hljs-string">&quot;index.html&quot;</span>, <span class="hljs-symbol">users:</span> users)
+<span class="hljs-keyword">end</span></code></pre>
+<p>The whole purpose of this action is to get all of the users from the database and display them in the <code>index.html.eex</code> template. We use the built-in <code>Repo.all/1</code> query to do that, and we pass in the (aliased) model name. It&apos;s that simple.</p><p>Notice that we do not use a changeset here. The assumption is that data will have to pass through a changeset in order to get into the database, so data coming out should already be valid.</p><p>Now, on to the <code>new</code> action. Notice that we do use a changeset, even though we do not use any parameters when we create it. Essentially, we always create an empty changeset in this action. The reason for this is that <code>new.html</code> can be rendered here, but it can also be rendered if we have invalid data in the <code>create</code> action. The changeset will then contain errors that we need to display back to the user. We render <code>new.html</code> with a changeset in both places for consistency.</p><pre><code class="lang-elixir"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">new</span></span>(conn, _params) <span class="hljs-keyword">do</span>
+  changeset = User.changeset(%User{})
+  render(conn, <span class="hljs-string">&quot;new.html&quot;</span>, <span class="hljs-symbol">changeset:</span> changeset)
+<span class="hljs-keyword">end</span></code></pre>
+<p>Once a user submits the form rendered from <code>new.html</code> above, the form elements and their values will be posted as parameters to the <code>create</code> action. This action shares some steps with the iex experiments that we did above.</p><pre><code class="lang-elixir"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">create</span></span>(conn, %{<span class="hljs-string">&quot;user&quot;</span> =&gt; user_params}) <span class="hljs-keyword">do</span>
+  changeset = User.changeset(%User{}, user_params)
+
+  <span class="hljs-keyword">case</span> Repo.insert(changeset) <span class="hljs-keyword">do</span>
+    {<span class="hljs-symbol">:ok</span>, _user} -&gt;
+      conn
+      |&gt; put_flash(<span class="hljs-symbol">:info</span>, <span class="hljs-string">&quot;User created successfully.&quot;</span>)
+      |&gt; redirect(<span class="hljs-symbol">to:</span> user_path(conn, <span class="hljs-symbol">:index</span>))
+    {<span class="hljs-symbol">:error</span>, changeset} -&gt;
+      render(conn, <span class="hljs-string">&quot;new.html&quot;</span>, <span class="hljs-symbol">changeset:</span> changeset)
+  <span class="hljs-keyword">end</span>
+<span class="hljs-keyword">end</span></code></pre>
+<p>Notice that we get the user parameters by pattern matching with the <code>&quot;user&quot;</code> key in the function signature. Then we create a changeset with those params and call <code>Repo.insert/1</code>. If the changeset is valid, it will return <code>{:ok, user}</code> with the inserted user model, then we set a flash message, and redirect to the <code>index</code> action.</p><p>If insert errored, we re-render <code>new.html</code> with the changeset to display the errors to the user.</p><p>In the <code>show</code> action, we use the <code>Repo.get!/2</code> built-in function to fetch the user record identified by the id we get from the request parameters. We don&apos;t generate a changeset here because we assume that the data has passed through a changeset on the way in to the database, and therefore is valid when we retrieve it here.</p><p>This is the singular version of <code>index</code> above.</p><pre><code class="lang-elixir"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">show</span></span>(conn, %{<span class="hljs-string">&quot;id&quot;</span> =&gt; id}) <span class="hljs-keyword">do</span>
+  user = Repo.get!(User, id)
+  render(conn, <span class="hljs-string">&quot;show.html&quot;</span>, <span class="hljs-symbol">user:</span> user)
+<span class="hljs-keyword">end</span></code></pre>
+<p>In the <code>edit</code> action, we use Ecto in a way which is a combination of <code>show</code> and <code>new</code>. We pattern match for the <code>id</code> from the incoming params so that we can use <code>Repo.get!/2</code> to retrieve the correct user from the database, as we did in <code>show</code>. We also create a changeset from that user because when the user submits a <code>PUT</code> request to <code>update</code>, there might be errors, which we can track in the changeset when re-rendering <code>edit.html</code>.</p><pre><code class="lang-elixir"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">edit</span></span>(conn, %{<span class="hljs-string">&quot;id&quot;</span> =&gt; id}) <span class="hljs-keyword">do</span>
+  user = Repo.get!(User, id)
+  changeset = User.changeset(user)
+  render(conn, <span class="hljs-string">&quot;edit.html&quot;</span>, <span class="hljs-symbol">user:</span> user, <span class="hljs-symbol">changeset:</span> changeset)
+<span class="hljs-keyword">end</span></code></pre>
+<p>The <code>update</code> action is nearly identical to <code>create</code>. The only difference is that we use <code>Repo.update/1</code> instead of <code>Repo.insert/1</code>. <code>Repo.update/1</code>, when used with a changeset, keeps track of fields which have changed. If no fields have changed, <code>Repo.update/1</code> won&apos;t send any data to the database. <code>Repo.insert/1</code> will always send all the data to the database.</p><pre><code class="lang-elixir"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">update</span></span>(conn, %{<span class="hljs-string">&quot;id&quot;</span> =&gt; id, <span class="hljs-string">&quot;user&quot;</span> =&gt; user_params}) <span class="hljs-keyword">do</span>
+  user = Repo.get!(User, id)
+  changeset = User.changeset(user, user_params)
+
+  <span class="hljs-keyword">case</span> Repo.update(changeset) <span class="hljs-keyword">do</span>
+    {<span class="hljs-symbol">:ok</span>, user} -&gt;
+      conn
+      |&gt; put_flash(<span class="hljs-symbol">:info</span>, <span class="hljs-string">&quot;User updated successfully.&quot;</span>)
+      |&gt; redirect(<span class="hljs-symbol">to:</span> user_path(conn, <span class="hljs-symbol">:show</span>, user))
+    {<span class="hljs-symbol">:error</span>, changeset} -&gt;
+      render(conn, <span class="hljs-string">&quot;edit.html&quot;</span>, <span class="hljs-symbol">user:</span> user, <span class="hljs-symbol">changeset:</span> changeset)
+  <span class="hljs-keyword">end</span>
+<span class="hljs-keyword">end</span></code></pre>
+<p>Finally, we come to the <code>delete</code> action. Here we also pattern match for the record id from the incoming params in order to use <code>Repo.get!/2</code> to fetch the user. From there, we simply call <code>Repo.delete!/1</code>, set a flash message, and redirect to the <code>index</code> action.</p><p>Note: There is nothing in this generated code to allow a user to change their mind about the deletion. In other words, there is no &quot;Are you sure?&quot; modal, so an errant mouse click will delete data without further warning. It&apos;s up to us as developers to add this in ourselves if we feel we need it.</p><pre><code class="lang-elixir"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">delete</span></span>(conn, %{<span class="hljs-string">&quot;id&quot;</span> =&gt; id}) <span class="hljs-keyword">do</span>
+  user = Repo.get!(User, id)
+
+  <span class="hljs-comment"># Here we use delete! (with a bang) because we expect</span>
+  <span class="hljs-comment"># it to always work (and if it does not, it will raise).</span>
+  Repo.delete!(user)
+
+  conn
+  |&gt; put_flash(<span class="hljs-symbol">:info</span>, <span class="hljs-string">&quot;User deleted successfully.&quot;</span>)
+  |&gt; redirect(<span class="hljs-symbol">to:</span> user_path(conn, <span class="hljs-symbol">:index</span>))
+<span class="hljs-keyword">end</span></code></pre>
+<p>That&apos;s the end of our walk-through of Ecto usage in our controller actions. There is quite a bit more that Ecto models can do. Please take a look at the <a href="http://hexdocs.pm/ecto/" target="_blank">Ecto documentation</a> for the rest of the story.</p><h3 id="data-relationship-and-dependencies">Data Relationship and Dependencies</h3><p>Suppose we are building a very simple video-sharing web application, in addition to having users on our site, we might also want to have videos. We asked Phoenix to scaffold a <code>Video</code> model for us:</p><pre><code class="lang-console">$ mix phoenix.gen.model Video videos name:string approved_at:datetime description:text likes:integer views:integer user_id:references:users
+* creating priv/repo/migrations/20150611051558_create_video.exs
+* creating web/models/video.ex
+* creating test/models/video_test.exs
+
+$ mix ecto.migrate</code></pre>
+<p>Handling individual tables is great, but if we want to build a modern web application, we will need a way to relate our data to each other. Those of us with experience using Ruby&apos;s ActiveRecord will be glad to see that Ecto provides a very familiar API for building relationships. For example,</p><p><code>Schema.has_many/3</code> declares one to many relationships, for example, in our video sharing service, our user model might have many uploaded video models.</p><p><code>Schema.belongs_to/3</code> declares a one to one relationship between parent and children models. In our video site example, an uploaded video belongs to its user.</p><p><code>Schema.has_one/3</code> declares a one to one relationship. Note that has_one is just like has_many except instead of returning a collection of model structs, it returns only one model struct. Continuing with the video-sharing example, while a user might have many uploaded videos, the user might only have one featured video.</p><p>Here&apos;s how we would declare a <code>has_many</code> relationship in <code>web/models/user.ex</code>:</p><pre><code class="lang-elixir"><span class="hljs-class"><span class="hljs-keyword">defmodule</span> <span class="hljs-title">HelloPhoenix</span></span>.User <span class="hljs-keyword">do</span>
+. . .
+  schema <span class="hljs-string">&quot;users&quot;</span> <span class="hljs-keyword">do</span>
+    field <span class="hljs-symbol">:name</span>, <span class="hljs-symbol">:string</span>
+    field <span class="hljs-symbol">:email</span>, <span class="hljs-symbol">:string</span>
+    field <span class="hljs-symbol">:bio</span>, <span class="hljs-symbol">:string</span>
+    field <span class="hljs-symbol">:number_of_pets</span>, <span class="hljs-symbol">:integer</span>
+
+    has_many <span class="hljs-symbol">:videos</span>, HelloPhoenix.Video
+    timestamps
+  <span class="hljs-keyword">end</span>
+. . .
+<span class="hljs-keyword">end</span></code></pre>
+<p>Since we used the generator to scaffold our <code>Video</code> model and specified the user association with <code>user_id:references:users</code>, the <code>belongs_to</code> relationship will already be defined for us in <code>web/models/video.ex</code>:</p><pre><code class="lang-elixir"><span class="hljs-class"><span class="hljs-keyword">defmodule</span> <span class="hljs-title">HelloPhoenix</span></span>.Video <span class="hljs-keyword">do</span>
+. . .
+  schema <span class="hljs-string">&quot;videos&quot;</span> <span class="hljs-keyword">do</span>
+    field <span class="hljs-symbol">:name</span>, <span class="hljs-symbol">:string</span>
+    field <span class="hljs-symbol">:approved_at</span>, Ecto.DateTime
+    field <span class="hljs-symbol">:description</span>, <span class="hljs-symbol">:string</span>
+    field <span class="hljs-symbol">:likes</span>, <span class="hljs-symbol">:integer</span>
+    field <span class="hljs-symbol">:views</span>, <span class="hljs-symbol">:integer</span>
+    belongs_to <span class="hljs-symbol">:user</span>, HelloPhoenix.User
+
+    timestamps
+  <span class="hljs-keyword">end</span>
+  <span class="hljs-variable">@required_fields</span> ~w(name approved_at description user_id)
+. . .
+<span class="hljs-keyword">end</span></code></pre>
+<p>Note that we don&apos;t declare the field <code>user_id</code> in the video model schema. We add it to the required (or optional) field list instead.</p><p>We can use our newly declared relationships in our <code>web/controllers/user_controller.ex</code> like this:</p><pre><code class="lang-elixir"><span class="hljs-class"><span class="hljs-keyword">defmodule</span> <span class="hljs-title">HelloPhoenix</span></span>.UserController <span class="hljs-keyword">do</span>
+. . .
+  <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">index</span></span>(conn, _params) <span class="hljs-keyword">do</span>
+    users = User |&gt; Repo.all |&gt; Repo.preload [<span class="hljs-symbol">:videos</span>]
+    render(conn, <span class="hljs-string">&quot;index.html&quot;</span>, <span class="hljs-symbol">users:</span> users)
+  <span class="hljs-keyword">end</span>
+
+  <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">show</span></span>(conn, %{<span class="hljs-string">&quot;id&quot;</span> =&gt; id}) <span class="hljs-keyword">do</span>
+    user = User |&gt; Repo.get!(id) |&gt; Repo.preload [<span class="hljs-symbol">:videos</span>]
+    render(conn, <span class="hljs-string">&quot;show.html&quot;</span>, <span class="hljs-symbol">user:</span> user)
+  <span class="hljs-keyword">end</span>
+. . .
+<span class="hljs-keyword">end</span></code></pre>
+<p>Because we declared a relationship in <code>HelloPhoenix.User</code>, <code>%User{}</code> will now contain a videos property which starts out as an unloaded relationship. In order to properly display it in <code>render</code>, we&apos;ll need to tell Ecto to preload the field. Note that <code>Repo.preload/2</code> is smart enough to work on just one model or a collection of them.</p><h3 id="integrating-ecto-into-an-existing-application">Integrating Ecto into an Existing Application</h3><p>Adding Ecto to an existing Phoenix application which wasn&apos;t using it before is easy. Once we include Ecto and Postgrex as dependencies, there are mix tasks to help us.</p><h4 id="adding-ecto-and-postgrex-as-dependencies">Adding Ecto and Postgrex as Dependencies</h4><p>We can add Ecto by way of the <code>phoenix_ecto</code> package, and we can add the <code>postgrex</code> package directly, just as we would add any other dependencies to our project.</p><pre><code class="lang-elixir"><span class="hljs-class"><span class="hljs-keyword">defmodule</span> <span class="hljs-title">HelloPhoenix</span></span>.Mixfile <span class="hljs-keyword">do</span>
+  <span class="hljs-keyword">use</span> Mix.Project
+
+. . .
+  <span class="hljs-comment"># Specifies your project dependencies</span>
+  <span class="hljs-comment">#</span>
+  <span class="hljs-comment"># Type `mix help deps` for examples and options</span>
+  <span class="hljs-function"><span class="hljs-keyword">defp</span> <span class="hljs-title">deps</span></span> <span class="hljs-keyword">do</span>
+    [{<span class="hljs-symbol">:phoenix</span>, <span class="hljs-string">&quot;~&gt; 1.1.0&quot;</span>},
+     {<span class="hljs-symbol">:phoenix_ecto</span>, <span class="hljs-string">&quot;~&gt; 2.0&quot;</span>},
+     {<span class="hljs-symbol">:postgrex</span>, <span class="hljs-string">&quot;&gt;= 0.0.0&quot;</span>},
+     {<span class="hljs-symbol">:phoenix_html</span>, <span class="hljs-string">&quot;~&gt; 2.3&quot;</span>},
+     {<span class="hljs-symbol">:phoenix_live_reload</span>, <span class="hljs-string">&quot;~&gt; 1.0&quot;</span>, <span class="hljs-symbol">only:</span> <span class="hljs-symbol">:dev</span>},
+     {<span class="hljs-symbol">:cowboy</span>, <span class="hljs-string">&quot;~&gt; 1.0&quot;</span>}]
+  <span class="hljs-keyword">end</span>
+<span class="hljs-keyword">end</span></code></pre>
+<p>Then we run <code>mix do deps.get, compile</code> to get them into our application.</p><pre><code class="lang-console">$ mix do deps.get, compile
+Running dependency resolution
+Dependency resolution completed successfully
+. . .</code></pre>
+<p>The next piece we need to add is our application&apos;s repo. We can easily do that with the <code>ecto.gen.repo</code> task.</p><pre><code class="lang-console">$ mix ecto.gen.repo
+* creating lib/hello_phoenix
+* creating lib/hello_phoenix/repo.ex
+* updating config/config.exs
+Don&apos;t forget to add your new repo to your supervision tree
+(typically in lib/hello_phoenix.ex):
+
+worker(HelloPhoenix.Repo, [])</code></pre>
+<p>Note: Please see the &quot;Repo&quot; section above for information on what the repo does.</p><p>This task creates a directory for our repo as well as the repo itself.</p><pre><code class="lang-elixir"><span class="hljs-class"><span class="hljs-keyword">defmodule</span> <span class="hljs-title">HelloPhoenix</span></span>.Repo <span class="hljs-keyword">do</span>
+  <span class="hljs-keyword">use</span> Ecto.Repo, <span class="hljs-symbol">otp_app:</span> <span class="hljs-symbol">:hello_phoenix</span>
+<span class="hljs-keyword">end</span></code></pre>
+<p>It also adds this block of configuration to our <code>config/config.exs</code> file. If we have different configuration options for different environments (which we should), we&apos;ll need to add a block like this to <code>config/dev.exs</code>, <code>config/test.exs</code>, and <code>config/prod.secret.exs</code> with the correct values.</p><pre><code class="lang-elixir">. . .
+config <span class="hljs-symbol">:hello_phoenix</span>, HelloPhoenix.Repo,
+<span class="hljs-symbol">adapter:</span> Ecto.Adapters.Postgres,
+<span class="hljs-symbol">database:</span> <span class="hljs-string">&quot;hello_phoenix_repo&quot;</span>,
+<span class="hljs-symbol">username:</span> <span class="hljs-string">&quot;user&quot;</span>,
+<span class="hljs-symbol">password:</span> <span class="hljs-string">&quot;pass&quot;</span>,
+<span class="hljs-symbol">hostname:</span> <span class="hljs-string">&quot;localhost&quot;</span></code></pre>
+<p>We should also make sure to listen to the output of <code>ecto.gen.repo</code> and add our application repo as a child worker to our application&apos;s supervision tree.</p><p>Let&apos;s open up <code>lib/hello_phoenix.ex</code> and do that by adding <code>worker(HelloPhoenix.Repo, [])</code> to the list of children our application will start.</p><pre><code class="lang-elixir"><span class="hljs-class"><span class="hljs-keyword">defmodule</span> <span class="hljs-title">HelloPhoenix</span></span> <span class="hljs-keyword">do</span>
+  <span class="hljs-keyword">use</span> Application
+. . .
+    children = [
+      <span class="hljs-comment"># Start the endpoint when the application starts</span>
+      supervisor(HelloPhoenix.Endpoint, []),
+      <span class="hljs-comment"># Start the Ecto repository</span>
+      worker(HelloPhoenix.Repo, []),
+      <span class="hljs-comment"># Here you could define other workers and supervisors as children</span>
+      <span class="hljs-comment"># worker(HelloPhoenix.Worker, [arg1, arg2, arg3]),</span>
+    ]
+. . .
+<span class="hljs-keyword">end</span></code></pre>
+<p>At this point, we are completely configured and ready to go. We can go back to the top of this guide and follow along.</p>
+                                
+                                </section>
+                            
+    </div>
+    <div class="search-results">
+        <div class="has-results">
+            
+            <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+            <ul class="search-results-list"></ul>
+            
+        </div>
+        <div class="no-results">
+            
+            <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+            
+        </div>
+    </div>
+</div>
+
+                        </div>
+                    </div>
+                
+            </div>
+
+            
+                
+                <a href="G_通道.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page: G_通道">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+                
+                
+            
+        
+    </div>
+
+    <script>
+        var gitbook = gitbook || [];
+        gitbook.push(function() {
+            gitbook.page.hasChanged({"page":{"title":"H_ecto模型","level":"1.2.12","depth":2,"previous":{"title":"G_通道","level":"1.2.11","depth":2,"path":"G_通道.md","ref":"G_通道.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["livereload"],"pluginsConfig":{"livereload":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"H_ecto模型.md","mtime":"2016-02-22T14:54:23.000Z","type":"markdown"},"gitbook":{"version":"3.2.0","time":"2016-08-02T23:02:57.236Z"},"basePath":".","book":{"language":""}});
+        });
+    </script>
+</div>
+
+        
+    <script src="gitbook/gitbook.js"></script>
+    <script src="gitbook/theme.js"></script>
+    
+        
+        <script src="gitbook/gitbook-plugin-livereload/plugin.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-search/search-engine.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-search/search.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-lunr/lunr.min.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-lunr/search-lunr.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-sharing/buttons.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+        
+    
+
+    </body>
+</html>
+
