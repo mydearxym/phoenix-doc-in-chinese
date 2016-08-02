@@ -2,7 +2,7 @@
 
 phoenix 框架的中文文档 
 
-gitbook:
+gitbook:2
 
 [主页](http://www.phoenixframework.org/docs/controllers)
 
