@@ -1,7 +1,7 @@
 # Summary
 
 * [介绍](README.md)
-* [基础内容](概览.md)
+* [Introduction](概览.md)
   * [概览](概览.md)
   * [安装依赖](安装.md)
   * [学习资源](学习资源.md)
