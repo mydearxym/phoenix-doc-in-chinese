@@ -6,7 +6,7 @@
 
 当我们用命令产生一个 `Phoenix` 应用后，默认的目录结构如下：
 
-```bash
+```console
 ├── _build
 ├── config
 ├── deps
@@ -17,7 +17,7 @@
 ```
 我们教程中涉及的大部分内容都在 `web` 目录下，她的结构展开如下图：
 
-```bash
+```console
 ├── channels
 ├── controllers
 │   └── page_controller.ex
@@ -43,7 +43,7 @@
 会把 `priv/static` 里对应的 js, css 文件分别编译到 `web/static` 目录的 `app.js` / `app.css`。
 , 我们现在不会深入，只是留个印象。
 
-```bash
+```console
 priv
 └── static
     └── images
@@ -64,7 +64,7 @@ web
 我们同样需要了解一下 `lib` 目录, 我们应用的 endpoint 位于 `lib/hello_phoenix/endpoint.ex`, 而我们的应用
 启动文件(负责启动我们的应用以及 supervision 监测树)位于 `lib/hello_phoenix.ex`。
 
-```Bash
+```console
 lib
 ├── hello_phoenix
 |   ├── endpoint.ex
