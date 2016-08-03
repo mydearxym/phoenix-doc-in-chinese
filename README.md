@@ -1,10 +1,6 @@
-# phoenix-doc-in-chinese
 
-phoenix 框架的中文文档 
+### phoenix 框架的中文文档
 
-gitbook:2
+[gitbook地址](https://mydearxym.gitbooks.io/phoenix-doc-in-chinese/content/)
 
-[主页](http://www.phoenixframework.org/docs/controllers)
-
-[github](https://github.com/phoenixframework/phoenix_guides)
-
+[官方repo](https://github.com/phoenixframework/phoenix_guides)
