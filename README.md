@@ -1,8 +1,11 @@
 
 ### phoenix 框架的中文文档
 
-* [gitbook地址](https://mydearxym.gitbooks.io/phoenix-doc-in-chinese/content/)
-* [官方repo](https://github.com/phoenixframework/phoenix_guides)
+* [Github地址](https://github.com/mydearxym/phoenix-doc-in-chinese)
+
+* [Gitbook 阅读地址](https://mydearxym.gitbooks.io/phoenix-doc-in-chinese/content/)
+* [官方文档地址](https://github.com/phoenixframework/phoenix_guides)
+* [官方网站地址](http://www.phoenixframework.org/)
 
 ### Phoenix
 * [Github地址](https://github.com/phoenixframework/phoenix)
