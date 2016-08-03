@@ -50,6 +50,7 @@
 * [Github地址](https://github.com/elixir-lang/elixir)
 * [文档](http://elixir-lang.org/docs/stable/eex/)
 
+
 ### 真实项目
 
 > phoenix-react-redux-template
@@ -107,3 +108,39 @@
 
 * [Github地址](https://github.com/huangz1990/pgsqlcn)
 * [文档](http://pgsqlcn.com/)
+
+### Elixir 教程
+
+> Programming elixir Elixir的入门（语言层面）知识
+
+* [Github地址](https://github.com/straightdave/programming_elixir)
+
+> Elixir的高级知识：OTP编程（也是入门）
+
+* [Github地址](https://github.com/straightdave/advanced_elixir)
+
+> elixir-koans (koans 系列)
+
+* [github地址](https://github.com/elixirkoans/elixir-koans)
+
+> 30-days-of-elixir (以测试教学，但版本不是很新)
+
+* [github地址](https://github.com/seven1m/30-days-of-elixir)
+
+
+> 简书上的教程 (入门推荐)
+
+* [地址](http://www.jianshu.com/collection/e7cab9407e1a)
+
+> Elixir examples
+
+* [Github地址](https://github.com/elixir-examples/elixir-examples.github.io)
+* [文档](http://elixir-examples.github.io/)
+
+> Learning Elixir (博客)
+
+* [地址](http://learningelixir.joekain.com/)
+
+> plataformatec (博客，质量深度有保障)
+
+* [地址](http://blog.plataformatec.com.br/tag/elixir/)
