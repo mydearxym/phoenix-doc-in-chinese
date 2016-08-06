@@ -1,3 +1,5 @@
+### 通道
+
 频道 (Channels) 是 Phoenix 中一个激动人心并且十分强大的功能，它允许我们轻松的给应用添加软实时（soft-realtime）功能。Channels 的理念十分简单 -- 即发送和接收消息。发送者 (Senders) 按照主题（topics）广播消息，接收者（Receivers）通过订阅主题来接收这些消息。`发送者` 和 `接收者` 可以随时互换角色。
 
 对于 Elixir 这样一个基于消息传递的语言，你也许会好奇为什么它还需要一个额外的收发消息的机制。使用 Channels, 发送者和接收者都可以不是 Elixir 的进程 (原文: Elixir processess)。 它可以是其他任何东西 --- 一个 JavaScript 客户端，一个 iOS 应用，其他的Phoenix 应用，甚至我们的手表等，另外，消息广播可以有多个接收者，而 Elixir processes 只能一对一的通信。

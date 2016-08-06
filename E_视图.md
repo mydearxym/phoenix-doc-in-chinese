@@ -1,3 +1,4 @@
+### 视图
 
 Phoenix 视图 (views) 有两个主要的工作，第一个，也是最重要的一个是渲染 `模板(template)`, 这里用到的核心函数 `render/3` 是由 `Phoenix.View` 定义的。另外, 视图 (View) 提供一些函数将原始数据转换成 视图(templates) 易于识别的格式 (原文: Views also provide functions which take raw data and make it easier for templates to consume. ), 如果你熟悉装饰器或者 facade pattern (更好的翻译？), 你会发现这很类似。
 
