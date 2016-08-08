@@ -1,4 +1,6 @@
 
+### 升级指南
+
 每一个版本的 Phoenix, 都会在 [News](http://www.phoenixframework.org/blog) 上发布升级指南，并且 blog 标题会以版本号数字开
 头。
 
