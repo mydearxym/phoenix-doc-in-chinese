@@ -1,14 +1,20 @@
-Sometimes we inherit a legacy database on top of which we need to build a new application. We can't control how these databases were created, and changing them to meet our current needs can be both difficult and expensive.
+# 自定义主键
 
-Ecto expects each table to have an auto-incremented integer for a primary key. What if our legacy database requires a string as the primary key instead? No problem. We can create our models with a custom primary key, and Ecto will work just the same as if we had an integer.
+有时我们只在一个已经存在的数据库之上来开发我们的应用，我们不能控制数据库的是怎么创建的，而为此修改数据库代价又
+比较昂贵。
 
-> Note: While Ecto allows us to do this, it's not the natural path Ecto wants to take. Allowing Ecto to use an auto-incremented integer is definitely the right way to go for new applications.
+Ecto 需要一个表中有一个自增的整型字段作为主键。但如果这个现有的数据库是以一个字符串作为主键呢？ 没关系，我们可
+以使用自定义的主键来创建模型。Ecto 会像我们有整型主键一样正常工作。
 
-> Also, we chose this example for simplicity. `name` might not be the best choice for a primary key.
+> *注意* : 尽管 Ecto 支持非整型主键，我们最好还是在新项目中使用整型作为主键。
 
-Let's say that we need a JSON resource that stores rows of team athletes. Each athlete has a name, a position they play on the field, and the number of their jersey. The database that will back this resource requires that each table have a string for a primary key.
+> 另外，这里选择 `name` 只是为了演示的简单性， `name` 并不是主键的最佳选择。
 
-We can generate that resource like this.
+比如我们需要一个 JSON 资源存储一个球队的信息表(每行是一个球员信息)，每个球员有一个 `名字`, 一个 `场上位置`, 以
+及一个 `球衣号码`, 现有的数据库需要每个表有一个字符串类型的主键 ( The database that will back this
+resource requires that each table have a string for a primary key.)。
+
+我们可以像这样生成资源。
 
 ```console
 $ mix phoenix.gen.json Player players name:string position:string number:integer
@@ -29,7 +35,7 @@ and then update your repository by running migrations:
     $ mix ecto.migrate
 ```
 
-The first thing we need to do is add the resources route to the `api` scope in the router.
+我们首先在路由中只用 `api` scope 添加资源的路由。
 
 ```elixir
 . . .
@@ -41,9 +47,11 @@ end
 . . .
 ```
 
-Now we'll need to make a few quick changes to the generated files.
+现在我们需要在生成的文件上做一些小改动。
 
-Let's take a look at the migration first, `priv/repo/migrations/20150908003815_create_player.exs`. We'll need to do two things. The first is to pass in a second argument - `primary_key: false` to the `table/2` function so that it won't create a primary_key. Then we'll need to pass `primary_key: true` to the `add/3` function for the name field to signal that it will be the primary_key instead.
+先来看看迁移任务的文件， `priv/repo/migrations/20150908003815_create_player.exs`。 哦们需要改动两处地方，首先
+是传递一个 `primary_key: false` 给 `table/2` 函数让其不生成主键。然后我们给 name 字段的 `add/3` 函数传递
+`primary_key: true` 让其成为主键。
 
 ```elixir
 defmodule HelloPhoenix.Repo.Migrations.CreatePlayer do
@@ -61,7 +69,17 @@ defmodule HelloPhoenix.Repo.Migrations.CreatePlayer do
 end
 ```
 
-Let's move on to `web/models/player.ex` next. We'll need to add a module attribute `@primary_key {:name, :string, []}` describing our primary key as a string. Then we'll need to tell Phoenix how to convert our data structure to an ID that is used in the routes: `@derive {Phoenix.Param, key: :name}`. We'll also need to remove the `field :name, :string` line because this is our new primary key. If this seems unusual, recall that the schema doesn't list the `id` field in models where `id` is the primary key.
+接下来打开 `web/models/player.ex`, 我们需要添加一行模块属性 `@primary_key {:name, :string, []}` 来描述我们的主
+键是一个字符串。然后我们需要告诉 Phoenix 怎样在路由中获取我们的数据的标识。 我们还需要删除 `field :name,
+:string`, 因为 :name 现在已经是主键了。
+
+( 原文：
+  Let's move on to `web/models/player.ex` next. We'll need to add a module attribute
+  `@primary_key {:name, :string, []}` describing our primary key as a string. Then we'll need to tell Phoenix
+  how to convert our data structure to an ID that is used in the routes: `@derive {Phoenix.Param, key: :name}`.
+  We'll also need to remove the `field :name, :string` line because this is our new primary key. If this seems
+  unusual, recall that the schema doesn't list the `id` field in models where `id` is the primary key.
+)
 
 ```elixir
 defmodule HelloPhoenix.Player do
@@ -78,7 +96,7 @@ defmodule HelloPhoenix.Player do
   . . .
 ```
 
-There's just one more thing we'll need to do, and that's remove the reference to `id: player.id,` in the `def render("player.json", %{player: player})` function body.
+最后，让我们在 `def render("player.json", %{player: player})` 函数体中删除 `id: player.id` 。
 
 ```elixir
 defmodule HelloPhoenix.PlayerView do
@@ -94,13 +112,13 @@ defmodule HelloPhoenix.PlayerView do
 end
 ```
 
-With all of that taken care of, let's run our migration.
+完成之后，我们来运行迁移任务。
 
 ```console
 $mix ecto.migrate
 ```
 
-The resulting `players` table will look like this:
+`players` 表看起来如下：
 
 ```sql
 hello_phoenix_dev=# \d players
@@ -116,4 +134,4 @@ Indexes:
     "players_pkey" PRIMARY KEY, btree (name)
 ```
 
-Now we have a model with the primary key `name` that we can query for with `Repo.get!/2`. We can also use it in our routes instead of an integer id - `localhost:4000/players/iguberman`.
+现在我们有了一个以 `name` 为主键的模型，可以用 `Repo.get!/2` 来查询，同时我们也可以在路由中直接使用 -- `localhost:4000/players/iguberman`。
