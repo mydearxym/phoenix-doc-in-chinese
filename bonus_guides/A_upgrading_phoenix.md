@@ -1,4 +1,6 @@
-For each new version of Phoenix, there will be detailed upgrade instructions in the [News](http://www.phoenixframework.org/blog) section. These posts will be titled by version number.
 
+每一个版本的 Phoenix, 都会在 [News](http://www.phoenixframework.org/blog) 上发布升级指南，并且 blog 标题会以版本号数字开
+头。
 
-Please see the [Phoenix changelog](https://github.com/phoenixframework/phoenix/blob/master/CHANGELOG.md) for release notes on specific versions as well.
+另外你可以查看 [Phoenix changelog](https://github.com/phoenixframework/phoenix/blob/master/CHANGELOG.md) 获取
+每一个发布版的详情。
