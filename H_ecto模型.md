@@ -1,6 +1,7 @@
 ### ecto 模型
 
-Most web applications today need some form of data storage. In the Elixir ecosystem, we have Ecto to enable this. Ecto currently has adapters for the following databases:
+今天绝大多数的 web 应用需要某种形式的数据存储。在 Elixir 生态圈中， Ecto 可以助我们一臂之力。 Ecto 目前
+有下列数据库的适配器：
 
 * PostgreSQL
 * MySQL
@@ -8,13 +9,15 @@ Most web applications today need some form of data storage. In the Elixir ecosys
 * SQLite3
 * MongoDB
 
-Newly generated Phoenix applications integrate both Ecto and the PostgreSQL adapter by default.
+新生成的 Phoenix 应用默认集成了 Ecto 以及 PostgreSQL 数据库的适配器。
 
-This guide assumes that we have generated our new application with Ecto. If we're using an older Phoenix app, or we used the `--no-ecto` option to generate our application, all is not lost. Please follow the instructions in the "Integrating Ecto into an Existing Application" section below.
+这篇指南假设我们是使用 Ecto 来生成的工程。如果我们在使用一个老版本的 Phoenix 应用，或者我们在生成项目时使用了
+`--no-ecto` 选项。请阅读下面的章节 'Integrating Ecto into an Existing Application'
 
-This guide also assumes that we will be using PostgreSQL. For instructions on switching to MySQL, please see the [Using MySQL Guide](http://www.phoenixframework.org/docs/using-mysql).
+这篇指南同时假设我们使用的数据库是 PostgreSQL, 如果你要使用 MySQL, 请查看 [MySQL 指南](http://www.phoenixframework.org/docs/using-mysql)。
 
-Now that we all have Ecto and Postgrex installed and configured, the easiest way to use Ecto models is to generate a resource through the `phoenix.gen.html` task. Let's generate a `User` resource with `name`, `email`, `bio`, and `number_of_pets` fields.
+当我们安装并配置好了 `Ecto` 以及 `PostgreSQL`, 最简单的使用 Ecto 模型的方法就是使用 `phoenix.gen.html` 任务生
+成一个 `资源`。我们就来生成一个包含 `name`, `email`, `bio` 和 `number_of_pets` 字段的 *User* 模型。
 
 ```console
 $ mix phoenix.gen.html User users name:string email:string bio:string number_of_pets:integer
@@ -39,9 +42,11 @@ and then update your repository by running migrations:
     $ mix ecto.migrate
 ```
 
-Notice that we get a lot for free with this task - a migration, a controller, a controller test, a model, a model test, a view, and a number of templates.
+注意这个任务生成了很多东西： 一个迁移(migration), 一个控制器，一个控制器的测试，一个模型，一个模型测试，一个视
+图，以及一些模板。( a migration, a controller, a controller test, a model, a model test, a view, and
+a number of templates.)
 
-Let's follow the instructions the task gives us and insert the `resources "/users", UserController` line in the router `web/router.ex`.
+让我们先来看看 'web/router.ex' 中添加的这行 `resources "/users", UserController`:
 
 ```elixir
 defmodule HelloPhoenix.Router do
@@ -54,12 +59,11 @@ defmodule HelloPhoenix.Router do
     get "/", PageController, :index
     resources "/users", UserController
   end
-
 . . .
 end
 ```
 
-With the resource route in place, it's time to run our migration.
+接下来，我们运行我们的迁移任务：
 
 ```console
 $ mix ecto.migrate
@@ -84,18 +88,20 @@ Generated hello_phoenix.app
     (mix) lib/mix/cli.ex:55: Mix.CLI.run_task/2
 ```
 
-Oops! This error message means that we haven't created the database that Ecto expects by default. In our case, the database we need is called `hello_phoenix_dev` - that is the name of our application with a `_dev` suffix indicating that it is our development database.
+啊哦! 这里的错误消息提示我们现在并没有创建 Ecto 所期望的数据库，目前，我们希望创建的数据库是
+`hello_phoenix_dev` - `_dev` 后缀表明现在是测试数据库。
 
-Ecto has an easy way to do this. We just run the `ecto.create` task.
+Ecto 解决这个问题很简单，只需要运行： `ecto.create` 任务:
 
 ```console
 $ mix ecto.create
 The database for repo HelloPhoenix.Repo has been created.
 ```
 
-Mix assumes that we are in the development environment unless we tell it otherwise with `MIX_ENV=another_environment`. Our Ecto task will get its environment from Mix, and that's how we get the correct suffix to our database name.
+Mix 会默认我们处于 开发环境，除非我们使用`MIX_ENV=another_environment`明确指定当前环境. 我们的Ecto 任务会从
+Mix 中得到环境变量, 并由此决定我们数据库名称的后缀。
 
-Now our migration should run more smoothly.
+现在我们的迁移任务可以正常运行了：
 
 ```console
 $ mix ecto.migrate
@@ -104,11 +110,16 @@ $ mix ecto.migrate
 [info] == Migrated in 0.3s
 ```
 
-Before we get too far into the details, let's have some fun! We can start our server with `mix phoenix.server` at the root of our project and then head to the [users index](http://localhost:4000/users) page. We can click on "New user" to create new users, then show, edit, or delete them. By default, Ecto considers all of the fields on our model to be required. (We'll see how to change that in a bit.) If we don't provide some of them when creating or updating, we'll see a nice error message telling us all of the fields we missed. Our resource generating task has given us a complete scaffold for manipulating user records in the database and displaying the results.
+在我们陷入细节之前，先来做点小实验，我们在项目的根目录运行 `mix phoenix.server` 启动服务器，然后打开
+[users index](http://localhost:4000/users) 页面, 我们可以点击 "new user" 生成一些新用户然后编辑或删除他们。默
+认情况下， Ecto 会默认模型上的所有字段都是必填的，（我们之后会知道如何修改它），如果我们在创建或者更新的时候不
+提供某些字段，我们会看到相应的错误提示信息，我的资源生成器给了我们一个完整的操作和显示 user 记录的手脚架。
 
-Ok, now back to the details.
+好了，我们再看看细节。
 
-If we log in to our database server, and connect to our `hello_phoenix_dev` database, we should see our `users` table. Ecto assumes that we want an integer column called `id` as our primary key, so we should see a sequence generated for that as well.
+如果我们登陆进数据库服务器并连接到 `hello_phoenix_dev` 数据库，我们应该会看到我们的 `users` 表。Ecto 默认我们
+使用 id 作为主键，所以我们也会看到一列整型类型的列。
+
 
 ```console
 =# \connect hello_phoenix_dev
@@ -123,7 +134,9 @@ public | users_id_seq      | sequence | postgres
 (3 rows)
 ```
 
-If we take a look at the migration generated by `phoenix.gen.html` in `priv/repo/migrations`, we'll see that it will add the columns we specified. It will also add timestamp columns for `inserted_at` and `updated_at` which come from the `timestamps/0` function.
+如果我们看看 `phoenix.gen.html` 生成的迁移任务 (位于：priv/repo/migrations), 我们会看到它会自动添加我们指定的
+字段，同样还会自动加入一个 timestamp 列 --- 它由 `timestamps/0` 函数产生，会生成 `inserted_at` 和 `updated_at`
+两个字段。
 
 ```elixir
 defmodule HelloPhoenix.Repo.Migrations.CreateUser do
@@ -143,7 +156,7 @@ end
 
 ```
 
-And here's what that translates to in the actual `users` table.
+让我们看看实际生成的 `users` 表。
 
 ```console
 hello_phoenix_dev=# \d users
@@ -161,21 +174,20 @@ Indexes:
 "users_pkey" PRIMARY KEY, btree (id)
 ```
 
-Notice that we do get an `id` column as our primary key by default, even though it isn't listed as a field in our migration.
+注意，尽管我们没有在迁移任务中显示的指定 id 字段，它还是作为默认的主键被添加了。
 
 #### The Repo
 
-Our `HelloPhoenix.Repo` module is the foundation we need to work with databases in a Phoenix application. Phoenix generated it for us here `lib/hello_phoenix/repo.ex`, and this is what it looks like.
+`HelloPhoenix.Repo` 模块是 phoenix 应用处理数据库的基石，它被自动生成在 `lib/hello_phoenix/repo.ex`, 内容如下：
 
 ```elixir
 defmodule HelloPhoenix.Repo do
   use Ecto.Repo, otp_app: :hello_phoenix
 end
 ```
+它包含两个主要任务：从 `Ecto.Repo` 中继承所有的基础请求函数，另外将 `opt_app` 的名字和我们的项目名称对应起来。
 
-Our repo has two main tasks - to bring in all the common query functions from `Ecto.Repo` and to set the `otp_app` name equal to our application name.
-
-When `phoenix.new` generated our application, it generated some basic configuration as well. Let's look at `config/dev.exs`.
+当 `phoenix.new` 生成我们项目时，也自动产生了一些基础配置信息，让我们来看看 `config/dev.exs`。
 
 ```elixir
 . . .
@@ -188,15 +200,18 @@ database: "hello_phoenix_dev"
 . . .
 ```
 
-It begins by configuring our `otp_app` name and repo module. Then it sets the adapter - Postgres, in our case. It also sets our login credentials. Of course, we can change these to match our actual credentials if they are different.
+从 `opt_app` 名字和 repo 模块开始，然后设置适配器 - 我们目前用的是 Postgres, 同时还配置了登陆信息，当然，你可
+以根据自己的项目需求去修改。
 
-We also have similar configuration in `config/test.exs` and `config/prod.secret.exs` which can also be changed to match our actual credentials.
+类似的配置还有 `config/test.exs` 和 `config/prod.secret.exs`, 同样可根据你自己的项目需求去修改。
 
-#### The Model
+#### 模型
 
-Ecto models have several functions. Each model defines the fields of our schema as well as their types. They each define a struct with the same fields in our schema. Models are where we define relationships with other models. Our `User` model might have many `Post` models, and each `Post` would belong to a `User`. Models also handle data validation and type casting with changesets.
+Ecto 模型定义我们 schema 的字段以及它们的类型。并且定义一个包含相同字段的结构体。模型还是我们定义`关系`的地方,
+比如，我们的 `User` 模型可能包含很多 `Post` 模型，然后每一个 `Post` 属于一个 `User`。模型同时帮助我们处理数据
+验证，以及结合 `changesets` 对数据进行清洗转换等。
 
-Here is the `User` model that Phoenix generated for us.
+这是一个 Phoenix 应用生成的 `User` 模型的例子。
 
 ```elixir
 defmodule HelloPhoenix.User do
@@ -208,104 +223,96 @@ defmodule HelloPhoenix.User do
     field :bio, :string
     field :number_of_pets, :integer
 
-    timestamps
+    timestamps()
   end
 
-  @required_fields ~w(name email bio number_of_pets)
-  @optional_fields ~w()
-
   @doc """
-  Creates a changeset based on the `model` and `params`.
-
-  If no params are provided, an invalid changeset is returned
-  with no validation performed.
+  Builds a changeset based on the `struct` and `params`.
   """
-  def changeset(model, params \\ :empty) do
-    model
-    |> cast(params, @required_fields, @optional_fields)
+  def changeset(struct, params \\ %{}) do
+    struct
+    |> cast(params, [:name, :email, :bio, :number_of_pets])
+    |> validate_required([:name, :email, :bio, :number_of_pets])
   end
 end
 
 ```
 
-The schema block at the top of the model should be pretty self-explanatory. We'll take a look at changesets next.
+上面的 schema 部分很好理解，我们接下来看看 changesets。
 
 #### Changesets and Validations
 
-Changesets define a pipeline of transformations our data needs to undergo before it will be ready for our application to use. These transformations might include type casting, validation, and filtering out any extraneous parameters.
+Changesets 定义了在渲染之前一个转换数据的管道机制，这些转换包括验证必要数据、数据验证、过滤掉无关的参数等等。
 
-Let's take a closer look at our default changeset.
+让我们看看一个默认的 changeset 。
 
 ```elixir
-def changeset(model, params \\ :empty) do
-  model
-  |> cast(params, @required_fields, @optional_fields)
+def changeset(struct, params \\ %{}) do
+  struct
+  |> cast(params, [:name, :email, :bio, :number_of_pets])
+  |> validate_required([:name, :email, :bio, :number_of_pets])
 end
 ```
 
-At this point, we only have one transformation in our pipeline. This `cast/4` function's main job is to separate required fields from optional ones. We define the fields for each category in the module attributes `@required_fields` and `@optional_fields`. By default all of the fields are required.
+现在，我们在模型的处理流上有两个部分，第一步，我们将请求参数和需要校验的字段传入 `cast/3` , cast 第一个参数是
+struct (由 pipeline 传递过来)， 然后 params 是可能需要更新的请求参数，最后一个是需要被更新的参数列表。 另外
+`cast/3` 只抓取 schema 中定义的字段。 接下来, `validate_required/3` 检查 `cast/3` 返回的数据是不是包换所需的字
+段，默认情况下， schema 中所有字段都是必须提供的。
 
-Let's take a look at two ways to validate that this is the case. The first and easiest way is to simply start our application by running the `mix phoenix.server` task at the root of our project. Then we can go to the [new users page](http://localhost:4000/users/new) and click the "submit" button without filling in any fields. We should get an error telling us that something went wrong and enumerating all the fields which can't be blank. That should be all the fields in our schema at this point.
+让我们看看两种验证它们的方式，第一种，也是最容易的方式是在根目录启动我们的应用 `mix phoenix.server`。然后我们
+到 [new users page](http://localhost:4000/users/new) ，在不填写任何信息的情况下，点击 "submit" 提交按钮。这时我
+们应该会得到错误提示：某些字段不能为空（这里指 schema 中定义的字段）。
 
-We can also verify this in iex. Let's stop our server and start it again with `iex -S mix phoenix.server`. In order to minimize typing and make this easier to read, let's alias our `HelloPhoenix.User` model.
+另一种方式是使用 iex，我们先停止服务器然后使用 `iex -S mix phoenix.server` 重新打开。为了少打点字看着方便，我
+们给 `HelloPhoenix.User` 模型起个别名：
 
 ```console
 iex(1)> alias HelloPhoenix.User
 nil
 ```
 
-Then let's create a changeset from our model with an empty `User` struct, and an empty map of parameters.
+然后使用一个空的 `User` struct 来创建一个 changeset, 不带参数。
 
 ```console
 iex(2)> changeset = User.changeset(%User{}, %{})
-%Ecto.Changeset{action: nil, changes: %{}, constraints: [],
- errors: [name: "can't be blank", email: "can't be blank",
-  bio: "can't be blank", number_of_pets: "can't be blank"], filters: %{},
- model: %HelloPhoenix.User{__meta__: #Ecto.Schema.Metadata<:built>, bio: nil,
-  email: nil, id: nil, inserted_at: nil, name: nil, number_of_pets: nil,
-  updated_at: nil}, optional: [], params: %{}, repo: nil,
- required: [:name, :email, :bio, :number_of_pets],
- types: %{bio: :string, email: :string, id: :id, inserted_at: Ecto.DateTime,
-   name: :string, number_of_pets: :integer, updated_at: Ecto.DateTime},
- valid?: false, validations: []}
+#Ecto.Changeset<action: nil, changes: %{},
+  errors: [name: {"can't be blank", []}, email: {"can't be blank", []},
+    bio: {"can't be blank", []}, number_of_pets: {"can't be blank", []}],
+  data: #HelloPhoenix.User<>, valid?: false>
 ```
 
-Once we have a changeset, we can ask it if it is valid.
+一旦有了 changeset, 我们可以简单的检查其是否合法：
 
 ```console
 iex(3)> changeset.valid?
 false
 ```
 
-Since this one is not valid, we can ask it what the errors are.
+如果不和合法的话，我们可以查看错误在哪里：
 
 ```console
 iex(4)> changeset.errors
-[name: "can't be blank", email: "can't be blank",
-bio: "can't be blank", number_of_pets: "can't be blank"]
+[name: {"can't be blank", []}, email: {"can't be blank", []},
+ bio: {"can't be blank", []}, number_of_pets: {"can't be blank", []}]
 ```
 
-It gives us the same list of fields that can't be blank that we got from the front end of our application.
+和之前那个例子看到的错误信息一样。
 
-Now let's test this by moving the `number_of_pets` field from `@required_fields` to `@optional_fields`.
+让我们将`number_of_pets`字段变成可选的，很简单：
 
 ```elixir
-@required_fields ~w(name email bio)
-@optional_fields ~w(number_of_pets)
+|> validate_required([:name, :email, :bio])
 ```
 
-Now either method of verification should tell us that only `name`, `email`, and `bio` can't be blank.
-
-What happens if we pass a key/value pair that is in neither `@required_fields` nor `@optional_fields`? Let's find out.
-
-In a new `iex -S mix phoenix.server` session, we should alias our module again.
+现在只有 name, email 和 bio 才是必须字段了。
+那如果我们传递一个 schema 中不存在的字段呢，让我做个小实验。还是像之前一样先做个别名。
 
 ```console
 iex(1)> alias HelloPhoenix.User
 nil
 ```
 
-Lets create a `params` map with valid values plus an extra `random_key: "random value"`.
+然后创建一个合法但多余的 params 参数 `random_key: "random value"`：
 
 ```console
 iex(2)> params = %{name: "Joe Example", email: "joe@example.com", bio: "An example to all", number_of_pets: 5, random_key: "random value"}
@@ -313,33 +320,24 @@ iex(2)> params = %{name: "Joe Example", email: "joe@example.com", bio: "An examp
 number_of_pets: 5, random_key: "random value"}
 ```
 
-Then let's use our new `params` map to create a changeset.
+然后我们用这个新的 `params` 来创建一个 changeset 。
 
 ```console
 iex(3)> changeset = User.changeset(%User{}, params)
-%Ecto.Changeset{action: nil,
- changes: %{bio: "An example to all", email: "joe@example.com",
-   name: "Joe Example", number_of_pets: 5}, constraints: [], errors: [],
- filters: %{},
- model: %HelloPhoenix.User{__meta__: #Ecto.Schema.Metadata<:built>, bio: nil,
-  email: nil, id: nil, inserted_at: nil, name: nil, number_of_pets: nil,
-  updated_at: nil}, optional: [:number_of_pets],
- params: %{"bio" => "An example to all", "email" => "joe@example.com",
-   "name" => "Joe Example", "number_of_pets" => 5,
-   "random_key" => "random value"}, repo: nil, required: [:name, :email, :bio],
- types: %{bio: :string, email: :string, id: :id, inserted_at: Ecto.DateTime,
-   name: :string, number_of_pets: :integer, updated_at: Ecto.DateTime},
- valid?: true, validations: []}
+#Ecto.Changeset<action: nil,
+  changes: %{bio: "An example to all", email: "joe@example.com",
+    name: "Joe Example", number_of_pets: 5}, errors: [], data: #HelloPhoenix.User<>,
+    valid?: true>
 ```
 
-Our new changeset is valid.
+现在新的 changeset 是合法的。
 
 ```console
 iex(4)> changeset.valid?
 true
 ```
 
-We can also check the changeset's changes - the map we get after all of the transformations are complete.
+我们也可以查看 changeset 目前的改变 -- 经过转换完成后的一个 map 。
 
 ```console
 iex(9)> changeset.changes
@@ -347,11 +345,11 @@ iex(9)> changeset.changes
 number_of_pets: 5}
 ```
 
-Notice that our `random_key` and `random_value` have been removed from our final changeset.
+注意 `random_key` 和 `random_value` 已经在最后的 changeset 中被移除了.
 
-We can validate more than just whether a field is required or not. Let's take a look at some finer-grained validations.
+当然我们能做的还不止这些，让我们再来看一个更细粒度的校验例子。
 
-What if we had a requirement that all biographies in our system must be at least two characters long? We can do this easily by adding another transformation to the pipeline in our changeset which validates the length of the `bio` field.
+比如我们想给简介字段设置一个长度限制，只需要在 pipeline 后面再加一个针对 `bio` 字段的转换规则即可：
 
 ```elixir
 def changeset(model, params \\ :empty) do
@@ -360,15 +358,14 @@ def changeset(model, params \\ :empty) do
   |> validate_length(:bio, min: 2)
 end
 ```
-
-Now if we try to add a new user through the front end of the application with a bio of "A", we should see this error message at the top of the page.
+这时如果我们尝试在创建用户的时给 bio 字段一个 'A', 就会得到错误：
 
 ```text
 Oops, something went wrong! Please check the errors below:
 Bio should be at least 2 characters
 ```
 
-If we also have a requirement for the maximum length that a bio can have, we can simply add another validation.
+类似的，我们可以限制最大长度：
 
 ```elixir
 def changeset(model, params \\ :empty) do
@@ -379,14 +376,14 @@ def changeset(model, params \\ :empty) do
 end
 ```
 
-Now if we try to add a new user with a 141 character bio, we would see this error.
+这时如果超过 140 个字符，也会报错：
 
 ```text
 Oops, something went wrong! Please check the errors below:
 Bio should be at most 140 characters
 ```
 
-Let's say we want to perform at least some rudimentary format validation on the `email` field. All we want to check for is the presence of the "@". The `validate_format/3` function is just what we need.
+我们也可以使用`validate_format`函数执行自定义的校验规则：
 
 ```elixir
 def changeset(model, params \\ :empty) do
@@ -398,38 +395,32 @@ def changeset(model, params \\ :empty) do
 end
 ```
 
-If we try to create a user with an email of "personexample.com", we should see an error message like the following.
+这时，如果我们试图使用 "personexample.com" 作为 email 字段来创建用户，会报错：
 
 ```text
 Oops, something went wrong! Please check the errors below:
 Email has invalid format
 ```
 
-There are many more validations and transformations we can perform in a changeset. Please see the [Ecto Changeset documentation](http://hexdocs.pm/ecto/Ecto.Changeset.html) for more information.
+还有很多校验和转换的例子，请查看 [Ecto Changeset documentation](http://hexdocs.pm/ecto/Ecto.Changeset.html)。
 
 #### Controller Usage
 
-At this point, let's see how we can actually use Ecto in our application. Luckily, Phoenix gave us an example of this when we ran `mix phoenix.gen.html`, the `HelloPhoenix.UserController`.
+现在，让我们看看如何在项目中使用 Ecto 。幸运的是，Phoenix 给了我们一个例子（`mix phoenix.gen.html`）, 在 `HelloPhoenix.UserController`
+中。
 
-Let's work through the generated controller action by action to see how Ecto is used.
-
-Before we get to the first action, let's look at two important lines at the top of the file.
+让我们来仔细看看 Ecto 是怎么在这个生成的控制器中起作用的。
+不过在开始前还是先做一个简单的别名映射，以节省体力（之后可以用 `%User{}` 代替 `%HelloPhoenix.User{}` 了）。
 
 ```elixir
 defmodule HelloPhoenix.UserController do
 . . .
   alias HelloPhoenix.User
-
-  plug :scrub_params, "user" when action in [:create, :update]
 . . .
 end
 ```
 
-We alias `HelloPhoenix.User` so that we can name our structs `%User{}` instead of `%HelloPhoenix.User{}`.
-
-We also plug the `Phoenix.Controller.scrub_params/2` to pre-process our params a bit before they come to an action. `scrub_params/2` does a couple of useful things for us. It makes sure that all of the required fields are present, and raises an error for each that is missing. It will also recursively change any empty strings to nils.
-
-On to our first action, `index`.
+我们来看看第一个 action, `index`.
 
 ```elixir
 def index(conn, _params) do
@@ -438,11 +429,16 @@ def index(conn, _params) do
 end
 ```
 
-The whole purpose of this action is to get all of the users from the database and display them in the `index.html.eex` template. We use the built-in `Repo.all/1` query to do that, and we pass in the (aliased) model name. It's that simple.
+这个 action 的目的是从数据库中获取到所有的 users 信息，并用 index.html.eex 这个模板将他们显示出来。我们使用了
+内建的 `Repo.all/1` 请求来完成 （User 是 HelloPhoenix.User 的别名，之前已经解释过），就这么简单。
 
-Notice that we do not use a changeset here. The assumption is that data will have to pass through a changeset in order to get into the database, so data coming out should already be valid.
+注意这里我们并没有使用 changeset, changeset 假设你写入数据到数据库时不干净，需要"清洗和校验", 但从数据库中取得
+已经存在其中的数据时就不需要了，因为这些数据已经是合法的了。
 
-Now, on to the `new` action. Notice that we do use a changeset, even though we do not use any parameters when we create it. Essentially, we always create an empty changeset in this action. The reason for this is that `new.html` can be rendered here, but it can also be rendered if we have invalid data in the `create` action. The changeset will then contain errors that we need to display back to the user. We render `new.html` with a changeset in both places for consistency.
+
+现在，再来看看 new action, 注意这里我们使用了一个 changeset, 即便 new action 本身并不需要任何参数（它只是发送
+一个空表单到前端），这里需要 changeset 的理由是我们在其他页面比如创建页面出错时可能会重定向到 new action, 需要
+显示错误信息什么的。
 
 ```elixir
 def new(conn, _params) do
@@ -451,7 +447,7 @@ def new(conn, _params) do
 end
 ```
 
-Once a user submits the form rendered from `new.html` above, the form elements and their values will be posted as parameters to the `create` action. This action shares some steps with the iex experiments that we did above.
+接下来是将参数传递过来创建 user：
 
 ```elixir
 def create(conn, %{"user" => user_params}) do
@@ -468,13 +464,16 @@ def create(conn, %{"user" => user_params}) do
 end
 ```
 
-Notice that we get the user parameters by pattern matching with the `"user"` key in the function signature. Then we create a changeset with those params and call `Repo.insert/1`. If the changeset is valid, it will return `{:ok, user}` with the inserted user model, then we set a flash message, and redirect to the `index` action.
+我们先通过 `模式匹配` 得到 user 的参数，然后用这些参数创建一个 changeset，并调用 `Repo.insert/1`, 如果这个
+changeset是合法的，它会返回 {:ok, user} 包含刚刚插入的 user 模型。 再之后，我们设置一条 flash 信息，最后重定向
+到 index 首页。
 
-If insert errored, we re-render `new.html` with the changeset to display the errors to the user.
+如果插入失败了，我们重新渲染 new.html 页面给用户，并显示错误信息。
 
-In the `show` action, we use the `Repo.get!/2` built-in function to fetch the user record identified by the id we get from the request parameters. We don't generate a changeset here because we assume that the data has passed through a changeset on the way in to the database, and therefore is valid when we retrieve it here.
+在 show action 中，我们用内建的 `Repo.get!/2` 函数，根据请求的 id 找到目标 user， 这里没有使用 changeset 是因
+为我们任务数据库里的数据是合法的。
 
-This is the singular version of `index` above.
+和 index 类似。
 
 ```elixir
 def show(conn, %{"id" => id}) do
@@ -483,7 +482,8 @@ def show(conn, %{"id" => id}) do
 end
 ```
 
-In the `edit` action, we use Ecto in a way which is a combination of `show` and `new`. We pattern match for the `id` from the incoming params so that we can use `Repo.get!/2` to retrieve the correct user from the database, as we did in `show`. We also create a changeset from that user because when the user submits a `PUT` request to `update`, there might be errors, which we can track in the changeset when re-rendering `edit.html`.
+在 edit action 中， 我们结合 show 和 index 来使用 `Ecto`, 我们先用`模式匹配`从请求参数中取到 id， 然后使用
+`Repo.get!/2`从数据库中获取用户，我们同时还是用了 changeset, 因为当用户使用 `PUT` 请求时， 参数可能包含错误。
 
 ```elixir
 def edit(conn, %{"id" => id}) do
@@ -493,7 +493,9 @@ def edit(conn, %{"id" => id}) do
 end
 ```
 
-The `update` action is nearly identical to `create`. The only difference is that we use `Repo.update/1` instead of `Repo.insert/1`. `Repo.update/1`, when used with a changeset, keeps track of fields which have changed. If no fields have changed, `Repo.update/1` won't send any data to the database. `Repo.insert/1` will always send all the data to the database.
+update action 几乎和 create 那个一样，唯一的区别是我们使用了 `Repo.update/1` 而不是 `Repo.insert/1`。
+`Repo.update/1` 和 changeset 一起使用时自动检查那些字段被更新了，如果没有字段更新，那么 `Repo.update/1` 不会向
+数据库中写入任何数据， `Repo.insert/1` 则是每次都将所有数据写入数据库。
 
 ```elixir
 def update(conn, %{"id" => id, "user" => user_params}) do
@@ -511,9 +513,8 @@ def update(conn, %{"id" => id, "user" => user_params}) do
 end
 ```
 
-Finally, we come to the `delete` action. Here we also pattern match for the record id from the incoming params in order to use `Repo.get!/2` to fetch the user. From there, we simply call `Repo.delete!/1`, set a flash message, and redirect to the `index` action.
-
-Note: There is nothing in this generated code to allow a user to change their mind about the deletion. In other words, there is no "Are you sure?" modal, so an errant mouse click will delete data without further warning. It's up to us as developers to add this in ourselves if we feel we need it.
+最后，我们看看 delete action, 我们使用`模式匹配`取到 id , 然后使用 `Repo.get!/2` 取到user， 然后只需简单的调用
+`Repo.delete!/1`, 设置一条 flash 消息，然后重定向到 index 首页。
 
 ```elixir
 def delete(conn, %{"id" => id}) do
@@ -529,11 +530,11 @@ def delete(conn, %{"id" => id}) do
 end
 ```
 
-That's the end of our walk-through of Ecto usage in our controller actions. There is quite a bit more that Ecto models can do. Please take a look at the [Ecto documentation](http://hexdocs.pm/ecto/) for the rest of the story.
+我们简单学习了一下如何在控制器中使用 Ecto , 更详细的内容请查看 [Ecto documentation](http://hexdocs.pm/ecto/)。
 
-### Data Relationship and Dependencies
+### 模型关系和依赖
 
-Suppose we are building a very simple video-sharing web application, in addition to having users on our site, we might also want to have videos. We asked Phoenix to scaffold a `Video` model for us:
+假设我们正在编写一个很简单的视频分享类的应用，为了吸引用户，我们先来创建一个 video 模型。
 
 ```console
 $ mix phoenix.gen.model Video videos name:string approved_at:datetime description:text likes:integer views:integer user_id:references:users
@@ -544,15 +545,18 @@ $ mix phoenix.gen.model Video videos name:string approved_at:datetime descriptio
 $ mix ecto.migrate
 ```
 
-Handling individual tables is great, but if we want to build a modern web application, we will need a way to relate our data to each other. Those of us with experience using Ruby's ActiveRecord will be glad to see that Ecto provides a very familiar API for building relationships. For example,
+如果我们要编写一个现代的网页应用，只处理独立的表是不行的，我们需要将数据关联起来，类似于 Ruby 的 ActiveRecord，
+Ecto 也提供了类似的语法糖来处理这些关系，比如：
 
-`Schema.has_many/3` declares one to many relationships, for example, in our video sharing service, our user model might have many uploaded video models.
+`Schema.has_many/3` 声明`一对多`关系,比如，在我们的视频分享应用中，一个 user 可能会上传多个 video 。
 
-`Schema.belongs_to/3` declares a one to one relationship between parent and children models. In our video site example, an uploaded video belongs to its user.
+`Schema.belongs_to/3` 声明父子式的 `属于` 关系 比如，一个 video 只属于一个 user。
 
-`Schema.has_one/3` declares a one to one relationship. Note that has_one is just like has_many except instead of returning a collection of model structs, it returns only one model struct. Continuing with the video-sharing example, while a user might have many uploaded videos, the user might only have one featured video.
+`Schema.has_one/3` 声明`一对一`关系。和 `has_many` 类似，只是返回的不是模型的集合而是一个模型。比如用户上传了
+很多 video, 但他可能只喜欢其中的一个。
 
-Here's how we would declare a `has_many` relationship in `web/models/user.ex`:
+这是一个在 `web/models/user.ex` 中声明 `has_many` 的例子：
+
 ```elixir
 defmodule HelloPhoenix.User do
 . . .
@@ -563,13 +567,15 @@ defmodule HelloPhoenix.User do
     field :number_of_pets, :integer
 
     has_many :videos, HelloPhoenix.Video
-    timestamps
+    timestamps()
   end
 . . .
 end
 ```
 
-Since we used the generator to scaffold our `Video` model and specified the user association with `user_id:references:users`, the `belongs_to` relationship will already be defined for us in `web/models/video.ex`:
+因为之前我们是使用的生成器来生成的 `Video` 模型，并显示的用`user_id:references:users` 制定了它的从属关系,所以
+`belongs_to` 内容被自动添加到了 `web/models/video.ex` 中：
+
 ```elixir
 defmodule HelloPhoenix.Video do
 . . .
@@ -581,41 +587,43 @@ defmodule HelloPhoenix.Video do
     field :views, :integer
     belongs_to :user, HelloPhoenix.User
 
-    timestamps
+    timestamps()
   end
-  @required_fields ~w(name approved_at description user_id)
 . . .
 end
 ```
-Note that we don't declare the field `user_id` in the video model schema. We add it to the required (or optional) field list instead.
 
-We can use our newly declared relationships in our `web/controllers/user_controller.ex` like this:
+注意我们并没有在 video 模型中声明 `user_id`, 我们把它添加到必须字段中去。
+
+我们可以在 `web/controllers/user_controller.ex` 使用它们：
 
 ```elixir
 defmodule HelloPhoenix.UserController do
 . . .
   def index(conn, _params) do
-    users = User |> Repo.all |> Repo.preload [:videos]
+    users = User |> Repo.all |> Repo.preload([:videos])
     render(conn, "index.html", users: users)
   end
 
   def show(conn, %{"id" => id}) do
-    user = User |> Repo.get!(id) |> Repo.preload [:videos]
+    user = User |> Repo.get!(id) |> Repo.preload([:videos])
     render(conn, "show.html", user: user)
   end
 . . .
 end
 ```
-Because we declared a relationship in `HelloPhoenix.User`, `%User{}` will now contain a videos property which starts out as an unloaded relationship. In order to properly display it in `render`, we'll need to tell Ecto to preload the field. Note that `Repo.preload/2` is smart enough to work on just one model or a collection of them.
 
+因为我们在 `HelloPhoenix.User` 中声明了`数据关系`， `%User{}` 会包含一个 videos 的属性，为了将它显示出来，我们
+需要显示的告诉 Ecto。 注意 `Repo.preload/2` 会自动判断是 `一对多` 还是 `多对多`。
 
-### Integrating Ecto into an Existing Application
+### 在现有的项目中集成 Ecto
 
-Adding Ecto to an existing Phoenix application which wasn't using it before is easy. Once we include Ecto and Postgrex as dependencies, there are mix tasks to help us.
+在一个现有的 Phoenix 应用中使用 Ecto 并不难，一旦安装了 `Ecto` 和 `Postgrex` 依赖项目，使用 mix 任务就可以搞定
+了。
 
-#### Adding Ecto and Postgrex as Dependencies
+#### 添加 Ecto 和 Postgrex 作为依赖项
 
-We can add Ecto by way of the `phoenix_ecto` package, and we can add the `postgrex` package directly, just as we would add any other dependencies to our project.
+使用 Ecto, 你可以使用 `phoenix_ecto` 包。 同时我们可以直接添加 `postgres` 包，就像添加项目中其他的依赖一样。
 
 ```elixir
 defmodule HelloPhoenix.Mixfile do
@@ -626,17 +634,18 @@ defmodule HelloPhoenix.Mixfile do
   #
   # Type `mix help deps` for examples and options
   defp deps do
-    [{:phoenix, "~> 1.1.0"},
-     {:phoenix_ecto, "~> 2.0"},
+    [{:phoenix, "~> 1.2.0"},
+     {:phoenix_ecto, "~> 3.0"},
      {:postgrex, ">= 0.0.0"},
-     {:phoenix_html, "~> 2.3"},
+     {:phoenix_html, "~> 2.6"},
      {:phoenix_live_reload, "~> 1.0", only: :dev},
-     {:cowboy, "~> 1.0"}]
+     {:gettext, "~> 0.11",
+     {:cowboy, "~> 1.0"},]
   end
 end
 ```
 
-Then we run `mix do deps.get, compile` to get them into our application.
+然后运行 `mix do deps.get, compile` 将其添加到我们的项目中。
 
 ```console
 $ mix do deps.get, compile
@@ -645,7 +654,7 @@ Dependency resolution completed successfully
 . . .
 ```
 
-The next piece we need to add is our application's repo. We can easily do that with the `ecto.gen.repo` task.
+接下来要添加的是我们应用的 repo, 运行 `ecto.gen.repo` 任务。
 
 ```console
 $ mix ecto.gen.repo
@@ -657,10 +666,7 @@ Don't forget to add your new repo to your supervision tree
 
 worker(HelloPhoenix.Repo, [])
 ```
-
-Note: Please see the "Repo" section above for information on what the repo does.
-
-This task creates a directory for our repo as well as the repo itself.
+这个任务同时还为我们的 repo 创建了一个一个目录。
 
 ```elixir
 defmodule HelloPhoenix.Repo do
@@ -668,7 +674,8 @@ defmodule HelloPhoenix.Repo do
 end
 ```
 
-It also adds this block of configuration to our `config/config.exs` file. If we have different configuration options for different environments (which we should), we'll need to add a block like this to `config/dev.exs`, `config/test.exs`, and `config/prod.secret.exs` with the correct values.
+同时，它自动在我们的配置文件 `config/config.exs` 中添加了一些配置。如果我们对不同的开发环境配置了不同的参数
+（事实上也应该这样），我们需要增加类似的配置代码到 `config/dev.exs`, `config/test.exs` 和 `config/prod.secret.exs`。
 
 ```elixir
 . . .
@@ -680,9 +687,7 @@ password: "pass",
 hostname: "localhost"
 ```
 
-We should also make sure to listen to the output of `ecto.gen.repo` and add our application repo as a child worker to our application's supervision tree.
-
-Let's open up `lib/hello_phoenix.ex` and do that by adding `worker(HelloPhoenix.Repo, [])` to the list of children our application will start.
+我们还需要监听 ecto.gen.repo 的输出，并把它作为一个 child worker 加到应用的`监视树` (supervision tree)上。
 
 ```elixir
 defmodule HelloPhoenix do
@@ -692,12 +697,10 @@ defmodule HelloPhoenix do
       # Start the endpoint when the application starts
       supervisor(HelloPhoenix.Endpoint, []),
       # Start the Ecto repository
-      worker(HelloPhoenix.Repo, []),
+      supervisor(HelloPhoenix.Repo, []),
       # Here you could define other workers and supervisors as children
       # worker(HelloPhoenix.Worker, [arg1, arg2, arg3]),
     ]
 . . .
 end
 ```
-
-At this point, we are completely configured and ready to go. We can go back to the top of this guide and follow along.
