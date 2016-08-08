@@ -13,3 +13,5 @@
   * [F_模板](F_模板.md)
   * [G_通道](G_通道.md)
   * [H_ecto模型](H_ecto模型.md)
+* [进阶部分]()
+  * [A_升级phoenix](bonus_guides/A_upgrading_phoenix.md)
