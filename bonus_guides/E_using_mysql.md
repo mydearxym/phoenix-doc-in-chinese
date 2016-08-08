@@ -1,18 +1,20 @@
-Phoenix applications are configured to use PostgreSQL by default, but what if we want to use MySQL instead? In this guide, we'll walk through changing that default whether we are about to create a new application, or whether we have an existing one configured for PostgreSQL.
+# 使用 MySQL
 
-If we are about to create a new application, configuring our application to use MySQL is easy. We can simply pass the `--database mysql` flag to `phoenix.new` and everything will be configured correctly.
+Phoenix 默认是使用的数据库是 PostgreSQL, 但如果我们想换成 MySQL 呢？ 在这票指南中，我们将学习怎样切换 -- 不管
+是从一个新的应用，还是在一个已经存在的应用上做切换。
+
+如果我们创建一个新的应用，要使用 MySQL 非常简单, 只需要在 `phoenix.new` 的时候使用 `--database mysql` 选项即可，
+phoenix 会为我们完成剩下的工作。
 
 ```console
 $ mix phoenix.new hello_phoenix --database mysql
 ```
 
-This will set up all the correct dependencies and configuration for us automatically. Once we install those dependencies with `mix deps.get`, we'll be ready to begin working with Ecto in our application.
+当我们用 `mix deps.get` 安装完必要的依赖后，我们就可以在应用中使用 Ecto 了。
 
-If we have an existing application, all we need to do is switch adapters and make some small configuration changes.
+如果我们在一个已经存在的应用中，我们也只需要更换一个适配器并在配置上做一些小改动。
 
-To switch adapters, we need to remove the Postgrex dependency and add a new one for Mariaex instead.
-
-Let's open up our `mix.exs` file and do that now.
+关于更换适配器，我们需要删除依赖项 (`mix.exs`) 中的 `Postgrex`, 然后添加新的适配器： `Mariaex` 。
 
 ```elixir
 defmodule HelloPhoenix.Mixfile do
@@ -33,7 +35,7 @@ defmodule HelloPhoenix.Mixfile do
 end
 ```
 
-We also need to remove the `:postgrex` app from our list of applications and substitute the `:mariaex` app instead. Let's do that in `mix.exs` as well.
+我们同样需要将应用列表里的 `:postgrex` 用 `:mariaex` 来取代，代码同样位于 `mix.exs` 文件中。
 
 ```elixir
 defmodule HelloPhoenix.Mixfile do
@@ -48,7 +50,7 @@ end
 . . .
 ```
 
-Next, we need to configure our new adapter. Let's open up our `config/dev.exs` file and do that.
+接下来，我们需要配置新适配器， 让我们修改 `config/dev.exs` 。
 
 ```elixir
 config :hello_phoenix, HelloPhoenix.Repo,
@@ -58,24 +60,22 @@ password: "",
 database: "hello_phoenix_dev"
 ```
 
-If we have an existing configuration block for our `HelloPhoenix.Repo`, we can simply change the values to match our new ones. The most important thing is to make sure we are using the MySQL adapter `adapter: Ecto.Adapters.MySQL,`.
+如果我们是在一个已存在的应用中，只需要修改相对应的字段即可，只需要确保适配器是使用 MySQL 即可 ：`adapter: Ecto.Adapters.MySQL` 。
+`config/test.exs` 和 `config/prod.secret.exs` 的配置与此类似。
 
-We also need to configure the correct values in the `config/test.exs` and `config/prod.secret.exs` files as well.
-
-Now all we need to do is fetch our new dependency, and we'll be ready to go.
+现在我们需要安装依赖：
 
 ```console
 $ mix do deps.get, compile
 ```
-
-With our new adapter installed and configured, we're ready to create our database.
+当安装完成并且配置完毕，我们就可以来创建数据库了。
 
 ```console
 $ mix ecto.create
 The database for HelloPhoenix.repo has been created.
 ```
 
-We're also ready to run any migrations, or do anything else with Ecto that we might choose.
+我们可以执行迁移任务了，或者使用 Ecto 做任何事情。
 
 ```console
 $ mix ecto.migrate
