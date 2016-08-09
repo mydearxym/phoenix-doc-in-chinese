@@ -1,21 +1,30 @@
-Since our Phoenix apps are simply Elixir applications, they  have the same configuration and structure as other Mix projects. Recall that Mix is the build tool used by most Elixir apps.
+# 配置
+
+因为 Phoenix 只是 Elixir 应用程序的一种，所以他的配置和结构和其他的 Mix 工程基本一致 (绝大多数的 Elixir 应用都
+使用 Mix 作为构建工具)。
 
 #### .ex and .exs Files Types
 
-The config for our Phoenix app is stored in a combination of `.ex` and `.exs` files. Although both file types are Elixir scripts, they are compiled differently.
+Phoenix 应用的配置存储在 `.ex` 和 `.exs` 文件中，尽管这两种文件都是 Elixir 脚本，但他们在经过编译后还是差异。
 
-Our `.exs` files are compiled in memory each time they are run (such as on reload), which makes them ideal for storing configuration details and scripts that change often (such as standalone tasks during development).
+`.exs` 文件是在每次运行时（比如重启）编译到内存中，这使得他非常适合那些变动非常频繁的配置（比如开发是时的独立
+任务等）。
 
-Whereas `.ex` files are compiled to `.beam` files that run on the Erlang Virtual Machine (BEAM), which makes them useful for storing higher level configuration that changes less frequently (such as endpoint and OTP supervisor/worker config). 
+而 `.ex` 文件会被编译成 `.beam` 后缀的文件运行在 Erlang 虚拟机上 (Erlang Virtual Machine `BEAM`), 这使得他比较
+适合存储变动不太频繁的配置 （比如 OTP 的 supervisor/worker 配置）。
 
+#### 配置文件和环境
 
-#### Config Files and Environments
+`mix.exs` 配置文件在项目的根目录, 他包含一些非常重要的配置，包括编译路径，项目依赖以及别名等等。
 
-Our `mix.exs` config file is located in the root folder of our app and contains some important overall config details relating to our app, including compilation paths, dependencies and aliases.
+Phoenix 应用惯例是在不同的环境下使用不同的配置文件，比如 `开发环境` 或 `生产环境`。这使得开发者在部署应用时体
+验一流，默认情况下，根目录的 `/config` 默认包含下列配置文件：
 
-Phoenix applications are intended to be run with configuration particular to different environments, such as 'development' or 'production'. This allows for an improved developer experience and smoother workflow when deploying apps to production. By default, the `/config` folder at the root of our app will include the following config files:
+`config.exs` 是我们的主配置文件(master config file)， 在所有环境下起效。包含总体的配置信息比如日志和 endpoint
+细节，比如我们应用的 url 和根目录。另外文件的最下面，我们同样根据当前的环境引入对应的配置文件。我们可以在启动
+或部署应用的时候通过设置 `Mix.env` 环境变量轻松的切换不同环境的配置文件。比如，我们将变量设置成 `#prod.exs` 来
+启动生产服务器。
 
-`config.exs`, which is our master config file that is common across all our environments. It contains overall app config such as our logging and endpoint details, such as our app url and root directory. Additionally, towards the bottom of this file, we also take the important step of importing the configuration specific to our current environment.  We can easily switch between the different configuration files for our environments by adjusting the value for the `Mix.env` environment variable below when we start/deploy our app; for instance, we'd set the value to `"#prod.exs"` for our production environment.
 
 ```elixir
 ...
@@ -25,26 +34,30 @@ import_config "#{Mix.env}.exs"
 ...
 ```
 
-`dev.exs`, which is used to store config details specific to our development environment, such as debugging settings and our database connection details.
+`dev.exs`, 开发环境配置文件，包含调试设置以及数据库连接细节等。
 
-`prod.exs`, which is used to store config for our production environment, since these settings often need to be different and more strict than our dev or test environments. For instance, in production we use stronger hashing of passwords, which would slow down performance during development or testing, but is an unavoidable expense for a production app.
+`prod.exs`, 生产环境配置文件，这里的配置和开发或者测试都不同并且更加严格，比如，在生产环境下我们需要使用强哈希
+的密码，这在开发和测试时可能会影响性能，但对于生产环境是不可避免的。
 
-`prod.secret.exs`, which is used to store sensitive configuration details relating to our production environment (such as passwords or API keys), and is thus generally excluded from the version control in our code repository.  Note that config details from this file can be imported into our other files as appropriate.
+`prod.secret.exs`, 用于存储敏感的配置信息，比如密码 和 API 密钥等，因此需要在版本控制时将其排除在外，注意这里
+的配置可以在其他文件中引用。
 
-`test.exs`, which is used to store any config details specific to our testing environment.
+`test.exs`, 测试环境的配置文件。
 
-We should open each of these files and familiarize ourselves with the contents. 
+这些文件中的配置大同小异。
 
-In addition to these default development (`dev.exs`), test (`test.exs`) and production (`prod.exs`) environment configurations, Phoenix supports the use of custom environment configurations that we can manually add as we get more advanced.
+另外除了默认的 开发环境 (`dev.exs`), 测试环境 (`test.exs`) 和生产环境 (`prod.exs`), Phoenix 同样支持自定义的环
+境配置。
 
-#### Umbrella Apps
+#### 主从应用 (Umbrella Apps)
 
-Umbrella apps enable multiple child applications to run together, which can help to reduce the overall complexity of our app by separating different functionality into smaller apps that run together. While a full discussion of Umbrella Apps extends beyond the scope of this Guide, for now it's worth simply noting that the configuration of an Umbrella app is slightly different (and in some ways a bit simpler) than what's outlined above, since much of the configuration details will reside in the config for each of the children apps.
+主从应用允许多个子应用在一起运行，这样，通过将不同功能分给子应用可以减轻应用的复杂性。详细谈论主从应用的细节超
+过了本指南的范围，现在只需要知道主从应用的配置比正常应用有一些不同（甚至在某些方面更简单），因为一些配置的细节
+由自应用保管。
 
-#### Summary
+#### 总结
 
-Config is an important topic and essential to every app we build. The important points to take away from this guide are that:
-- Our `.ex` and `.exs` files are used to store the configuration for our app.
-- Our `.exs` files are compiled in memory each time they are run which makes them ideal for storing configuration details.
-- Mix apps include config for development, test and production environments by default, and custom environments can be manually added.
-- We can store our sensitive production config in our `prod.secret.exs` file, outside of version control.
+- 应用的配置由 `.ex` 和 `.exs` 文件保管。
+- `.exs` 文件每次会编译到内存中适用于保存改动频繁的配置。
+- Mix 应用默认包括开发环境，测试环境以及生产环境，还可以手动添加自定义环境。
+- 我们可以在 `prod.secret.exs` 存储敏感信息，排除在版本控制之外。
