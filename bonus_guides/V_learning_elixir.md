@@ -1,17 +1,17 @@
-Here is a selected list of resources to help with learning Elixir and Erlang.
+# 一些学习 Elixir 和 Erlang 的学习资料。
 
 ## Elixir
-- [Elixir Guides](http://elixir-lang.org/getting-started/introduction.html)
-- [Official Documentation](http://elixir-lang.org/docs/stable/elixir)
+- [Elixir 指南](http://elixir-lang.org/getting-started/introduction.html)
+- [官方文档](http://elixir-lang.org/docs/stable/elixir)
 
-##### Books
+##### 书
 - [Programming Elixir](https://pragprog.com/book/elixir/programming-elixir), Dave Thomas
 - [Elixir in Action](https://www.manning.com/juric/), Saša Jurić
 - [Introducing Elixir](http://shop.oreilly.com/product/0636920030584.do), Simon St. Laurent, J. David Eisenberg
 - [Metaprogramming Elixir](https://pragprog.com/book/cmelixir/metaprogramming-elixir), Chris McCord
 - [The Little Elixir & OTP Guidebook](https://www.manning.com/tanweihao/), Benjamin Tan Wei Hao
 
-##### Videos
+##### 视频
 - [All Aboard The Elixir Express](http://www.confreaks.tv/videos/railsconf2014-workshop-all-aboard-the-elixir-express), Chris McCord
 
 ##### The Erlangelist: Understanding Elixir Macros, by Saša Jurić
