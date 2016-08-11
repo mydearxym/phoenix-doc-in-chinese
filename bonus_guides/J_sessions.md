@@ -1,10 +1,13 @@
-Phoenix gets its session functionality from Plug. Plug ships with two forms of session storage out of the box - cookies, and Erlang Term Storage (ETS).
+# 会话 (Session)
+
+Phoenix 从 Plug 中继承了`会话` (Session) 功能。Plug 支持两种会话存储方式 -- cookies 和 Erlang Term Storage (ETS)。
 
 ## Cookies
 
-Phoenix uses Plug's cookie session storage by default. The two things that make this work are having a `secret_key_base` configured for our environment - this includes the base `config/config.exs` - and the correct configuration for `Plug.Session` in our endpoint.
+Phoenix 默认使用 Plug 的 cookie 会话存储。我们需要在两个地方配置 `secret_key_base` 来使其正常工作 -- 在
+`config/config.exs` 以及在 endpoint 配置 `Plug.Session` 。
 
-Here's the `config/config.exs` file from a newly generated Phoenix application, showing the `secret_key_base` set for us.
+下面是刚生成的 Phoenix 应用的 `config/config.exs` 文件内容的 `secret_key_base` 部分。
 
 ```elixir
 config :hello_phoenix, HelloPhoenix.Endpoint,
@@ -13,12 +16,12 @@ config :hello_phoenix, HelloPhoenix.Endpoint,
   secret_key_base: "some_crazy_long_string_phoenix_generated",
   debug_errors: false,
   pubsub: [name: HelloPhoenix.PubSub,
-  adapter: Phoenix.PubSub.PG2]
+           adapter: Phoenix.PubSub.PG2]
 ```
 
-Plug uses our `secret_key_base` value to encrypt and sign each cookie to make sure it can't be read or tampered with.
+Plug 使用 `secret_key_base` 的值来给每一个 cookie 签名，以防止其被篡改。
 
-And here is the default `Plug.Session` configuration from `lib/hello_phoenix/endpoint.ex`.
+下面是 `lib/hello_phoenix/endpoint.ex` 中 `Plug.Session` 的默认配置:
 
 ```elixir
 defmodule HelloPhoenix.Endpoint do
@@ -33,9 +36,11 @@ end
 ```
 
 ## ETS
-Phoenix also supports server-side sessions via ETS. To configure ETS sessions, we need to create an ETS table when we start our application. We'll call ours `session`. We also need to re-configure `Plug.Session` in our endpoint.
 
-Here's how we would create an ETS table on application startup in `lib/hello_phoenix.ex`.
+Phoenix 同时通过 `ETS` 支持服务端的会话管理。 为了配置 ETS 会话， 我们需要在应用启动的时候创建一个 ETS 表。我
+们还需要重新配置一下  `Plug.Session`。
+
+这里展示了我们怎样在 `lib/hello_phoenix.ex` 文件中在应用启动的时候创建 ETS 表。
 
 ```elixir
 def start(_type, _args) do
@@ -44,9 +49,10 @@ def start(_type, _args) do
 . . .
 ```
 
-In order to re-configure `Plug.Session`, we need to change the store, specify the name of the key for the ETS table, and specify the name of the table in which we are storing the sessions. The `secret_key_base` is not necessary if we are using ETS session storage.
+为了重新配置 `Plug.Session`, 我们需要需要改变 `store` 字段，明确我们使用的是 ETS 表，并且明确声明我们存储会话
+的表名。 对于 ETS 来说， `secret_key_base` 是不必须的。
 
-Here is how it looks in `lib/hello_phoenix/endpoint.ex`.
+这是在 `lib/hello_phoenix/endpoint.ex` 中的配置：
 
 ```elixir
 defmodule HelloPhoenix.Endpoint do
@@ -60,17 +66,21 @@ defmodule HelloPhoenix.Endpoint do
 end
 ```
 
-While we can use ETS for session storage, it might not be the best idea. This is from the `Plug.Session` documentation.
+尽管我们可以使用 ETS 作为会话存储，但这并不是最好的选择，下面内容节选自 `Plug.Session` 文档：
 
-> We don’t recommend using this store in production as every session will be stored in ETS and never cleaned until you create a task responsible for cleaning up old entries.
+> 我们并不推荐将 ETS 作为会话存储在生产环境下使用，因为每次会话会存储在 ETS 但却没有清理机制，除非我们专门创建
+> 一个任务来做这件事情。
 
-> Also, since the store is in-memory, it means sessions are not shared between servers. If you deploy to more than one machine, using this store is again not recommended.
+> 同时，ETS 是在内存中的，这意味着它不能再多个服务器中被共享， 所以，当部署在多个服务器中时，并不是一个好的选择。
 
-## Accessing Session Data
+## 获取会话数据
 
-With the proper configuration in place, we can access session data in our application's controllers.
+当配置无误后，我们就可以在控制器中获取会话数据了。
 
-Here's a really quick example of putting a value into the session and getting it out again. We can change the `index` action of our generated `HelloPhoenix.PageController` at `web/controllers/page_controller.ex` to use `put_session/3`, `get_session/2`, and then render only the text that made the session round-trip.
+这里是一个简单的设置一个回话数据并将其取回的例子。
+
+我们可以像下面例子中那样在 `web/controllers/page_controller.ex` 文件中改变 `HelloPhoenix.PageController` 控制
+器的 `index` action, 来让会话信息在浏览器服务器之间来回穿越一下。
 
 ```elixir
 defmodule HelloPhoenix.PageController do
