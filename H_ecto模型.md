@@ -11,6 +11,8 @@
 
 新生成的 Phoenix 应用默认集成了 Ecto 以及 PostgreSQL 数据库的适配器。
 
+如果相对 Ecto 有一个快速全面的了解，请查看 [Ecto 入门手册](https://hexdocs.pm/ecto/getting-started.html)
+
 这篇指南假设我们是使用 Ecto 来生成的工程。如果我们在使用一个老版本的 Phoenix 应用，或者我们在生成项目时使用了
 `--no-ecto` 选项。请阅读下面的章节 'Integrating Ecto into an Existing Application'
 
