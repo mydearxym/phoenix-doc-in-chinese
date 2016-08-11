@@ -1,4 +1,4 @@
-# 在代理后面使用 phoenix
+# 配合代理服务器使用 phoenix
 
 为了在代理服务器比如 `nginx` 或者 `apache` 后面使用 Phoenix, 我们需要配置一个特殊的监听端口。
 
