@@ -27,3 +27,4 @@
   * [P_使用 ssl](bonus_guides/P_using_ssl.md)
   * [S_使用代理](bonus_guides/S_phoenix_behind_proxy.md)
   * [V_学习 Elixir](bonus_guides/V_learning_elixir.md)
+  * [X_填充数据](bonus_guides/X_seeding_data.md)
