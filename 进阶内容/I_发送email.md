@@ -1,15 +1,31 @@
-Sending email from a Phoenix application is really easy. Before we begin, we'll need an account with Mailgun - we won't actually be able to send mail without it. Once we have an account, though, the rest will be straightforward.
+# 发送 Email
 
-First, [sign up at Mailgun](https://mailgun.com/signup). They have a generous number of free emails per month, so we can get going with a free account.
+Sending email from a Phoenix application is really easy. Phoenix does not ship with a library to send
+emails, but there are various packages available that can help with that.
 
-Once we have an account, we'll get a sandbox through which we can send mail. The url of that sandbox will be our domain unless we choose to create a custom one through Mailgun.
+The options include [Phoenix Swoosh](https://github.com/swoosh/phoenix_swoosh) and [Bamboo](https://github.com/thoughtbot/bamboo).
 
-Now that we have an account, we'll need to add `mailgun` as a dependency to our project. We'll do that in the `deps/0` function in `mix.exs`.
+If you are only going to use Mailgun, you can use the mailgun package instead:
+
+## Using the Mailgun package
+
+Before we begin, we'll need an account with Mailgun - we won't actually be able to send mail without it.
+Once we have an account, though, the rest will be straightforward.
+
+First, [sign up at Mailgun](https://mailgun.com/signup). They have a generous number of free emails per month,
+so we can get going with a free account.
+
+Once we have an account, we'll get a sandbox through which we can send mail. The url of that sandbox will be
+our
+domain unless we choose to create a custom one through Mailgun.
+
+Now that we have an account, we'll need to add `mailgun` as a dependency to our project. We'll do that in the
+`deps/0` function in `mix.exs`.
 
 ```elixir
 defp deps do
-  [{:phoenix, "~> 1.1.0"},
-   {:phoenix_ecto, "~> 2.0"},
+  [{:phoenix, "~> 1.2.0"},
+   {:phoenix_ecto, "~> 3.0"},
    {:postgrex, ">= 0.0.0"},
    {:phoenix_html, "~> 2.3"},
    {:phoenix_live_reload, "~> 1.0", only: :dev},
@@ -18,17 +34,27 @@ defp deps do
 end
 ```
 
-Next, we'll need to run `mix deps.get` to bring the `mailgun` package into our application.
+Next, we'll need to run `mix deps.get` to bring the `mailgun` package into our application. In the case of a
+dependency conflict error with Poison, add the following line as well:
+
+```
+{:poison, "~> 2.1", override: true}
+```
 
 ### Configuration
 
 We'll also need to configure our `:mailgun_domain` and `:mailgun_key` in `config/config.ex`.
 
-The `:mailgun_domain` will be a full url, something like this `https://api.mailgun.net/v3/sandbox-our-domain.mailgun.org`. The `:mailgun_key` will be a long string - "key-another-long-string".
+The `:mailgun_domain` will be a full url, something like this
+`https://api.mailgun.net/v3/sandbox-our-domain.mailgun.org`.
+The `:mailgun_key` will be a long string - "key-another-long-string".
 
-For security reasons, it's important to not commit these values to a public source code repository. There are a couple of ways we can accomplish this.
+For security reasons, it's important to not commit these values to a public source code repository. There are
+a couple of ways we can accomplish this.
 
-One way is quick, but it requires us to set environment variables for our `:mailgun_domain` and `:mailgun_key` in all of our environments - development, production, and whichever other environments we might define. With the environment variables set, we can reference them in our `config/config.exs` file.
+One way is quick, but it requires us to set environment variables for our `:mailgun_domain` and `:mailgun_key`
+in all of our environments - development, production, and whichever other environments we might define. With
+the environment variables set, we can reference them in our `config/config.exs` file.
 
 ```elixir
 config :hello_phoenix,
@@ -36,9 +62,13 @@ config :hello_phoenix,
        mailgun_key: System.get_env("MAILGUN_API_KEY")
 ```
 
-There's another way which doesn't require environment variables for all environments, but is a little more complex to set up. This method mimics the way that `config/prod.secret.exs` works by creating a `config/config.secret.exs` file which will apply to all environments. We won't be using `prod.secret.exs` itself, because we will need these configuration values in development as well as production. Here goes.
+There's another way which doesn't require environment variables for all environments, but is a little more
+complex to set up. This method mimics the way that `config/prod.secret.exs` works by creating a`config/config.secret.exs`
+file which will apply to all environments. We won't be using `prod.secret.exs` itself, because we will need
+these configuration values in development as well as production. Here goes.
 
-The first thing we will do is add a line to the `.gitignore` file for a new `config/config.secret.exs` file. This will keep `config.secret.exs` out of our git repository.
+The first thing we will do is add a line to the `.gitignore` file for a new `config/config.secret.exs` file.
+This will keep `config.secret.exs` out of our git repository.
 
 ```elixir
 . . .
@@ -72,11 +102,16 @@ import_config "#{Mix.env}.exs"
 import_config "config.secret.exs"
 ```
 
-Since our `config/config.secret.exs` file won't be in our repository, we'll need to take some extra steps when we deploy our application. Please see the [Deployment Introduction Guide](http://www.phoenixframework.org/docs/deployment) for more information.
+Since our `config/config.secret.exs` file won't be in our repository, we'll need to take some extra steps
+when we deploy our application. Please see the
+[Deployment Introduction Guide](http://www.phoenixframework.org/docs/deployment)
+for more information.
 
 ### The Client Module
 
-In order for our application to interact with Mailgun, we'll need a client module. Let's define one here `lib/hello_phoenix/mailer.ex`. When we `use` the `Mailgun.Client` module in the second line, we pass our configuration to the `mailgun` package, and we import `mailgun`'s `send_email/1` function into our mailer.
+In order for our application to interact with Mailgun, we'll need a client module. Let's define one here
+`lib/hello_phoenix/mailer.ex`. When we `use` the `Mailgun.Client` module in the second line, we pass our
+configuration to the `mailgun` package, and we import `mailgun`'s `send_email/1` function into our mailer.
 
 ```elixir
 defmodule HelloPhoenix.Mailer do
@@ -86,11 +121,18 @@ defmodule HelloPhoenix.Mailer do
 end
 ```
 
-> Note The filesystem watcher does not monitor files in the `lib` directory for changes in order to recompile them. This means that if we update the mailer client, we'll need to restart the server in order for those changes to take effect.
+> Note The filesystem watcher does not monitor files in the `lib` directory for changes in order to recompile
+> them. This means that if we update the mailer client, we'll need to restart the server in order for those
+> changes to take effect.
 
-With this in place, we can start creating our custom email functions. Web applications may send any number of different types of emails - welcome emails after signup, password confirmations, activity notifications - the list goes on. For each type of email, we'll define a new function which will call `send_email/1`, passing in a keyword list of arguments.
+With this in place, we can start creating our custom email functions. Web applications may send any number of
+different types of emails - welcome emails after signup, password confirmations, activity notifications - the
+list goes on. For each type of email, we'll define a new function which will call `send_email/1`, passing in a
+keyword list of arguments.
 
-Let's say we want to send a welcome email to new users formatted as plain text. We'll need to know who to send the email to, as well as the "from" address, subject, and body of the email. This will be sent as a plain text email because we've specified the `:text` option.
+Let's say we want to send a welcome email to new users formatted as plain text. We'll need to know who to send
+the email to, as well as the "from" address, subject, and body of the email. This will be sent as a plain text
+email because we've specified the `:text` option.
 
 ```elixir
 def send_welcome_text_email(email_address) do
@@ -107,7 +149,9 @@ Sending this email is as easy as invoking the function with an email address, fr
 HelloPhoenix.Mailer.send_welcome_text_email("us@example.com")
 ```
 
-Since we're just getting started, it would be great to test this out locally without hitting Mailgun. The `mailgun` package gives us a very easy way to do this. In the client module, we set the mode to `:test` and provide a path to a file for `mailgun` to write out the JSON representation of our emails.
+Since we're just getting started, it would be great to test this out locally without hitting Mailgun. The
+`mailgun` package gives us a very easy way to do this. In the client module, we set the mode to `:test` and
+provide a path to a file for `mailgun` to write out the JSON representation of our emails.
 
 Let's add those to our client module at `lib/hello_phoenix/mailer.ex`.
 
@@ -115,13 +159,15 @@ Let's add those to our client module at `lib/hello_phoenix/mailer.ex`.
 defmodule HelloPhoenix.Mailer do
   use Mailgun.Client, domain: Application.get_env(:my_app, :mailgun_domain),
                       key: Application.get_env(:my_app, :mailgun_key),
-                      mode: :test,
+                      mode: :test, # Alternatively use Mix.env while in the test environment.
                       test_file_path: "/tmp/mailgun.json"
   . . .
 end
 ```
 
-Let's try this out from `iex`. We'll use `iex -S mix phoenix.server` in order to interact with a running Phoenix application. Once we're in an `iex` session, we can call our welcome email function, passing in the address we want to send the email to.
+Let's try this out from `iex`. We'll use `iex -S mix phoenix.server` in order to interact with a running
+Phoenix application. Once we're in an `iex` session, we can call our welcome email function, passing in the
+address we want to send the email to.
 
 ```console
 $ iex -S mix phoenix.server
@@ -139,7 +185,8 @@ $ more /tmp/mailgun.json
 {"to":"us@example.com","text":"Welcome to HelloPhoenix!","subject":"Welcome!","from":"Mailgun Sandbox <postmaster@sandbox-our-domain.mailgun.org>"}
 ```
 
-We can send HTML emails as well. To do this, we can define a new function which uses an `:html` key instead of `:text`. The HTML value we use will need to be a string.
+We can send HTML emails as well. To do this, we can define a new function which uses an `:html` key instead
+of `:text`. The HTML value we use will need to be a string.
 
 ```elixir
 def send_welcome_html_email(email_address) do
@@ -177,7 +224,8 @@ def send_welcome_html_email(email_address) do
 end
 ```
 
-When we call the `send_welcome_html_email/1` function, we get almost the same output, with the HTML content instead of the text content.
+When we call the `send_welcome_html_email/1` function, we get almost the same output, with the HTML content
+instead of the text content.
 
 ```console
 $ iex -S mix phoenix.server
@@ -193,7 +241,11 @@ $ more /tmp/mailgun.json
 {"to":"them@example.com","subject":"Welcome!","html":"<strong>Welcome to HelloPhoenix Test</strong>","from":"Mailgun Sandbox <postmaster@sandbox-our-domain.mailgun.org>"}
 ```
 
-For many email uses, it's good to have clients try to render an HTML version first, then fall back to plain text if they are unable to do so. Let's write a new `send_welcome_email/1` function which will supersede the other two welcome email functions. In it, we'll simply use both `:text` and `:html` options. This will produce a multi-part email with the text section separated from the HTML section. Each will appear in the order it is defined in the function.
+For many email uses, it's good to have clients try to render an HTML version first, then fall back to plain
+text if they are unable to do so. Let's write a new `send_welcome_email/1` function which will supersede the
+other two welcome email functions. In it, we'll simply use both `:text` and `:html` options. This will produce
+a multi-part email with the text section separated from the HTML section. Each will appear in the order it is
+defined in the function.
 
 ```elixir
 def send_welcome_email(email_address) do
@@ -223,7 +275,8 @@ defmodule HelloPhoenix.Mailer do
   . . .
 ```
 
-When we restart the application and call our `send_welcome_email/1` function, we actually get a response back from Mailgun telling us our email has been queued.
+When we restart the application and call our `send_welcome_email/1` function, we actually get a response back
+from Mailgun telling us our email has been queued.
 
 ```console
 iex> HelloPhoenix.Mailer.send_welcome_email("us@example.com")
@@ -233,7 +286,8 @@ iex> HelloPhoenix.Mailer.send_welcome_email("us@example.com")
 
 Great! Time to check our inbox.
 
-Looking at the original source of our email, we can see that it is indeed a multipart email with two parts. The first is our text email, with a Content-Type of "text/plain". The second is our HTML email with a Content-Type of "text/html".
+Looking at the original source of our email, we can see that it is indeed a multipart email with two parts.
+The first is our text email, with a Content-Type of "text/plain". The second is our HTML email with a Content-Type of "text/html".
 
 ```
 To: them@example.com
@@ -260,9 +314,12 @@ Content-Transfer-Encoding: 7bit
 
 ### Tidying Up
 
-What we've written so far is fine, but for a real-world welcome email, we're going to need more than a few words of text or a single HTML tag. With more text or HTML, though, our `send_welcome_email/1` will become messy quite quickly. The solution is private functions which cordon off the complexity behind a descriptive name.
+What we've written so far is fine, but for a real-world welcome email, we're going to need more than a few
+words of text or a single HTML tag. With more text or HTML, though, our `send_welcome_email/1` will become
+messy quite quickly. The solution is private functions which cordon off the complexity behind a descriptive name.
 
-In our `HelloPhoenix.Mailer` module, we can define a private `welcome_text/0` function which uses a heredoc to define a string literal for the text that makes up the body of our email.
+In our `HelloPhoenix.Mailer` module, we can define a private `welcome_text/0` function which uses a heredoc
+to define a string literal for the text that makes up the body of our email.
 
 ```elixir
 . . .
@@ -286,7 +343,10 @@ def send_welcome_email(email_address) do
 end
 ```
 
-If we're going to render anything other than the simplest HTML while still having a readable `send_welcome_email/1` function, using bare HTML strings is going to present problems as well. Rendering templates fixes that, but we need a string value for the `:html` key. The `Phoenix.View.render_to_string/3` function will do just what we need.
+If we're going to render anything other than the simplest HTML while still having a readable
+`send_welcome_email/1` function, using bare HTML strings is going to present problems as well. Rendering
+templates fixes that, but we need a string value for the `:html` key. The `Phoenix.View.render_to_string/3`
+function will do just what we need.
 
 ```elixir
 def send_welcome_email(email_address) do
@@ -319,14 +379,15 @@ We'll also need a new `email` directory in `web/templates` with a `welcome.html.
 > Note: If we need to use any path or url helpers in our template, we will need to pass the endpoint instead of a connection struct for the first argument. This is because we won't be in the context of a request, so `@conn` won't be available. For example, we will need to write this
 ```elixir
 alias HelloPhoenix
-Router.Helpers.page_path(Endpoint, :index)
+Router.Helpers.page_url(Endpoint, :index)
 ```
 instead of this.
 ```elixir
 Router.Helpers.page_path(@conn, :index)
 ```
 
-If we have any other values we need to pass into the template, we can pass a map of them as the third argument to `Phoenix.View.render_to_string/3`.
+If we have any other values we need to pass into the template, we can pass a map of them as the third
+argument to `Phoenix.View.render_to_string/3`.
 
 We can put the render call behind a private function as well, just as we did with `welcome_text/0`.
 
@@ -352,7 +413,9 @@ end
 
 ### Sending attachments
 
-Mailgun also lets us send attachments with an email. We'll use the `:attachments` key to tell `mailgun` that we want to include one or more of them. The value we give it needs to be a list of two element maps. One element of each map needs to be the path to a file we want to attach. The other needs to be the filename.
+Mailgun also lets us send attachments with an email. We'll use the `:attachments` key to tell `mailgun`
+that we want to include one or more of them. The value we give it needs to be a list of two element maps.
+One element of each map needs to be the path to a file we want to attach. The other needs to be the filename.
 
 Sending new users a copy of the Phoenix framework logo with their welcome email would look like this.
 
@@ -367,7 +430,8 @@ def send_welcome_email(email_address) do
 end
 ```
 
-If we put our mailer client back in test mode, restart our application, and call the `send_welcome_email/1` function with our email address, we'll see our attachment at the very end.
+If we put our mailer client back in test mode, restart our application, and call the `send_welcome_email/1`
+function with our email address, we'll see our attachment at the very end.
 
 ```console
 more mailgun.json
