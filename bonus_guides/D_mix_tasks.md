@@ -1,29 +1,37 @@
-There are currently a number of built-in Phoenix-specific and ecto-specific mix tasks available to us within a newly-generated application. We can also create our own application specific tasks.
 
-## Phoenix Specific Mix Tasks
+# mix 任务
+
+新生成的 Phoenix 应用中有很多内建的针对 Phoenix 以及 Ecto 的 mix 任务。同时，我们也可以根据需求自己创建。
+
+## Phoenix 相关的 Mix 任务
 
 ```console
 $ mix help | grep -i phoenix
-mix phoenix.digest      # Digests and compress static files
-mix phoenix.gen.channel # Generates a Phoenix channel
-mix phoenix.gen.html    # Generates controller, model and views for an HTML based resource
-mix phoenix.gen.json    # Generates a controller and model for a JSON based resource
-mix phoenix.gen.model   # Generates an Ecto model
-mix phoenix.new         # Create a new Phoenix v1.1.2 application
-mix phoenix.routes      # Prints all routes
-mix phoenix.server      # Starts applications and their servers
+mix phoenix.digest      # 编译静态资源
+mix phoenix.gen.channel # 生成一个 phoenix 的通道
+mix phoenix.gen.html    # 为指定资源生成控制器，模型，视图。
+mix phoenix.gen.json    # 为一个资源生成控制器以及模型。
+mix phoenix.gen.model   # 生成一个模型
+mix phoenix.new         # 生成一个 phoenix 应用。
+mix phoenix.routes      # 打印所有路由
+mix phoenix.server      # 启动应用服务器
 ```
-We have seen all of these at one point or another in the guides, but having all the information about them in one place seems like a good idea. And here we are.
+
+我们在之前的章节中已经或多或少的使用过它们，现在让我们再来仔细的看看。
 
 #### `mix phoenix.new`
 
-This is how we tell Phoenix the framework to generate a new Phoenix application for us. We saw it early on in the [Up and Running Guide](http://www.phoenixframework.org/docs/up-and-running).
+告诉 Phoenix 给我们生成一个应用，就像我们之前在
+[起步指南](https://mydearxym.gitbooks.io/phoenix-doc-in-chinese/content/A_%E8%B5%B7%E6%AD%A5.html)
+看到的那样。
 
-Before we begin, we should note that Phoenix uses [Ecto](https://github.com/elixir-lang/ecto) for database access and [Brunch.io](http://brunch.io/) for asset management by default. We can pass `--no-ecto` to opt out of Ecto and  `--no-brunch` to opt out of Brunch.io.
+在我们开始之前，我们需要知道 Phoenix 默认使用 [Ecto](https://github.com/elixir-lang/ecto) 作为 ORM, 用 [Brunch.io](http://brunch.io/)
+作为资源编译打包工具。我们可以使用 `--no-ecto` 和 `--no-brunch` 来移除它们。
 
-> Note: If we do use Brunch.io, we need to install its dependencies before we start our application. `phoenix.new` will ask to do this for us. Otherwise, we can install them with `npm install`. If we don't install them, the app will throw errors and may not serve our assets properly.
+> 注意: 如果我们使用 Brunch, 我们需要在使用前先安装它。
+> `phoenix.new` 默认会询问是否安装，当然你也可以手动使用 npm install 来安装。 否侧在编译打包资源的时候会报错。
 
-We need to pass `phoenix.new` a name for our application. Conventionally, we use all lower-case letters with underscores.
+我们需要给 `phoenix.new` 任务起个名字，惯例是使用小字母中间带下划线。
 
 ```console
 $ mix phoenix.new task_tester
@@ -31,9 +39,9 @@ $ mix phoenix.new task_tester
 . . .
 ```
 
-We can also use either a relative or absolute path.
+我们也可以使用相对或绝对路径。
 
-This relative path works.
+相对路径的例子：
 
 ```console
 $ mix phoenix.new ../task_tester
@@ -41,7 +49,7 @@ $ mix phoenix.new ../task_tester
 . . .
 ```
 
-This absolute path works as well.
+绝对路径的例子：
 
 ```console
 $ mix phoenix.new /Users/me/work/task_tester
@@ -49,7 +57,7 @@ $ mix phoenix.new /Users/me/work/task_tester
 . . .
 ```
 
-The `phoenix.new` task will also ask us if we want to install our dependencies. (Please see the note above about Brunch.io dependencies.)
+`phoenix.new` 会询问是否帮你安装依赖。
 
 ```console
 Fetch and install dependencies? [Yn] y
@@ -57,7 +65,7 @@ Fetch and install dependencies? [Yn] y
 * running mix deps.get
 ```
 
-Once all of our dependencies are installed, `phoenix.new` will tell us what our next steps are.
+所以依赖安装完成后， `phoenix.new` 会告诉我们下一步：
 
 ```console
 We are all set! Run your Phoenix application:
@@ -70,7 +78,8 @@ You can also run it inside IEx (Interactive Elixir) as:
 $ iex -S mix phoenix.server
 ```
 
-By default `phoenix.new` will assume we want to use ecto for our models. If we don't want to use ecto in our application, we can use the `--no-ecto` flag.
+默认情况下 `phoenix.new` 会假设我们使用 ecto 来操作我们的模型。如果我们不想使用 `ecto` 使用 `--no-ecto` 选项即
+可。
 
 ```console
 $ mix phoenix.new task_tester --no-ecto
@@ -78,9 +87,10 @@ $ mix phoenix.new task_tester --no-ecto
 . . .
 ```
 
-With the `--no-ecto` flag, Phoenix will not make either ecto or postgrex a dependency of our application, and it will not create a `repo.ex` file.
+Phoenix 将不会把 ecto 或者 postgrex 作为我们项目的依赖，并不会创建 `repo.ex` 文件。
 
-By default, Phoenix will name our OTP application after the name we pass into `phoenix.new`. If we want, we can specify a different OTP application name with the `--app` flag.
+默认情况下， Phoenix 会将我们传递给 `phoenix.new` 的名字作为我们 OTP 应用的名字。如果你愿意，也可以使用
+`--app` 选项指定一个不同的 OTP 应用的名字。
 
 ```console
 $  mix phoenix.new task_tester --app hello_phoenix
@@ -112,7 +122,7 @@ $  mix phoenix.new task_tester --app hello_phoenix
 . . .
 ```
 
-If we look in the resulting `mix.exs` file, we will see that our project app name is `hello_phoenix`.
+如果我们打开 `mix.exs` 文件，我们会发现目前项目的名字是 `hello_phoenix`。
 
 ```elixir
 defmodule HelloPhoenix.Mixfile do
@@ -124,7 +134,7 @@ defmodule HelloPhoenix.Mixfile do
 . . .
 ```
 
-A quick check will show that all of our module names are qualified with `HelloPhoenix`.
+大略看一下，我们的模块名都符合 `HelloPhoenix`。
 
 ```elixir
 defmodule HelloPhoenix.PageController do
@@ -132,7 +142,7 @@ defmodule HelloPhoenix.PageController do
 . . .
 ```
 
-We can also see that files related to the application as a whole - eg. files in `lib/` and the test seed file - have `hello_phoenix` in their names.
+我们会发现项目名字在很多地方都有体现 -- 比如 `lib/` 下的文件, 测试文件等 -- 名字上都带有 `hello_phoenix`。
 
 ```console
 * creating task_tester/lib/hello_phoenix.ex
@@ -141,7 +151,7 @@ We can also see that files related to the application as a whole - eg. files in 
 * creating task_tester/test/hello_phoenix_test.exs
 ```
 
-If we only want to change the qualifying prefix for module names, we can do that with the `--module` flag. It's important to note that the value of the `--module` must look like a valid module name with proper capitalization. The task will throw an error if it doesn't.
+如果我们想改变模块的名字，可以使用 `--module` 标记。 注意传递给 `--module` 的名字必须是符合大写规范的，否则会报错。
 
 ```console
 $  mix phoenix.new task_tester --module HelloPhoenix
@@ -173,9 +183,8 @@ $  mix phoenix.new task_tester --module HelloPhoenix
 . . .
 ```
 
-Notice that none of the files have `hello_phoenix` in their names. All filenames related to the application name are `task_tester`.
-
-If we look at the project app name in `mix.exs`, we see that it is `task_tester`, but all the module qualifying names begin with `HelloPhoenix`.
+注意所有和项目相关的文件名都是 `task_tester`。因为 `mix.exs` 中的项目名就是 `task_tester`, 但是左右的模块名是以 `HelloPhoenix`
+开头的。
 
 ```elixir
 defmodule HelloPhoenix.Mixfile do
@@ -188,9 +197,11 @@ defmodule HelloPhoenix.Mixfile do
 
 #### `mix phoenix.gen.html`
 
-Phoenix now offers the ability to generate all the code to stand up a complete HTML resource - ecto migration, ecto model, controller with all the necessary actions, view, and templates. This can be a tremendous timesaver. Let's take a look at how to make this happen.
+Phoenix 现在能通过生成器生成一个 HTML 应用的所有部分 -  Ecto 迁移，Ecto 模型, 控制器以及 actions, 视图，和模板，
+这将给你节省很多时间。让我们来仔细看看。
 
-The `phoenix.gen.html` task takes a number of arguments, the module name of the model, the resource name, and a list of column_name:type attributes. The module name we pass in must conform to the Elixir rules of module naming, following proper capitalization.
+`phoenix.gen.html` 需要一些参数， model 模型的名字， 资源名字和一串 `列：类型` 的属性。模块名字必须要符合  Elixir 关于
+模型的命名规范, 即首字母大写。。
 
 ```console
 $ mix phoenix.gen.html Post posts body:string word_count:integer
@@ -207,7 +218,7 @@ $ mix phoenix.gen.html Post posts body:string word_count:integer
 * creating test/controllers/post_controller_test.exs
 ```
 
-When `phoenix.gen.html` is done creating files, it helpfully tells us that we need to add a line to our router file as well as run our ecto migrations.
+当 `phoenix.gen.html` 生成这些文件后，会提示你添加路由以及运行迁移任务。
 
 ```console
 Add the resource to your browser scope in web/router.ex:
@@ -219,7 +230,7 @@ and then update your repository by running migrations:
 $ mix ecto.migrate
 ```
 
-Important: If we don't do this, our application won't compile, and we'll get an error.
+注意： 如果我们不按照提示的做，我们的应用将不会被编译，并且还会报错。
 
 ```console
 $ mix phoenix.server
@@ -231,7 +242,7 @@ Compiled web/models/post.ex
 (stdlib) erl_eval.erl:657: :erl_eval.do_apply/6
 ```
 
-If we don't want to create a model for our resource we can use the `--no-model` flag.
+如果我们不希望给我们的资源创建模型，我们可以使用 `--no-model` 选项。
 
 ```console
 $ mix phoenix.gen.html Post posts body:string word_count:integer --no-model
@@ -245,7 +256,7 @@ $ mix phoenix.gen.html Post posts body:string word_count:integer --no-model
 * creating test/controllers/post_controller_test.exs
 ```
 
-It will tell us we need to add a line to our router file, but since we skipped the model, it won't mention anything about `ecto.migrate`.
+这时会让我们添加路由，但是不会提示我们运行 `ecto.migrate`, 因为我们跳过了创建模型。
 
 ```console
 Add the resource to your browser scope in web/router.ex:
@@ -253,7 +264,7 @@ Add the resource to your browser scope in web/router.ex:
     resources "/posts", PostController
 ```
 
-Important: If we don't do this, our application won't compile, and we'll get an error.
+同样的，如果我们不按照提示来，会报错。
 
 ```console
 $ mix phoenix.server
@@ -266,9 +277,10 @@ $ mix phoenix.server
 
 #### `mix phoenix.gen.json`
 
-Phoenix also offers the ability to generate all the code to stand up a complete JSON resource - ecto migration, ecto model, controller with all the necessary actions and view. This command will not create any template for the app.
+Phoenix 同样为我们准备了 JSON 资源的生成器 -  Ecto 迁移， Ecto 模型， 控制器、视图等。但是这个生成器不会生成模板文件。
 
-The `phoenix.gen.json` task takes a number of arguments, the module name of the model, the resource name, and a list of column_name:type attributes. The module name we pass in must conform to the Elixir rules of module naming, following proper capitalization.
+`phoenix.gen.json` 生成器需要一些参数，模型的模块名 (the module name of the model), 资源名和一串 `列：类型` 的属性。
+模块名字必须要符合 Elixir 中模块的命名规范 , 即首字母大写。
 
 ```console
 $ mix phoenix.gen.json Post posts title:string content:string
@@ -281,7 +293,7 @@ $ mix phoenix.gen.json Post posts title:string content:string
 * creating web/views/changeset_view.ex
 ```
 
-When `phoenix.gen.json` is done creating files, it helpfully tells us that we need to add a line to our router file as well as run our ecto migrations.
+当 `phoenix.gen.json` 生成这些文件后，会提示你添加路由以及运行迁移任务。
 
 ```console
 Add the resource to your api scope in web/router.ex:
@@ -293,7 +305,7 @@ and then update your repository by running migrations:
     $ mix ecto.migrate
 ```
 
-Important: If we don't do this, our application won't compile, and we'll get an error.
+注意： 如果我们不按照提示的做，我们的应用将不会被编译，并且还会报错。
 
 ```console
 $ mix phoenix.server
@@ -305,7 +317,7 @@ Compiled web/models/post.ex
 (stdlib) erl_eval.erl:657: :erl_eval.do_apply/6
 ```
 
-If we don't want to create a model for our resource we can use the `--no-model` flag.
+如果我们不希望给我们的资源创建模型，我们可以使用 `--no-model` 选项。
 
 ```console
 $ mix phoenix.gen.json Post posts title:string content:string --no-model
@@ -315,7 +327,7 @@ $ mix phoenix.gen.json Post posts title:string content:string --no-model
 * creating web/views/changeset_view.ex
 ```
 
-It will tell us we need to add a line to our router file, but since we skipped the model, it won't mention anything about `ecto.migrate`.
+这时会让我们添加路由，但是不会提示我们运行 `ecto.migrate`, 因为我们跳过了创建模型。
 
 ```console
 Add the resource to your api scope in web/router.ex:
@@ -323,7 +335,7 @@ Add the resource to your api scope in web/router.ex:
     resources "/posts", PostController, except: [:new, :edit]
 ```
 
-Important: If we don't do this, our application won't compile, and we'll get an error.
+注意： 如果我们不按照提示的做，我们的应用将不会被编译，并且还会报错。
 
 ```console
 $ mix phoenix.server
@@ -336,9 +348,10 @@ $ mix phoenix.server
 
 #### `mix phoenix.gen.model`
 
-If we don't need a complete HTML/JSON resource and instead are only interested in a model, we can use the `phoenix.gen.model` task. It will generate a model, a migration and a test case.
+如果我们只想创建一个模型，我们可以使用 `phoenix.gen.model` 任务。它会生成一个模型，一个迁移任务以及一个测试用
+例。
 
-The `phoenix.gen.model` task takes a number of arguments, the module name of the model, the plural model name used for the schema, and a list of column_name:type attributes.
+`phoenix.gen.model` 生成器需要一些参数， 模型的模块名称，复数形式的模型名称（用于 schema）, 以及一串 `列：类型` 的属性。
 
 ```console
 $ mix phoenix.gen.model User users name:string age:integer
@@ -347,7 +360,8 @@ $ mix phoenix.gen.model User users name:string age:integer
 * creating test/models/user_test.exs
 ```
 
-> Note: If we need to namespace our resource we can simply namespace the first argument of the generator.
+> 注意：如果我们想要给资源一个命名空间，我们只需要将第一个参数之前加上命名空间即可。
+
 ```console
 $ mix phoenix.gen.model Admin.User users name:string age:integer
 * creating priv/repo/migrations/20150527185940_create_admin_user.exs
@@ -357,7 +371,8 @@ $ mix phoenix.gen.model Admin.User users name:string age:integer
 
 #### `mix phoenix.gen.channel`
 
-This task will generate a basic Phoenix channel as well a test case for it. It takes only two arguments, the module name for the channel and plural used as the topic.
+这个生成器会产生一个基本的 Phoenix 通道以及相应的测试用例。  它只需要两个参数： channel 的模块名以及复数形式的
+话题名称 (topic)。
 
 ```console
 $ mix phoenix.gen.channel Room rooms
@@ -365,7 +380,7 @@ $ mix phoenix.gen.channel Room rooms
 * creating test/channels/room_channel_test.exs
 ```
 
-When `phoenix.gen.channel` is done, it helpfully tells us that we need to add a channel route to our router file.
+当 `phoenix.gen.channel` 执行完毕，它会提示你在路由中添加相关信息。
 
 ```console
 Add the channel to your `web/channels/user_socket.ex` handler, for example:
@@ -375,15 +390,19 @@ Add the channel to your `web/channels/user_socket.ex` handler, for example:
 
 #### `mix phoenix.routes`
 
-This task has a single purpose, to show us all the routes defined for a given router. We saw it used extensively in the [Routing Guide](http://www.phoenixframework.org/docs/routing).
+这个任务将列出我们给定路由中的所有路由信息，我们已经在之前的
+[路由指南](https://mydearxym.gitbooks.io/phoenix-doc-in-chinese/content/C_%E8%B7%AF%E7%94%B1.html)
+用过很多次了。
 
-If we don't specify a router for this task, it will default to the router Phoenix generated for us.
+如果我们不指定具体路由，他会将当前应用作为默认的。
 
 ```console
 $ mix phoenix.routes
 page_path  GET  /  TaskTester.PageController.index/2
 ```
-We can also specify an individual router if we have more than one for our application.
+
+如果我们的工程中有多个应用，我们可以指定具体的一个
+(We can also specify an individual router if we have more than one for our application.) ：
 
 ```console
 $ mix phoenix.routes TaskTester.Router
@@ -392,25 +411,28 @@ page_path  GET  /  TaskTester.PageController.index/2
 
 #### `mix phoenix.server`
 
-This is the task we use to get our application running. It takes no arguments at all. If we pass any in, they will be silently ignored.
+这个任务将我们的应用启动起来，不需要任何参数。
 
 ```console
 $ mix phoenix.server
 [info] Running TaskTester.Endpoint with Cowboy on port 4000 (http)
 ```
-It silently ignores our `DoesNotExist` argument.
+
+如果你传递了参数它会默认忽略, 不产生错误或警告信息。
 
 ```console
 $ mix phoenix.server DoesNotExist
 [info] Running TaskTester.Endpoint with Cowboy on port 4000 (http)
 ```
-Prior to the 0.8.x versions of Phoenix, we used the `phoenix.start` task to get our applications running. That task no longer exists, and attempting to run it will cause an error.
+
+在之前版本的 (0.8.x) Phoenix 中，我们是使用 `phoenix.start` 来启动应用, 这个任务已经废弃了，尝试使用会报错。
 
 ```console
 $ mix phoenix.start
 ** (Mix) The task phoenix.start could not be found
 ```
-If we would like to start our application and also have an `iex` session open to it, we can run the mix task within `iex` like this, `iex -S mix phoenix.server`.
+
+我们还可以使用 `iex -S mix phoenix.server` 在 `iex` 中启动我们的应用。
 
 ```console
 $ iex -S mix phoenix.server
@@ -423,13 +445,14 @@ iex(1)>
 
 #### `mix phoenix.digest`
 
-This task does two things, it creates a digest for our static assets and then compresses them.
+这个任务做两件事情， 给我们的静态资源创建一个资源并压缩它们。
 
-"Digest" here refers to an MD5 digest of the contents of an asset which gets added to the filename of that asset. This creates a sort of "fingerprint" for it. If the digest doesn't change, browsers and CDNs will use a cached version. If it does change, they will re-fetch the new version.
+"Digest" 具体是在我们的静态资源文件名后加一个 MD5 校验码，类似于一个指纹，如果这个"指纹"没有变化，浏览器和
+`CDN` 会缓存这个文件，如果文件内容改变了，才会重新获取。
 
-Before we run this task let's inspect the contents of two directories in our hello_phoenix application.
+在看细节之前我们先来看看 Hello_phoenix 中的 两个目录。
 
-First `priv/static` which should look similar to this:
+首先是 `priv/static` 目录：
 
 ```text
 ├── images
@@ -437,7 +460,7 @@ First `priv/static` which should look similar to this:
 ├── robots.txt
 ```
 
-And then `web/static/` which should look similar to this:
+以及 `web/static` 目录：
 
 ```text
 ├── css
@@ -448,29 +471,32 @@ And then `web/static/` which should look similar to this:
 │   └── phoenix.js
 ```
 
-All of these files are our static assets. Now let's run the `mix phoenix.digest` task.
+这些都是我们的静态资源，现在我们试试运行 `mix phoenix.digest` 任务。
 
 ```console
 $ mix phoenix.digest
 Check your digested files at 'priv/static'.
 ```
 
-We can now do as the task suggests and inspect the contents of `priv/static` directory. We'll see that all files from `web/static/` have been copied over to `priv/static` and also each file now has a couple of versions. Those versions are:
+我们可以按照提示来看看 `priv/static` 目录里的内容。 我们看到 `web/static/` 目录下的文件已经都拷贝到了这里，并
+且每一个文件都有几个版本， 它们是：
 
-* the original file
-* a compressed file with gzip
-* a file containing the original file name and its digest
-* a compressed file containing the file name and its digest
+* 原文件。
+* gzip 压缩过的文件。
+* 在文件名中包含指纹的文件。
+* 压缩过的、在文件名中包含指纹的文件。
 
-> Note: We can specify a different output folder where `phoenix.digest` will put processed files. The first argument is the path where the static files are located.
+> 注意: 我们可以给 `phoenix.digest` 任务指定目标编译目录（第一个参数） -- 如果我们想把他们放在其他目录的话。
+
 ```console
 $ mix phoenix.digest priv/static -o www/public
 Check your digested files at 'www/public'.
 ```
 
-## Ecto Specific Mix Tasks
+## Ecto 相关的 Mix 任务
 
-Newly generated Phoenix applications now include ecto and postgrex as dependencies by default (which is to say, unless we use the `--no-ecto` flag with `phoenix.new`). With those dependencies come mix tasks to take care of common ecto operations. Let's see which tasks we get out of the box.
+默认生成的 Phoenix 应用包含 ecto 以及 postgrex 依赖 （除非我们使用了 `--no-ecto` 选项），mix 中包含了一些通用
+的 Ecto 处理任务，让我们来一探究竟。
 
 ```console
 $ mix help | grep -i ecto
@@ -482,86 +508,88 @@ mix ecto.migrate         # Runs migrations up on a repo
 mix ecto.rollback        # Reverts migrations down on a repo
 ```
 
-Note: We can run any of the tasks above with the `--no-start` flag to execute the task without starting the application.
+注意：我们可以给这些任务加上 `--no-start` 选项，让其光执行任务而不启动我们的应用。
 
 #### `ecto.create`
-This task will create the database specified in our repo. By default it will look for the repo named after our application (the one generated with our app unless we opted out of ecto), but we can pass in another repo if we want.
 
-Here's what it looks like in action.
+这个任务会创建应用中指定的repo。 默认情况下repo 的名字会跟随应用的名字，但是我们也可以自己指定。
+
+让我们看个实际的例子。
 
 ```console
 $ mix ecto.create
 The database for HelloPhoenix.Repo has been created.
 ```
 
-If we happen to have another repo called `OurCustom.Repo` that we want to create the database for, we can run this.
+如果我们要给另一个叫 `OurCustom.Repo` 的repo 创建数据库，我们可以这么做：
 
 ```console
 $ mix ecto.create -r OurCustom.Repo
 The database for OurCustom.Repo has been created.
 ```
 
-There are a few things that can go wrong with `ecto.create`. If our Postgres database doesn't have a "postgres" role (user), we'll get an error like this one.
+运行 `ecto.create` 时可能会产生一些错误，比如我们的数据库没有一个 "postgres" 用户，我们会得到如下错误：
 
 ```console
 $ mix ecto.create
 ** (Mix) The database for HelloPhoenix.Repo couldn't be created, reason given: psql: FATAL:  role "postgres" does not exist
 ```
 
-We can fix this by creating the "postgres" role with the permissions needed to log in and create a database.
+我们可以在 `psql` 终端里创建 "postgres" 角色(用户)，并分配给其登陆以及创建数据库的权限。
 
 ```console
 =# CREATE ROLE postgres LOGIN CREATEDB;
 CREATE ROLE
 ```
 
-If the "postgres" role does not have permission to log in to the application, we'll get this error.
+如果 "postgres" 角色没有登陆的权限，会得到如下错误：
 
 ```console
 $ mix ecto.create
 ** (Mix) The database for HelloPhoenix.Repo couldn't be created, reason given: psql: FATAL:  role "postgres" is not permitted to log in
 ```
 
-To fix this, we need to change the permissions on our "postgres" user to allow login.
+解决办法是赋予 "postgres" 登陆的权限。
 
 ```console
 =# ALTER ROLE postgres LOGIN;
 ALTER ROLE
 ```
 
-If the "postgres" role does not have permission to create a database, we'll get this error.
+如果 "postgres" 角色没有创建数据库的权限，会得到如下错误：
 
 ```console
 $ mix ecto.create
 ** (Mix) The database for HelloPhoenix.Repo couldn't be created, reason given: ERROR:  permission denied to create database
 ```
 
-To fix this, we need to change the permissions on our "postgres" user to allow database creation.
+解决办法是赋予 "postgres" 创建数据库的权限。
 
 ```console
 =# ALTER ROLE postgres CREATEDB;
 ALTER ROLE
 ```
 
-If the "postgres" role is using a password different from the default "postgres", we'll get this error.
+如果 "postgres" 角色使用的密码不是默认的 "postgres", 会得到如下错误：
 
 ```console
 $ mix ecto.create
 ** (Mix) The database for HelloPhoenix.Repo couldn't be created, reason given: psql: FATAL:  password authentication failed for user "postgres"
 ```
 
-To fix this, we can change the password in the environment specific configuration file. For the development environment the password used can be found at the bottom of the `config/dev.exs` file.
+To fix this, we can change the password in the environment specific configuration file. For the development
+environment the password used can be found at the bottom of the `config/dev.exs` file.
 
 #### `ecto.drop`
 
-This task will drop the database specified in our repo. By default it will look for the repo named after our application (the one generated with our app unless we opted out of ecto). It will not prompt us to check if we're sure we want to drop the db, so do exercise caution.
+这个任务会删除我们 repo 指定的数据库，默认它会找和我们应用相同名字的那个，这个操作不会有提示，所以你一定要谨慎。
 
 ```console
 $ mix ecto.drop
 The database for HelloPhoenix.Repo has been dropped.
 ```
 
-If we happen to have another repo that we want to drop the database for, we can specify it with the `-r` flag.
+你可以使用 `-r` 选项指定一个不同的数据库。
 
 ```console
 $ mix ecto.drop -r OurCustom.Repo
@@ -570,9 +598,9 @@ The database for OurCustom.Repo has been dropped.
 
 #### `ecto.gen.repo`
 
-Many applications require more than one data store. For each data store, we'll need a new repo, and we can generate them automatically with `ecto.gen.repo`.
+很多应用需要不止一个数据库存储，对于每一个，我们需要创建一个新的 repo, 我们可以使用 `ecto.gen.repo` 自动创建。
 
-If we name our repo `OurCustom.Repo`, this task will create it here `lib/our_custom/repo.ex`.
+如果我们将 repo 命名为 `OurCustom.Repo`, 创建的文件会在这里 `lib/our_custom/repo.ex`：
 
 ```console
 $ mix ecto.gen.repo -r OurCustom.Repo
@@ -585,7 +613,7 @@ Don't forget to add your new repo to your supervision tree
 worker(OurCustom.Repo, [])
 ```
 
-Notice that this task has updated `config/config.exs`. If we take a look, we'll see this extra configuration block for our new repo.
+注意这个任务同时更新了 `config/config.exs` 文件。 它给我们的新 repo 增加了一个额外的配置块。
 
 ```elixir
 . . .
@@ -598,9 +626,10 @@ hostname: "localhost"
 . . .
 ```
 
-Of course, we'll need to change the login credentials to match what our database expects. We'll also need to change the config for other environments.
+当然，我们需要自己更改一下登陆信息已经环境配置信息。
 
-We certainly should follow the instructions and add our new repo to our supervision tree. In our `HelloPhoenix` application, we would open up `lib/hello_phoenix.ex`, and add our repo as a worker to the `children` list.
+同时，我们根据提示打开 `lib/hello_phoenix.ex` 文件将新 repo 加入到监视树(supervision tree)中, 并将 repo 当作一
+个 worker 加入的 `children` 列表中。
 
 ```elixir
 . . .
@@ -618,9 +647,10 @@ children = [
 
 #### `ecto.gen.migration`
 
-Migrations are a programmatic, repeatable way to affect changes to a database schema. Migrations are also just modules, and we can create them with the `ecto.gen.migration` task. Let's walk through the steps to create a migration for a new comments table.
+`迁移(Migrations)` 是一种编程的、可重复的改变数据库 schema 的方法。 `迁移` 同时实现上仅仅是模块，并且我们可以
+使用 `ecto.gen.migration` 来生成。 让我们来给一个新的评论表创建一个迁移任务。
 
-We simply need to invoke the task with a snake_case version of the module name that we want. Preferably, the name will describe what we want the migration to do.
+我们只需要一个 `snake_case` 规格的名字作为参数即可, 最佳实践是描述这个迁移任务的目的：
 
 ```console
 mix ecto.gen.migration add_comments_table
@@ -628,9 +658,9 @@ mix ecto.gen.migration add_comments_table
 * creating priv/repo/migrations/20150318001628_add_comments_table.exs
 ```
 
-Notice that the migration's filename begins with a string representation of the date and time the file was created.
+注意迁移任务以一个日期时间字符串作为前缀。
 
-Let's take a look at the file `ecto.gen.migration` has generated for us at `priv/repo/migrations/20150318001628_add_comments_table.exs`.
+我们来看一下 `ecto.gen.migration` 给我们创建的 `priv/repo/migrations/20150318001628_add_comments_table.exs`。
 
 ```elixir
 defmodule HelloPhoenix.Repo.Migrations.AddCommentsTable do
@@ -641,9 +671,10 @@ defmodule HelloPhoenix.Repo.Migrations.AddCommentsTable do
 end
 ```
 
-Notice that there is a single function `change/0` which will handle both forward migrations and rollbacks. We'll define the schema changes that we want using ecto's handy dsl, and ecto will figure out what to do depending on whether we are rolling forward or rolling back. Very nice indeed.
+注意，迁移和回滚的部分都会由这里的 `change/0` 函数处理。我们可以使用 ecto 的领域专属语言(DSL) 来描述我们的
+schema 的变动。 Ecto 会自动完成剩下的工作，无论是向前还是向后迁移 (whether we are rolling forward or rolling back)。
 
-What we want to do is create a `comments` table with a `body` column, a `word_count` column, and timestamp columns for `inserted_at` and `updated_at`.
+我们要做的是创建一个包含 `body` 、 `word_count` 以及 timestamp （包含`inserted_at` & `update_at`） 时间列的 `comments`数据表.
 
 ```elixir
 . . .
@@ -657,7 +688,7 @@ end
 . . .
 ```
 
-Again, we can run this task with the `-r` flag and another repo if we need to.
+同样的，我们可以使用 `-r` 选项指定具体的 repo 。
 
 ```console
 $ mix ecto.gen.migration -r OurCustom.Repo add_users
@@ -665,13 +696,13 @@ $ mix ecto.gen.migration -r OurCustom.Repo add_users
 * creating priv/repo/migrations/20150318172927_add_users.exs
 ```
 
-For more infomation on ecto's migration dsl, please see the [ecto migration docs](http://hexdocs.pm/ecto/Ecto.Migration.html).
+更多关于 Ecto 迁移的领域专属语言 (DSL), 可以[查阅文档](http://hexdocs.pm/ecto/Ecto.Migration.html)。
 
-That's it! We're ready to run our migration.
+现在我们可以运行我们的迁移任务了！
 
 #### `ecto.migrate`
 
-Once we have our migration module ready, we can simply run `mix ecto.migrate` to have our changes applied to the database.
+当我们的迁移模块写好了后，只要运行 `mix ecto.migrate` 应用到数据库即可。
 
 ```console
 $ mix ecto.migrate
@@ -680,9 +711,10 @@ $ mix ecto.migrate
 [info] == Migrated in 0.1s
 ```
 
-When we first run `ecto.migrate`, it will create a table for us called `schema_migrations`. This will keep track of all the migrations which we run by storing the timestamp portion of the migration's filename.
+当我们第一次运行 `ecto.migrate`, 它会创建一个叫 `schema_migrations` 的数据表。它的作用是记录我们运行的每一次
+迁移任务, 并按照 migration 文件名上的时间戳来排序。
 
-Here's what the `schema_migrations` table looks like.
+`schema_migrations` 表看上去是这个样子的。
 
 ```console
 hello_phoenix_dev=# select * from schema_migrations;
@@ -693,11 +725,12 @@ version     |     inserted_at
 (2 rows)
 ```
 
-When we roll back a migration, `ecto.rollback` will remove the record representing this migration from `schema_migrations`.
+当我们使用 `ecto.rollback` 回滚一个迁移任务时， 同时会将 `schema_migrations` 对应的记录移除掉。
 
-By default, `ecto.migrate` will execute all pending migrations. We can exercise more control over which migrations we run by specifying some options when we run the task.
+默认情况下，`ecto.migrate` 任务会执行所有处于 pending 状态的迁移任务。 我们可以通过使用一些选项来精确的控制迁
+移任务。
 
-We can specify the number of pending migrations we would like to run with the `-n` or `--step` options.
+我们可以使用 `-n` 或者 `--step` 来明确执行处于 pending 状态的迁移任务的条数。
 
 ```console
 $ mix ecto.migrate -n 2
@@ -709,19 +742,19 @@ $ mix ecto.migrate -n 2
 [info] == Migrated in 0.0s
 ```
 
-The `--step` option will behave the same way.
+`--step` 作用是一样的。
 
 ```console
 mix ecto.migrate --step 2
 ```
 
-We can also specify an individual migration we would like to run with the `-v` option.
+我们也可以指定具体的一个迁移任务，用 `-v` 选项。
 
 ```console
 mix ecto.migrate -v 20150317170448
 ```
 
-The `--to` option will behave the same way.
+`--to` 的作用是一样的。
 
 ```console
 mix ecto.migrate --to 20150317170448
@@ -729,7 +762,8 @@ mix ecto.migrate --to 20150317170448
 
 #### `ecto.rollback`
 
-The `ecto.rollback` task will reverse the last migration we have run, undoing the schema changes. `ecto.migrate` and `ecto.rollback` are mirror images of each other.
+`ecto.rollback` 任务会回滚我们最近运行的一次迁移任务，撤销 schema 的改动。 `ecto.migrate` 是 `ecto.rollback`
+作业是相反的。
 
 ```console
 $ mix ecto.rollback
@@ -738,19 +772,21 @@ $ mix ecto.rollback
 [info] == Migrated in 0.0s
 ```
 
-`ecto.rollback` will handle the same options as `ecto.migrate`, so `-n`, `--step`, `-v`, and `--to` will behave as they do for `ecto.migrate`.
+`ecto.rollback` 和  `ecto.migrate` 接收同样的参数, `-n`, `--step`, `-v` 和 `--to` 选项与其在 `ecto.migrate` 中所表达
+的意思是一样的。
 
-## Creating Our Own Mix Tasks
+## 自定义 Mix 任务
 
-As we've seen throughout this guide, both mix itself and the dependencies we bring in to our application provide a number of really useful tasks for free. Since neither of these could possibly anticipate all our individual application's needs, mix allows us to create our own custom tasks. That's exactly what we are going to do now.
+尽管 mix 以及一些第三方工具提供了很多有用的 mix 任务，但有时还是无法满足我们的一些特殊的针对性的需求， 不出意
+外的，mix 允许我们自定义任务。 我们现在就来一探究竟。
 
-The first thing we need to do is create a `mix/tasks` directory inside of `lib`. This is where any of our application specific mix tasks will go.
+首先我们需要在 `lib` 目录下创建一个 `mix/tasks` 目录。 这是存放我们自定义任务的地方。
 
 ```console
 $ mkdir -p lib/mix/tasks
 ```
 
-Inside that directory, let's create a new file, `hello_phoenix.greeting.ex`, that looks like this.
+让我们在那里创建一个 `hello_phoenix.greeting.ex` 文件。
 
 ```elixir
 defmodule Mix.Tasks.HelloPhoenix.Greeting do
@@ -770,22 +806,24 @@ defmodule Mix.Tasks.HelloPhoenix.Greeting do
 end
 ```
 
-Let's take a quick look at the moving parts involved in a working mix task.
+我们来快速浏览一下。
 
-The first thing we need to do is name our module. In order to properly namespace it, we begin with `Mix.Tasks`. We'd like to invoke this as `mix hello_phoenix.greeting`, so we complete the module name with
-`HelloPhoenix.Greeting`.
+首先我们要给模块起个名字，为了给其一个合适的命名空间，我们以 `Mix.Tasks` 开头, 我们想以 `mix
+hello_phoenix.greeting` 来运行这个`任务`，所以我们再加上 `HelloPhoenix.Greeting`
 
-The `use Mix.Task` line clearly brings in functionality from mix that makes this module behave as a mix task.
+`use Mix.Task` 这行将 mix 的一些功能带入这里，使其行为表现上像一个 mix 任务。
 
-The `@shortdoc` module attribute holds a string which will describe our task when users invoke `mix help`.
+模块属性 `@shortdoc` 定义了一个描述字符串，当我们运行 `mix help` 时会看到。
 
-`@moduledoc` serves the same function that it does in any module. It's where we can put long-form documentation and doctests, if we have any.
+`@moduledoc` 和在其他模块中看到的功能一样，较长的描述信息会被放置在这里。
 
-The `run/1` function is the critical heart of any mix task. It's the function that does all the work when users invoke our task. In ours, all we do is send a greeting from our app, but we can implement our `run/1` function to do whatever we need it to. Note that `Mix.shell.info/1` is the preferred way to print text back out to the user.
+`run/1` 函数是 mix 任务的关键部分。 当用户触发`任务`，所有的工作都在这里完成，目前，我们只是简单的打印了一条
+greeting 信息， 但是我们可以在 `run/1` 中实现我们的任何需求。 注意 `Mix.shell.info/1` 是将信息打印给用户的一个
+惯例用法。
 
-Of course, our task is just a module, so we can define other private functions as needed to support our `run/1` function.
+当然，我们的`任务`也仅仅是一个模块，所以你也可以在其中定义私有函数来将 `run/1` 分解开来编写。
 
-Now that we have our task module defined, our next step is to compile the application.
+任务模块编写完了，下一步是编译应用。
 
 ```console
 $ mix compile
@@ -793,20 +831,32 @@ Compiled lib/tasks/hello_phoenix.greeting.ex
 Generated hello_phoenix.app
 ```
 
-Now our new task should be visible to `mix help`.
+现在我们应该可以在 `mix help` 中看到我们编写的任务了。
 
 ```console
 $ mix help | grep hello
 mix hello_phoenix.greeting # Sends a greeting to us from Hello Phoenix
 ```
 
-Notice that `mix help` displays the text we put into the `@shortdoc` along with the name of our task.
+`mix help` 会显示我们定义在 `@shortdoc` 中的信息。
 
-So far, so good, but does it work?
+在看看是否工作正常？
 
 ```console
 $ mix hello_phoenix.greeting
 Greetings from the Hello Phoenix Application!
 ```
 
-Indeed it does.
+成功了！
+
+如果想在我们的 `任务` 中使用整个项目的基础设施(infrastructure), 我们需要先启动应用，这在比如想在 `任务` 中使
+用数据库时会非常有用。感谢上帝， 这在 mix 中非常容易实现：
+
+```elixir
+  . . .
+  def run(_args) do
+    Mix.Task.run "app.start"
+    Mix.shell.info "Now I have access to Repo and other goodies!"
+  end
+  . . .
+```
