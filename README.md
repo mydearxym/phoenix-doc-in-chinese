@@ -25,7 +25,7 @@
 * [文档](http://hexdocs.pm/plug/)
 
 ### Ecto
-> `Phonex`的数据层
+> `Phoenix`的数据层
 
 * [Github地址](https://github.com/elixir-lang/ecto)
 * [文档](http://hexdocs.pm/ecto/)
