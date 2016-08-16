@@ -1,26 +1,22 @@
 # 发送 Email
 
-Sending email from a Phoenix application is really easy. Phoenix does not ship with a library to send
-emails, but there are various packages available that can help with that.
+在 Phoenix 应用中发送 email 很容易。虽然 Phoenix 没有内建的发送 email 的功能，但是有很多第三方的包可供选择。
 
-The options include [Phoenix Swoosh](https://github.com/swoosh/phoenix_swoosh) and [Bamboo](https://github.com/thoughtbot/bamboo).
+比如 [Phoenix Swoosh](https://github.com/swoosh/phoenix_swoosh) 和 [Bamboo](https://github.com/thoughtbot/bamboo)。
 
-If you are only going to use Mailgun, you can use the mailgun package instead:
+如果你想使用 Mailgun 服务，你也可以找到他的包：
 
-## Using the Mailgun package
+## 使用 Mailgun
 
-Before we begin, we'll need an account with Mailgun - we won't actually be able to send mail without it.
-Once we have an account, though, the rest will be straightforward.
+在开始之前，我们需要在 Mailgun 上注册一个账户 -- 当然我们不注册也可以发送邮件。
+有了账户之后，剩下的步骤就很直观了。
 
-First, [sign up at Mailgun](https://mailgun.com/signup). They have a generous number of free emails per month,
-so we can get going with a free account.
+首先，[注册 Mailgun](https://mailgun.com/signup)。它每月送你很多免费邮件，所以目前免费账号就够了。
 
-Once we have an account, we'll get a sandbox through which we can send mail. The url of that sandbox will be
-our
-domain unless we choose to create a custom one through Mailgun.
+账号就绪以后，我们会得到一个发送邮件的沙箱 (sandbox)。 沙箱的 url 默认是我们的域名，我们也可以通过 Mailgun 自
+定义一个。
 
-Now that we have an account, we'll need to add `mailgun` as a dependency to our project. We'll do that in the
-`deps/0` function in `mix.exs`.
+我们还需要在工程中添加 `mailgun` 依赖。 在 `mix.exs` 文件的 `deps/0` 的函数中。
 
 ```elixir
 defp deps do
@@ -34,27 +30,23 @@ defp deps do
 end
 ```
 
-Next, we'll need to run `mix deps.get` to bring the `mailgun` package into our application. In the case of a
-dependency conflict error with Poison, add the following line as well:
+下一步，我们运行 `mix deps.get` 安装依赖。为了不和 `Poison` 包产生冲突，我们添加下面这行：
 
 ```
 {:poison, "~> 2.1", override: true}
 ```
 
-### Configuration
+### 配置
 
-We'll also need to configure our `:mailgun_domain` and `:mailgun_key` in `config/config.ex`.
+我们需要在 `config/config.ex` 文件中配置 `:mailgun_domain` 和 `:mailgun_key`。
 
-The `:mailgun_domain` will be a full url, something like this
-`https://api.mailgun.net/v3/sandbox-our-domain.mailgun.org`.
-The `:mailgun_key` will be a long string - "key-another-long-string".
+`:mailgun_domain` 是一个完整的 url , 比如`https://api.mailgun.net/v3/sandbox-our-domain.mailgun.org`.
+`:mailgun_key` 则是一个长字串， 比如 "key-another-long-string".
 
-For security reasons, it's important to not commit these values to a public source code repository. There are
-a couple of ways we can accomplish this.
+处于安全原因，这些配置最好不要上传到公共的代码仓库，我们可以使用一些方法：
 
-One way is quick, but it requires us to set environment variables for our `:mailgun_domain` and `:mailgun_key`
-in all of our environments - development, production, and whichever other environments we might define. With
-the environment variables set, we can reference them in our `config/config.exs` file.
+一种是直接在环境变量(包括开发环境，生产环境)中指定 `:mailgun_domain` 和  `:mailgun_key`，然后在配置文件
+`config/config.exs` 中引用他们。
 
 ```elixir
 config :hello_phoenix,
@@ -62,13 +54,10 @@ config :hello_phoenix,
        mailgun_key: System.get_env("MAILGUN_API_KEY")
 ```
 
-There's another way which doesn't require environment variables for all environments, but is a little more
-complex to set up. This method mimics the way that `config/prod.secret.exs` works by creating a`config/config.secret.exs`
-file which will apply to all environments. We won't be using `prod.secret.exs` itself, because we will need
-these configuration values in development as well as production. Here goes.
+还有一种稍微有点麻烦的办法。仿照 `config/prod.secret.exs` 文件创建一个 `config/config.secret.exs` -- 我们不使
+用 `prod.secret.exs` 文件的原因是他仅仅针对生产环境起效果，而 `config.secret.exs` 作用于所有环境。
 
-The first thing we will do is add a line to the `.gitignore` file for a new `config/config.secret.exs` file.
-This will keep `config.secret.exs` out of our git repository.
+首先是在 `.gitignore` 中忽略 `config/config.secret.exs` 文件。
 
 ```elixir
 . . .
@@ -82,7 +71,7 @@ This will keep `config.secret.exs` out of our git repository.
 /config/config.secret.exs
 ```
 
-The next step is to create the `config/config.secret.exs` file with our `mailgun` configuration in it.
+然后在 `config/config.secret.exs` 文件中配置 `mailgun`。
 
 ```elixir
 use Mix.Config
@@ -92,7 +81,7 @@ config :hello_phoenix,
        mailgun_key: "key-another-long-string"
 ```
 
-Finally, we'll need to import `config.secret.exs` into our regular `config/config.exs` file.
+最后， 在 `config/config.exs` 中引入 `config.secret.exs` 文件。
 
 ```elixir
 . . .
@@ -102,16 +91,13 @@ import_config "#{Mix.env}.exs"
 import_config "config.secret.exs"
 ```
 
-Since our `config/config.secret.exs` file won't be in our repository, we'll need to take some extra steps
-when we deploy our application. Please see the
+因为`config/config.secret.exs` 不会出现在我们的代码仓库中，我们需要在部署是做一些额外的步骤，具体请查看
 [Deployment Introduction Guide](http://www.phoenixframework.org/docs/deployment)
-for more information.
 
-### The Client Module
+### 客户端模块
 
-In order for our application to interact with Mailgun, we'll need a client module. Let's define one here
-`lib/hello_phoenix/mailer.ex`. When we `use` the `Mailgun.Client` module in the second line, we pass our
-configuration to the `mailgun` package, and we import `mailgun`'s `send_email/1` function into our mailer.
+为了让我们的应用和 Mailgun 交互，我们来创建一个客户端模块 -- `lib/hello_phoenix/mailer.ex`。在第二行 `use`
+`Mailgun.Client` 后，我们将配置信息传递给 `mailgun` 包，然后引入 `mailgun` 的 `send_email/1` 函数。
 
 ```elixir
 defmodule HelloPhoenix.Mailer do
@@ -121,18 +107,12 @@ defmodule HelloPhoenix.Mailer do
 end
 ```
 
-> Note The filesystem watcher does not monitor files in the `lib` directory for changes in order to recompile
-> them. This means that if we update the mailer client, we'll need to restart the server in order for those
-> changes to take effect.
+> 注意，我们的应用不会监视在 `lib` 目录中的文件改动，所以如果你改动了这里的代码，需要重新启动应用才能有效果。
 
-With this in place, we can start creating our custom email functions. Web applications may send any number of
-different types of emails - welcome emails after signup, password confirmations, activity notifications - the
-list goes on. For each type of email, we'll define a new function which will call `send_email/1`, passing in a
-keyword list of arguments.
+接下来，我们需要编写发送 email 的函数。 web 应用会发送各种邮件 -- 欢迎邮件，密码重置，消息提醒等等。对于每一种
+邮件，我们需要使用上面引入的`send_email/1` 来创建一个函数。
 
-Let's say we want to send a welcome email to new users formatted as plain text. We'll need to know who to send
-the email to, as well as the "from" address, subject, and body of the email. This will be sent as a plain text
-email because we've specified the `:text` option.
+比如我们发送一封纯文本的欢迎邮件, 使用 `:text` 选项 -- 其他选项看字面意思很好理解。
 
 ```elixir
 def send_welcome_text_email(email_address) do
@@ -143,17 +123,16 @@ def send_welcome_text_email(email_address) do
 end
 ```
 
-Sending this email is as easy as invoking the function with an email address, from wherever we want to in our application.
+现在我们可以在应用的任何地方发送这封邮件了（别忘了指定邮件地址）。
 
 ```elixir
 HelloPhoenix.Mailer.send_welcome_text_email("us@example.com")
 ```
 
-Since we're just getting started, it would be great to test this out locally without hitting Mailgun. The
-`mailgun` package gives us a very easy way to do this. In the client module, we set the mode to `:test` and
-provide a path to a file for `mailgun` to write out the JSON representation of our emails.
+在我们的邮件部分变得复杂之前，我们最好先来看看怎么做测试。`mailgun` 可以允许我们在本地测试，在客户端模块，我们
+可以添加 `:test` 字段并给一个接收`mailgun`响应(json 格式)的文件路径。
 
-Let's add those to our client module at `lib/hello_phoenix/mailer.ex`.
+让我们在 `lib/hello_phoenix/mailer.ex` 中添加他们。
 
 ```elixir
 defmodule HelloPhoenix.Mailer do
@@ -165,9 +144,8 @@ defmodule HelloPhoenix.Mailer do
 end
 ```
 
-Let's try this out from `iex`. We'll use `iex -S mix phoenix.server` in order to interact with a running
-Phoenix application. Once we're in an `iex` session, we can call our welcome email function, passing in the
-address we want to send the email to.
+让我们在 `iex` 中做个测试。我们使用 `iex -S mix phoenix.server` 以便于我们正在运行的 Phoenix 应用交互。一旦我
+们进入 `iex` 会话，我们就可以调用之前编写的发送欢迎邮件的函数了。
 
 ```console
 $ iex -S mix phoenix.server
@@ -176,17 +154,16 @@ iex> HelloPhoenix.Mailer.send_welcome_text_email("us@example.com")
 {:ok, "OK"}
 ```
 
-In test mode, the `send_mail/1` function will always return `{:ok, "OK"}`.
+在测试环境下, `send_email/1` 函数会总是返回 `{:ok, "OK"}` 。
 
-Now, we can see the results in the output file.
+现在，我们可以在文件中看到返回结果。
 
 ```console
 $ more /tmp/mailgun.json
 {"to":"us@example.com","text":"Welcome to HelloPhoenix!","subject":"Welcome!","from":"Mailgun Sandbox <postmaster@sandbox-our-domain.mailgun.org>"}
 ```
 
-We can send HTML emails as well. To do this, we can define a new function which uses an `:html` key instead
-of `:text`. The HTML value we use will need to be a string.
+我们也可以使用 `:html` 选项发送 HTML 邮件。 `:html` 选项的值是一个 html 字符串。
 
 ```elixir
 def send_welcome_html_email(email_address) do
@@ -197,7 +174,7 @@ def send_welcome_html_email(email_address) do
 end
 ```
 
-Notice that we have some duplication here in the value of the "from" lines in both functions. We can fix that with a module attribute.
+注意我们的代码里面 "form" 那行有重复，我们可以将其提取为模块属性。
 
 ```elixir
 defmodule HelloPhoenix.Mailer do
@@ -206,7 +183,7 @@ defmodule HelloPhoenix.Mailer do
   . . .
 ```
 
-If we substitute our module attribute for the string in the `:from` lines, our two functions will look like this.
+我们可以在 `:from` 后面这样使用：
 
 ```elixir
 def send_welcome_text_email(email_address) do
@@ -224,8 +201,7 @@ def send_welcome_html_email(email_address) do
 end
 ```
 
-When we call the `send_welcome_html_email/1` function, we get almost the same output, with the HTML content
-instead of the text content.
+当我们调用 `send_welcome_html_email/1` 函数， 我们得到的输出几乎一样，只是 html 取代了文本。
 
 ```console
 $ iex -S mix phoenix.server
@@ -234,18 +210,15 @@ iex> HelloPhoenix.Mailer.send_welcome_html_email("us@example.com")
 {:ok, "OK"}
 ```
 
-Here's the output in `/tmp/mailgun.json`.
+这里是 `/tmp/mailgun.json` 中的内容。
 
 ```console
 $ more /tmp/mailgun.json
 {"to":"them@example.com","subject":"Welcome!","html":"<strong>Welcome to HelloPhoenix Test</strong>","from":"Mailgun Sandbox <postmaster@sandbox-our-domain.mailgun.org>"}
 ```
 
-For many email uses, it's good to have clients try to render an HTML version first, then fall back to plain
-text if they are unable to do so. Let's write a new `send_welcome_email/1` function which will supersede the
-other two welcome email functions. In it, we'll simply use both `:text` and `:html` options. This will produce
-a multi-part email with the text section separated from the HTML section. Each will appear in the order it is
-defined in the function.
+对很多 email 的使用场景来说，当客户端不能渲染 HTML 时最好能降级到纯文本渲染。 这种情况下，我们可以在函数中同时定义 `:html`
+和 `:text` 字段。
 
 ```elixir
 def send_welcome_email(email_address) do
@@ -257,7 +230,7 @@ def send_welcome_email(email_address) do
 end
 ```
 
-When we call our new function, this is what we get.
+当我们测试调用这个函数，输出如下：
 
 ```console
 $ more /tmp/mailgun.json
@@ -265,7 +238,7 @@ $ more /tmp/mailgun.json
 {"to":"us@example.com","text":"Welcome to HelloPhoenix!","subject":"Welcome!","html":"<strong>Welcome to HelloPhoenix Test</strong>","from":"Mailgun Sandbox <postmaster@sandbox-our-domain.mailgun.org>"}
 ```
 
-Let's take our client out of test mode by removing the `:mode` and `:test_file_path` options.
+让我们回到非测试模式 ， 去掉 `:mode` 和 `:test_file_path` 选项即可。
 
 ```elixir
 defmodule HelloPhoenix.Mailer do
@@ -275,8 +248,8 @@ defmodule HelloPhoenix.Mailer do
   . . .
 ```
 
-When we restart the application and call our `send_welcome_email/1` function, we actually get a response back
-from Mailgun telling us our email has been queued.
+当我们重启应用然后调用 `send_welcome_email/1` 函数，我们会从 Mailgun 得到一条信息，提示我们这封 email 已经进入
+发送队列了(telling us our email has been queued)。
 
 ```console
 iex> HelloPhoenix.Mailer.send_welcome_email("us@example.com")
@@ -284,10 +257,10 @@ iex> HelloPhoenix.Mailer.send_welcome_email("us@example.com")
  "{\n  \"id\": \"<20150820050046.numbers.more_numbers@sandbox-our-domain.mailgun.org>\",\n  \"message\": \"Queued. Thank you.\"\n}"}
 ```
 
-Great! Time to check our inbox.
+不错！ 现在我们来看看我们的收件箱。
 
-Looking at the original source of our email, we can see that it is indeed a multipart email with two parts.
-The first is our text email, with a Content-Type of "text/plain". The second is our HTML email with a Content-Type of "text/html".
+注意看这封 email 的源文件， 我们可以看到这封 `multipart email` 包含两个部分。 首先是带有 Contents-Type 字段
+为 "text/plain" 的文本email， 第二封是带有 Content-Type 字段为 "text/html" 的 HTML 版本的 email 。
 
 ```
 To: them@example.com
@@ -312,14 +285,13 @@ Content-Transfer-Encoding: 7bit
 --ab2eaf529cf8442b93154d6e3d98896e--
 ```
 
-### Tidying Up
+### 收尾
 
-What we've written so far is fine, but for a real-world welcome email, we're going to need more than a few
-words of text or a single HTML tag. With more text or HTML, though, our `send_welcome_email/1` will become
-messy quite quickly. The solution is private functions which cordon off the complexity behind a descriptive name.
+目前为止我们做的还不错，但是对于真实世界的应用来说，这些简单的 email 内容就不够用了，随着文本或 html 的复杂，
+我们的 `send_welcome_email/1` 函数很快会变得非常乱。 解决办法是将其封装在一个私有函数里, 起一个描述性的名字。
 
-In our `HelloPhoenix.Mailer` module, we can define a private `welcome_text/0` function which uses a heredoc
-to define a string literal for the text that makes up the body of our email.
+在我们的 `HelloPhoenix.Mailer` 模块里， 我们可以定义一个私有的 `welcome_text/0` 函数，使用 `heredoc` 语法定义
+一串 email 的正文内容。
 
 ```elixir
 . . .
@@ -331,7 +303,7 @@ end
 . . .
 ```
 
-Now we can use it in our `send_welcome_email/1` function.
+现在我们可以在 `send_welcome_email/1` 函数中使用：
 
 ```elixir
 def send_welcome_email(email_address) do
@@ -343,10 +315,7 @@ def send_welcome_email(email_address) do
 end
 ```
 
-If we're going to render anything other than the simplest HTML while still having a readable
-`send_welcome_email/1` function, using bare HTML strings is going to present problems as well. Rendering
-templates fixes that, but we need a string value for the `:html` key. The `Phoenix.View.render_to_string/3`
-function will do just what we need.
+对于 html 我们也可以使用 `Phoenix.View.render_to_string/3` 将要渲染的 html 内容放在独立的文件里。
 
 ```elixir
 def send_welcome_email(email_address) do
@@ -358,9 +327,8 @@ def send_welcome_email(email_address) do
 end
 ```
 
-To make this example work, we'll need the same components that we would use to render any template in Phoenix.
-
-First, we'll need a basic `HelloPhoenix.EmailView` defined at `web/views/email_view.ex`.
+为了让上面的代码工作， 我们需要一些组件来渲染邮件模板。
+首先，我们需要在 `web/views/email_view.ex` 文件中定义一个 `HelloPhoenix.EmailView`
 
 ```elixir
 defmodule HelloPhoenix.EmailView do
@@ -368,7 +336,7 @@ defmodule HelloPhoenix.EmailView do
 end
 ```
 
-We'll also need a new `email` directory in `web/templates` with a `welcome.html.eex` template in it.
+我们还需要在 `web/templates` 目录中定义一个 `email` 目录, 并创建一个 `welcome.html.eex` 模板。
 
 ```html
 <div class="jumbotron">
@@ -376,20 +344,21 @@ We'll also need a new `email` directory in `web/templates` with a `welcome.html.
 </div>
 ```
 
-> Note: If we need to use any path or url helpers in our template, we will need to pass the endpoint instead of a connection struct for the first argument. This is because we won't be in the context of a request, so `@conn` won't be available. For example, we will need to write this
+> 注意： 如果你想在模板中使用 path 或 url helpers 的时候，我们需要传递 endpoint 而不是 conn 作为第一个参数。这
+> 是因为我们并不是在一个请求中上下文中，所以 `@conn` 不可用，比如，我们需要这样写：
+
 ```elixir
 alias HelloPhoenix
 Router.Helpers.page_url(Endpoint, :index)
 ```
-instead of this.
+
+而不是这样：
+
 ```elixir
 Router.Helpers.page_path(@conn, :index)
 ```
 
-If we have any other values we need to pass into the template, we can pass a map of them as the third
-argument to `Phoenix.View.render_to_string/3`.
-
-We can put the render call behind a private function as well, just as we did with `welcome_text/0`.
+如果我们需要给模板传递参数，我们可以将其作为 `Phoenix.View.render_to_string/3` 函数的第三个参数。
 
 ```elixir
 . . .
@@ -399,7 +368,7 @@ end
 . . .
 ```
 
-With that our `send_welcome_email/1` function looks much nicer.
+现在我们的 `send_welcome_email/1` 函数看起来好多了。
 
 ```elixir
 def send_welcome_email(email_address) do
@@ -411,13 +380,12 @@ def send_welcome_email(email_address) do
 end
 ```
 
-### Sending attachments
+### 发送附件
 
-Mailgun also lets us send attachments with an email. We'll use the `:attachments` key to tell `mailgun`
-that we want to include one or more of them. The value we give it needs to be a list of two element maps.
-One element of each map needs to be the path to a file we want to attach. The other needs to be the filename.
+Mailgun 同时允许我们发送附件。我们可以使用 `:attachments` 告诉 `mailgun` 我们需要发送一个或多个附件。值是一个
+包含两个元素的map 的列表。一个元素是附件文件的路径，另一个是文件名。
 
-Sending new users a copy of the Phoenix framework logo with their welcome email would look like this.
+下面的例子是给欢迎邮件加一个 Phoenix 框架的 logo 附件:
 
 ```elixir
 def send_welcome_email(email_address) do
@@ -430,12 +398,11 @@ def send_welcome_email(email_address) do
 end
 ```
 
-If we put our mailer client back in test mode, restart our application, and call the `send_welcome_email/1`
-function with our email address, we'll see our attachment at the very end.
+现在改为测试模式，重启应用，然后调用 `send_welcome_email/1` 函数， 我们可以在响应的结尾部分看到附件信息。
 
 ```console
 more mailgun.json
 {"to":"us@example.com","text":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\n","subject":"Welcome!","html":"<div class=\"jumbotron\">\n  <h2>Welcome to HelloPhoenix!</h2>\n</div>","from":"Mailgun Sandbox <postmaster@sandbox-our-domain.mailgun.org>","attachments":[{"path":"priv/static/images/phoenix.png","filename":"phoenix.png"}]}
 ```
 
-Then we can take the mailer out of test mode and actually send it.
+现在我们可以放心的在非测试环境使用了。
