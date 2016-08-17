@@ -15,6 +15,7 @@
   * [H_ecto模型](H_ecto模型.md)
 * [测试]()
   * [A_概述](测试/A_概述.md)
+  * [E_模型](测试/E_模型.md)
 * [进阶内容]()
   * [A_升级phoenix](进阶内容/A_升级phoenix.md)
   * [D_mix任务](进阶内容/D_mix任务.md)
