@@ -154,9 +154,29 @@ meaning_of_life = 42;
 
 我们的项目可能会使用外部的第三方库比如 jQuery 或者 underscore 等等，像上面提到的类似，我们可以将其放置在
 `web/static/vendor` 目录下。但是使用 `npm` 去安装他们是更好的选择，以 jQuery 为例，只需要在 package.json 中加
-入 `"jquery": ">= 2.1"` 然后使用 `npm install --save` 安装即可。  然后我们就可以在 `app.js` 中使用 `import $
-from "jquery"` 来使用了。
+入 `"jquery": ">= 2.1"` 然后使用 `npm install --save` 安装即可。 如果我们在 `brunch-config.js` 的 `npm` 部分
+有 `whitelist`属性，我们也需要将 `jQuery` 添加到那里。 现在我们就可以在 `app.js` 中使用 `import $ from "jquery"` 来使用了。
 
+如果我们现有的代码中是将 jQuery 作为全局变量使用的，我们需要重构一下代码（从长远维护角度），或者就将 jQuery 作
+为全局变量来使用（算是一个 hack）。
+
+将其暴露为全局变量，我们需要在配置中使用 `globals` 字段。比如，如果我们想要 jQuery 作为 $ 在全局使用，我们需要
+配置如下：
+
+```javascript
+  npm: {globals: {
+    $: 'jquery',
+    jQuery: 'jquery'
+  }},
+```
+更进一步的，有些外部的库会自带样式，为了让 Brunch 将这些样式加入到编译流程，我们同样需要配置。比如，如果我们安
+装了 Picaday 包并且想引入它的样式，我们可以配置如下：
+
+```javascript
+  npm: {styles: {
+    bootstrap: ['dist/css/bootstrap.min.css']
+  }},
+```
 #### Brunch Plugin Pipeline
 
 Brunch 中所有的转换功能都是通过插件机制实现的， Brunch 会使用 `package.json` 中安装的工具来实现其功能，主要部
@@ -280,7 +300,7 @@ npm install
 
 创建 webpack 的配置文件 `webpack.config.js` ：
 
-```json
+```javascript
 module.exports = {
   entry: "./web/static/js/app.js",
   output: {
