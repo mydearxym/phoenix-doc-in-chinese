@@ -21,6 +21,8 @@
   * [J_channels](测试/J_channels.md)
 * [部署]()
   * [A_概述](部署/A_概述.md)
+  * [E_heroku](部署/E_heroku.md)
+  * [I_exrm_release](部署/I_exrm_release.md)
 * [进阶内容]()
   * [A_升级phoenix](进阶内容/A_升级phoenix.md)
   * [D_mix任务](进阶内容/D_mix任务.md)

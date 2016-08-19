@@ -1,3 +1,11 @@
+
+*注意* : 这篇指南使用的 [Elixir Release Manager](https://github.com/bitwalker/exrm) (Exrm) 已经不在开发了，作
+者也不推荐使用(具体在 [Exrm 项目的 README](https://github.com/bitwalker/exrm) 里面有提及)，而是转而开发
+[distillery](https://github.com/bitwalker/distillery) 去了。
+
+故所以这篇指南就没有翻译了，有时间我会把 [distillery](https://github.com/bitwalker/distillery) 的文档作为替代
+放在这里。
+
 ### What We'll Need
 
 There are just a few things we'll need before we continue.
@@ -6,11 +14,16 @@ There are just a few things we'll need before we continue.
 - a build environment - this can be our dev environment
 - a hosting environment - this can be our build environment for testing/experimentation
 
-We need to be sure that the architectures for both our build and hosting environments are the same, e.g. 64-bit Linux -> 64-bit Linux. If the architectures don't match, our application might not run when deployed. Using a virtual machine that mirrors our hosting environment as our build environment is an easy way to avoid that problem.
+We need to be sure that the architectures for both our build and hosting environments are the same,
+e.g. 64-bit Linux -> 64-bit Linux. If the architectures don't match, our application might not run when
+deployed. Using a virtual machine that mirrors our hosting environment as our build environment is an
+easy way to avoid that problem.
 
 ### Goals
 
-Our main goal for this guide is to generate a release, using the [Elixir Release Manager](https://github.com/bitwalker/exrm) (Exrm), and deploy it to our hosting environment. Once we have our application running, we will discuss steps needed to make it publicly visible.
+Our main goal for this guide is to generate a release, using the
+[Elixir Release Manager](https://github.com/bitwalker/exrm) (Exrm), and deploy it to our hosting environment.
+Once we have our application running, we will discuss steps needed to make it publicly visible.
 
 ## Tasks
 
@@ -38,7 +51,9 @@ To get started, we'll need to add `{:exrm, "~> 1.0"}` into the list of dependenc
   end
 ```
 
-With that taken care of, a simple `mix do deps.get, compile` will pull down exrm and its dependencies, along with the rest of our application's dependencies. It also ensures that everything compiles properly. If all goes well, exrm's mix tasks will be available.
+With that taken care of, a simple `mix do deps.get, compile` will pull down exrm and its dependencies, along
+with the rest of our application's dependencies. It also ensures that everything compiles properly. If all
+goes well, exrm's mix tasks will be available.
 
 ```console
 $ mix help
@@ -51,7 +66,8 @@ mix release.plugins   # View information about active release plugins
 
 ### Configure Our Applications
 
-Now we need to update our `mix.exs` file to have all production dependencies listed in the `applications` list in the `application/0` function.
+Now we need to update our `mix.exs` file to have all production dependencies listed in the `applications`
+list in the `application/0` function.
 
 ```elixir
   def application do
@@ -61,11 +77,20 @@ Now we need to update our `mix.exs` file to have all production dependencies lis
   end
 ```
 
-Doing this helps us overcome one of [exrm's common issues](https://hexdocs.pm/exrm/common-issues.html) by helping exrm know about all our dependencies so that it can properly bundle them into our release. Without this, our application will probably alert us about missing modules or a failure to start a child application when we go to run our release.
+Doing this helps us overcome one of [exrm's common issues](https://hexdocs.pm/exrm/common-issues.html) by
+helping exrm know about all our dependencies so that it can properly bundle them into our release. Without
+this, our application will probably alert us about missing modules or a failure to start a child application
+when we go to run our release.
 
-Even if we list all of our dependencies, our application may still fail. Typically, this happens because one of our dependencies does not properly list its own dependencies. A quick fix for this is to include the missing dependency or dependencies in our list of applications. If this happens to you, and you feel like helping the community, you can create an issue or a pull request to that project's repo.
+Even if we list all of our dependencies, our application may still fail. Typically, this happens because one
+of our dependencies does not properly list its own dependencies. A quick fix for this is to include the
+missing dependency or dependencies in our list of applications. If this happens to you, and you feel like
+helping the community, you can create an issue or a pull request to that project's repo.
 
-Within `config/prod.exs` we need to make the following changes.   We must configure our Endpoint to act as a server `server: true`.  We must set the root to be `.` and we must set the `version: Mix.Project.config[:version]` to ensure that new versions cause the Endpoint assets cache to be reloaded.
+Within `config/prod.exs` we need to make the following changes.   We must configure our Endpoint to act as a
+server `server: true`.  We must set the root to be `.` and we must set the
+`version: Mix.Project.config[:version]` to ensure that new versions cause the Endpoint assets cache
+to be reloaded.
 
 ```elixir
 # Configures the endpoint
@@ -78,9 +103,14 @@ server: true,
 version: Mix.Project.config[:version]
 ```
 
-When we run `mix phoenix.server` to start our application, the `server` parameter is automatically set to true. When we're creating a release, however, we need to configure this manually. If we get through this release guide, and we aren't seeing any pages coming from our server, this is a likely culprit.
+When we run `mix phoenix.server` to start our application, the `server` parameter is automatically set to
+true. When we're creating a release, however, we need to configure this manually. If we get through this
+release guide, and we aren't seeing any pages coming from our server, this is a likely culprit.
 
-When generating a release and performing a hot upgrade, the static assets being served will not be the newest version without setting the root to `.` and setting the endpoint version.  If `root` or `version` are not set then we will be forced to perform a restart so that the correct static assets are served, effectively changing the hot upgrade to a rolling restart.
+When generating a release and performing a hot upgrade, the static assets being served will not be the newest
+version without setting the root to `.` and setting the endpoint version.  If `root` or `version` are not set
+then we will be forced to perform a restart so that the correct static assets are served, effectively changing
+the hot upgrade to a rolling restart.
 
 If we take a quick look at our `config/prod.exs` again, we'll see that our port is set to `8888`.
 
@@ -113,9 +143,11 @@ We also need to uncomment the following line to instruct Phoenix to start the se
 . . .
 ```
 
-If we don't currently have such an environment variable, we need to set it now, otherwise our release will not build properly.
+If we don't currently have such an environment variable, we need to set it now, otherwise our release will
+not build properly.
 
-There's one last thing to do before we create our release. We need to pre-compile our static assets using the `phoenix.digest` task. We will be generating a production release, so we need to run this task with `MIX_ENV=prod`.
+There's one last thing to do before we create our release. We need to pre-compile our static assets using
+the `phoenix.digest` task. We will be generating a production release, so we need to run this task with `MIX_ENV=prod`.
 
 ```console
 $ MIX_ENV=prod mix phoenix.digest
@@ -126,7 +158,8 @@ Check your digested files at 'priv/static'.
 
 ### Generating the Release
 
-Now that we've configured our application, let's build our production release by running `MIX_ENV=prod mix compile` and then `MIX_ENV=prod mix release` at the root of our application.
+Now that we've configured our application, let's build our production release by running
+`MIX_ENV=prod mix compile` and then `MIX_ENV=prod mix release` at the root of our application.
 
 ```console
 $ MIX_ENV=prod mix release
@@ -164,19 +197,29 @@ Consolidated protocols written to _build/prod/consolidated
 
 There are a couple of interesting things to note here.
 
-- There are a number of lines which begin with "Consolidated". These are protocols which have been consolidated for faster function dispatch and better performance.
+- There are a number of lines which begin with "Consolidated". These are protocols which have been
+consolidated for faster function dispatch and better performance.
 
-- We see our application's version number - `0.0.1`. This value comes from the application's `mix.exs` file. It is mapped to the `:version` key inside the `project/0` function.
+- We see our application's version number - `0.0.1`. This value comes from the application's `mix.exs` file.
+It is mapped to the `:version` key inside the `project/0` function.
 
-- Exrm has created a `rel` directory at the root of our application where it has written everything related to this release.
+- Exrm has created a `rel` directory at the root of our application where it has written everything related
+to this release.
 
-Exrm uses a set of default configuration options when building our release that will work for most applications. If we need more advanced configuration options, we can checkout [exrm's configuration section](https://hexdocs.pm/exrm/release-configuration.html) for more detailed information.
+Exrm uses a set of default configuration options when building our release that will work for most
+applications. If we need more advanced configuration options, we can checkout
+[exrm's configuration section](https://hexdocs.pm/exrm/release-configuration.html) for more detailed information.
 
-If we make a mistake, or if something doesn't go quite right, we can run `mix release.clean`, which will delete the release for the current application version number. If we add the `--implode` flag, exrm will remove _all_ releases for all versions of our application. These will be permanently removed unless they are under version control. Obviously, this is a destructive operation, and exrm will prompt us to make sure we want to continue.
+If we make a mistake, or if something doesn't go quite right, we can run `mix release.clean`, which will
+delete the release for the current application version number. If we add the `--implode` flag, exrm will
+remove _all_ releases for all versions of our application. These will be permanently removed unless they
+are under version control. Obviously, this is a destructive operation, and exrm will prompt us to make sure
+we want to continue.
 
 #### Contents of a Release
 
-Exrm has created our release, and put it somewhere in the `rel` directory, but where exactly did all the pieces end up?
+Exrm has created our release, and put it somewhere in the `rel` directory, but where exactly did all the
+pieces end up?
 
 Everything related to our releases is in the `rel/hello_phoenix` directory. Let's see what's in it.
 
@@ -192,7 +235,8 @@ drwxr-xr-x  26 lance  staff       884 May 13 18:47 lib
 drwxr-xr-x   5 lance  staff       170 May 13 18:47 releases
 ```
 
-The `bin` directory contains the generated executables for running our application. The `bin/hello_phoenix` executable is what we will use to issue commands to our application.
+The `bin` directory contains the generated executables for running our application. The `bin/hello_phoenix`
+executable is what we will use to issue commands to our application.
 
 ```console
 $ ls -la rel/hello_phoenix/bin
@@ -205,7 +249,8 @@ drwxr-xr-x  7 lance  staff    238 May 13 18:47 ..
 -rw-r--r--  1 lance  staff   5283 Apr 18  2014 start_clean.boot
 ```
 
-The `erts-6.4` directory contains all necessary files for the Erlang runtime system, pulled from our build environment.
+The `erts-6.4` directory contains all necessary files for the Erlang runtime system, pulled from our
+build environment.
 
 ```console
 $ ls -la rel/hello_phoenix/erts-6.3/
@@ -218,7 +263,8 @@ drwxr-xr-x   5 lance  staff  170 May 13 18:47 lib
 drwxr-xr-x   3 lance  staff  102 May 13 18:47 src
 ```
 
-The `lib` directory contains the compiled BEAM files for our application and all of our dependencies. This is where all of our work goes.
+The `lib` directory contains the compiled BEAM files for our application and all of our dependencies.
+This is where all of our work goes.
 
 ```console
 $ ls -la rel/hello_phoenix/lib/
@@ -251,7 +297,10 @@ drwxr-xr-x   4 lance  staff  136 May 13 18:47 stdlib-2.0
 drwxr-xr-x   3 lance  staff  102 May 13 18:47 syntax_tools-1.6.14
 ```
 
-The `releases` directory is the home for our releases - any release-dependent configurations and scripts that Exrm finds necessary for running our application. If we have multiple versions of our application, and if we have created releases for them, we will have multiple releases in the `releases` directory.
+The `releases` directory is the home for our releases - any release-dependent configurations and
+scripts that Exrm finds necessary for running our application. If we have multiple versions of our
+application, and if we have created releases for them, we will have multiple releases in the
+`releases` directory.
 
 ```console
 $ ls -la rel/hello_phoenix/releases/
@@ -263,17 +312,23 @@ drwxr-xr-x  8 lance  staff   272 May 13 18:47 0.0.1
 -rw-r--r--  1 lance  staff     9 May 13 18:47 start_erl.data
 ```
 
-The `hello_phoenix-0.0.1.tar.gz` tarball in `rel/hello_phoenix/releases/0.0.1` is our release in archive form, ready to be shipped off to our hosting environment.
+The `hello_phoenix-0.0.1.tar.gz` tarball in `rel/hello_phoenix/releases/0.0.1` is our release in
+archive form, ready to be shipped off to our hosting environment.
 
 ### Testing Our Release
 
-Before deploying our release, we should make sure that it runs. To do that, we will issue the `console` command to our executable, essentially running our application via `iex`.
+Before deploying our release, we should make sure that it runs. To do that, we will issue the `console`
+command to our executable, essentially running our application via `iex`.
 
-Note: Since we are building a production release - we set our mix environment to "prod" when we created it - we should exercise a little extra caution.
+Note: Since we are building a production release - we set our mix environment to "prod" when we created
+it - we should exercise a little extra caution.
 
-External dependencies will use their production configuration values. Applications will try to communicate with production databases, production Amazon S3 buckets, production message queues, and anything else which has a production configuration.
+External dependencies will use their production configuration values. Applications will try to communicate
+with production databases, production Amazon S3 buckets, production message queues, and anything else which
+has a production configuration.
 
-Some of these might be unreachable from the build environment, which will cause errors. Some might interact with important production data. Please be careful.
+Some of these might be unreachable from the build environment, which will cause errors. Some might
+interact with important production data. Please be careful.
 
 With a newly-generated application, though, we should be fine. :)
 
@@ -291,9 +346,12 @@ Interactive Elixir (1.0.2) - press Ctrl+C to exit (type h() ENTER for help)
 iex(hello_phoenix@127.0.0.1)1>
 ```
 
-This is the point where our application will crash if it fails to start a child application. If all goes well, however, we should end up at an `iex` prompt. We should also see our app running at [http://localhost:8888/](http://localhost:8888/).
+This is the point where our application will crash if it fails to start a child application. If all
+goes well, however, we should end up at an `iex` prompt. We should also see our app running at
+[http://localhost:8888/](http://localhost:8888/).
 
-Let's hit `ctrl-c` twice to get out of iex so that we can explore a couple of different ways to interact with our release.
+Let's hit `ctrl-c` twice to get out of iex so that we can explore a couple of different ways to
+interact with our release.
 
 One thing we can do is start the release without a console session. Let's try running the `start` command.
 
@@ -329,7 +387,10 @@ $ rel/hello_phoenix/bin/hello_phoenix ping
 pong
 ```
 
-It's still alive and responding. This is a feature! If the server were to go down every time we stopped a remote console, that would be a problem. Note that this situation is different from when we ran the `console` command above. The `remote_console` command is not intended to start a release locally, but rather to connect to one which has already started.
+It's still alive and responding. This is a feature! If the server were to go down every time we stopped
+a remote console, that would be a problem. Note that this situation is different from when we ran the
+`console` command above. The `remote_console` command is not intended to start a release locally, but
+rather to connect to one which has already started.
 
 So how _do_ we stop the server? There are two ways.
 
@@ -375,11 +436,13 @@ Node 'hello_phoenix@127.0.0.1' not responding to pings.
 
 As we expected, the server is now down.
 
-Congratulations! Now that we've interacted a bit with our release locally, we're ready to deploy our application!
+Congratulations! Now that we've interacted a bit with our release locally, we're ready to deploy
+our application!
 
 ## Deploying Our Release
 
-There are many ways for us to get our tarballed release to our hosting environment. In our example, we'll use SCP to upload to a remote server.
+There are many ways for us to get our tarballed release to our hosting environment. In our example,
+we'll use SCP to upload to a remote server.
 
 ```console
 $ scp -i ~/.ssh/id_rsa.pub rel/hello_phoenix-0.0.1.tar.gz ubuntu@hostname.com:/home/ubuntu
@@ -402,9 +465,12 @@ We're getting close.
 
 ### Setting Up Our Init System
 
-First step in exposing our application to the world is ensuring that our application will start running in case of a system restart - expected or unexpected. To do this, we will need to create an init script for our hosting environment's init system, be it `systemd`, `upstart`, or whatever.
+First step in exposing our application to the world is ensuring that our application will start
+running in case of a system restart - expected or unexpected. To do this, we will need to create an
+init script for our hosting environment's init system, be it `systemd`, `upstart`, or whatever.
 
-Let's use `upstart` as an example. We'll edit our init script with `sudo vi /etc/init/hello_phoenix.conf` (this is on Ubuntu Linux).
+Let's use `upstart` as an example. We'll edit our init script with `sudo vi /etc/init/hello_phoenix.conf`
+(this is on Ubuntu Linux).
 
 ```text
 description "hello_phoenix"
@@ -438,15 +504,25 @@ pre-start exec /bin/sh /app/bin/hello_phoenix start
 post-stop exec /bin/sh /app/bin/hello_phoenix stop
 ```
 
-Here, we've told `upstart` a few basic things about how we want it to handle our application. If you need to know how to do something in particular, take a look at the [`upstart` cookbook](http://upstart.ubuntu.com/cookbook/) for loads of information on it. We'll kick off the first start of our application with `sudo start hello_phoenix`.
+Here, we've told `upstart` a few basic things about how we want it to handle our application. If you
+need to know how to do something in particular, take a look at the
+[`upstart` cookbook](http://upstart.ubuntu.com/cookbook/) for loads of information on it. We'll kick
+off the first start of our application with `sudo start hello_phoenix`.
 
-One key point to notice is that we're instructing `upstart` to run our release's `bin/hello_phoenix start` command, which boostraps our application and runs it as a daemon.
+One key point to notice is that we're instructing `upstart` to run our release's `bin/hello_phoenix start`
+command, which boostraps our application and runs it as a daemon.
 
 ### Setting Up Our Web Server
 
-In a lot of cases, we're going to have more than one application running in our hosting environment, all of which might need to be accessible on port 80. Since only one application can listen on a single port at a time, we need to use something to proxy our application. Typically, Apache (with `mod_proxy` enabled) or nginx is used for this, and we'll be setting up nginx in this case.
+In a lot of cases, we're going to have more than one application running in our hosting environment,
+all of which might need to be accessible on port 80. Since only one application can listen on a single
+port at a time, we need to use something to proxy our application. Typically, Apache
+(with `mod_proxy` enabled) or nginx is used for this, and we'll be setting up nginx in this case.
 
-Let's create our config file for our application. By default, everything in `/etc/nginx/sites-enabled` is included into the main `/etc/nginx/nginx.conf` file that is used to configure nginx's runtime environment. Standard practice is to create our file in `/etc/nginx/sites-available` and make a symbolic link to it in `/etc/nginx/sites-enabled`.
+Let's create our config file for our application. By default, everything in `/etc/nginx/sites-enabled`
+is included into the main `/etc/nginx/nginx.conf` file that is used to configure nginx's runtime environment.
+Standard practice is to create our file in `/etc/nginx/sites-available` and make a symbolic link to it in
+`/etc/nginx/sites-enabled`.
 
 Note: These points hold true for Apache as well, but the steps to accomplish them are slightly different.
 
@@ -489,6 +565,9 @@ server{
 }
 ```
 
-Like our `upstart` script, this nginx config is basic. Look to the [nginx wiki](https://www.nginx.com/resources/wiki/) for steps to configure any more involved features. Restart nginx with `sudo service nginx restart` to load our new config.
+Like our `upstart` script, this nginx config is basic. Look to the
+[nginx wiki](https://www.nginx.com/resources/wiki/) for steps to configure any more involved features.
+Restart nginx with `sudo service nginx restart` to load our new config.
 
-At this point, we should be able to see our application if we visit `http://hostname.com/` if everything has been successful up to this point.
+At this point, we should be able to see our application if we visit `http://hostname.com/` if everything
+has been successful up to this point.
