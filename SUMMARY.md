@@ -19,6 +19,8 @@
   * [G_控制器](测试/G_控制器.md)
   * [H_视图](测试/H_视图.md)
   * [J_channels](测试/J_channels.md)
+* [部署]()
+  * [A_概述](部署/A_概述.md)
 * [进阶内容]()
   * [A_升级phoenix](进阶内容/A_升级phoenix.md)
   * [D_mix任务](进阶内容/D_mix任务.md)
