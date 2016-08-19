@@ -7,10 +7,19 @@
 * [官方文档地址](https://github.com/phoenixframework/phoenix_guides)
 * [官方网站地址](http://www.phoenixframework.org/)
 
+### 未完成的部分
+
+未完成的部分主要包括3类：
+
+* 官方文档仓库中也没有，比如测试的 controller 和 views 的章节。
+* 不和国情的内容，比如 heroku 的部署章节，国内无法访问。
+* 即将被遗弃的内容，比如 exrm 部署章节，即将被[distillery](https://github.com/bitwalker/distillery)替代。
+
+未完成的章节结构依然保留，在相应章节的顶部做了说明。
+
 ### Phoenix
 * [Github地址](https://github.com/phoenixframework/phoenix)
 * [官方的API](http://hexdocs.pm/phoenix/)(最新稳定版本)
-
 
 ### 视频
 > 内容为`Phoenix` 的作者 `Chris McCord`讲述的 关于1.0版本的开发计划以及现在的项目状态(自备梯子)。
