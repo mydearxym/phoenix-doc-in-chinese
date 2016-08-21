@@ -92,7 +92,26 @@ Since we generated an HTML resource, we can now start our server with `mix phoen
 是否存在；使用 `File.cp/2` 将文件拷贝到其他地方；使用第三方工具将文件发送到 S3；或者甚至使用 [Plug.Conn.send_file/5](http://hexdocs.pm/plug/Plug.Conn.html#send_file/5)
 将文件发回到前端。
 
-当我们没有上传文件时，请求参数里将不会有 "photo" 或者 "Plug.Upload" 键值：
+再比如，在生产模式下，我们可能需要将文件拷贝到项目根目录，比如 `/media`。在这个过程中，我们需要保证文件名是唯
+一的，比方说如果我们允许用上传头像，我们可以使用 user id 来产生一个唯一的名字：
+
+```elixir
+if upload = user_params["photo"] do
+  extension = Path.extname(upload.filename)
+  File.cp(upload.path, "/media/#{user.id}-profile#{extension}")
+end
+```
+
+然后我们可以使用 `lib/my_app/endpoint.ex` 文件中的 Plug.Static plug 来设置 serve 文件的位置到 "/media"：
+
+```elixir
+plug Plug.Static at: "/uploads", from: "/media"
+```
+
+现在浏览器可以使用诸如 "/uploads/1-profile.jpg" 来访问已上传的文件。 在实际环境下我们还需要一些额外的工作，比
+如验证文件类型，编码文件名等等。很多时候，使用一个第三方的模块会是一个更好的选择。
+
+最后，当上传的文件为空时，我们的 user_params 字段中是不会有 "photo" 和 Plug.Upload 字段的。这是日志中的记录：
 
 ```elixir
 %{"bio" => "Guitarist", "email" => "dweezil@example.com", "name" => "Dweezil Zappa", "number_of_pets" => "3"}
