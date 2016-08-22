@@ -7,6 +7,49 @@
 * [官方文档地址](https://github.com/phoenixframework/phoenix_guides)
 * [官方网站地址](http://www.phoenixframework.org/)
 
+### 文档大纲
+
+- 基础部分
+  - 概览
+  - 安装
+  - A_起步
+  - B_添加页面
+  - C_路由
+  - D_控制器
+  - DD_Plug
+  - E_视图
+  - F_模板
+  - G_通道
+  - H_ecto模型
+
+- 测试
+  - A_概述
+  - E_模型
+  - G_控制器
+  - H_视图
+  - J_channels
+
+- 部署
+  - A_概述
+  - E_heroku
+  - I_exrm_release
+
+- 进阶
+ - A_升级phoenix
+ - D_mix任务
+ - E_使用MySQL
+ - EE_自定义表主键
+ - F_配置
+ - G_静态资源
+ - H_上传文件
+ - I_发送 Email
+ - J_session会话
+ - M_自定义错误
+ - P_使用 ssl
+ - S_使用代理
+ - X_填充数据
+ - V_学习 Elixir
+
 ### 未完成的部分
 
 未完成的部分主要包括3类：
