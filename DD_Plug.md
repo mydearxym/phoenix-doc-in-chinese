@@ -105,7 +105,7 @@ defmodule HelloPhoenix.MessageController do
 end
 ```
 将原先嵌套的代码块用 plug 扁平化以后，我们可以让这些功能更加的模块化，更干净，更好的被复用。
-（译者： 请求在到达在这个 controller 的里的每个action时，都要顺序执行顶部列出的 plug 代码，相当于一个过滤层。）
+（译者： 有点像 node express 里的 middleware 的概念, 也是对连接参数做一些操作然后传给下一层）
 
 现在，让我们看看 plug 的另一种类型： 模块 plugs （module plugs）.
 
