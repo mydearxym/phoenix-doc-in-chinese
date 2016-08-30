@@ -16,7 +16,8 @@
 这篇指南假设我们是使用 Ecto 来生成的工程。如果我们在使用一个老版本的 Phoenix 应用，或者我们在生成项目时使用了
 `--no-ecto` 选项。请阅读下面的章节 'Integrating Ecto into an Existing Application'
 
-这篇指南同时假设我们使用的数据库是 PostgreSQL, 如果你要使用 MySQL, 请查看 [MySQL 指南](http://www.phoenixframework.org/docs/using-mysql)。
+这篇指南同时假设我们使用的数据库是 PostgreSQL, 如果你要使用 MySQL, 请查看
+[MySQL 指南](https://mydearxym.gitbooks.io/phoenix-doc-in-chinese/content/%E8%BF%9B%E9%98%B6%E5%86%85%E5%AE%B9/E_%E4%BD%BF%E7%94%A8MySQL.html)。
 
 当我们安装并配置好了 `Ecto` 以及 `PostgreSQL`, 最简单的使用 Ecto 模型的方法就是使用 `phoenix.gen.html` 任务生
 成一个 `资源`。我们就来生成一个包含 `name`, `email`, `bio` 和 `number_of_pets` 字段的 *User* 模型。
