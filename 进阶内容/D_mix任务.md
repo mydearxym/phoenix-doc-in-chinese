@@ -371,8 +371,8 @@ $ mix phoenix.gen.model Admin.User users name:string age:integer
 
 #### `mix phoenix.gen.channel`
 
-这个生成器会产生一个基本的 Phoenix 通道以及相应的测试用例。  它只需要两个参数： channel 的模块名以及复数形式的
-话题名称 (topic)。
+这个生成器会产生一个基本的 Phoenix 通道以及相应的测试用例。channel 接收一个
+ module 名字作为参数：
 
 ```console
 $ mix phoenix.gen.channel Room rooms
