@@ -32,7 +32,7 @@ Channels 处理客户端的事件，所以和控制器有点类似，但它们�
 
 Phoenix 的发布订阅层由 `Phoenix.PubSub` 模块以及 `GenServer`s 的各种适配器模块们组成 (a variety of modules for different adapters and their `GenServer`s)。实现 Channel 通信的各种功能 -- 订阅/取消订阅 主题， 对某一主题广播消息等。
 
-如果需要，我们也可以定义我们自己的 PubSub 适配器。详情可以在 [Phoenix.PubSub docs](http://hexdocs.pm/phoenix/Phoenix.PubSub.html) 查看。
+如果需要，我们也可以定义我们自己的 PubSub 适配器。详情可以在 [Phoenix.PubSub docs](http://hexdocs.pm/phoenix_pubsub/Phoenix.PubSub.html) 查看。
 
 
 需要注意的是，这些模块是在 Phoenix 内部使用的。Channels 在幕后使用他们来实现功能，作为终端用户（end users），我们并不需要直接在我们的应用中使用他们。
