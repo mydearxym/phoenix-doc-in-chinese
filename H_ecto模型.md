@@ -414,7 +414,6 @@ Email has invalid format
 中。
 
 让我们来仔细看看 Ecto 是怎么在这个生成的控制器中起作用的。
-不过在开始前还是先做一个简单的别名映射，以节省体力（之后可以用 `%User{}` 代替 `%HelloPhoenix.User{}` 了）。
 
 ```elixir
 defmodule HelloPhoenix.UserController do
