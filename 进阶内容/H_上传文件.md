@@ -105,7 +105,7 @@ end
 然后我们可以使用 `lib/my_app/endpoint.ex` 文件中的 Plug.Static plug 来设置 serve 文件的位置到 "/media"：
 
 ```elixir
-plug Plug.Static at: "/uploads", from: "/media"
+plug Plug.Static, at: "/uploads", from: "/media"
 ```
 
 现在浏览器可以使用诸如 "/uploads/1-profile.jpg" 来访问已上传的文件。 在实际环境下我们还需要一些额外的工作，比
