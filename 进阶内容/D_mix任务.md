@@ -375,7 +375,7 @@ $ mix phoenix.gen.model Admin.User users name:string age:integer
  module 名字作为参数：
 
 ```console
-$ mix phoenix.gen.channel Room rooms
+$ mix phoenix.gen.channel Room
 * creating web/channels/room_channel.ex
 * creating test/channels/room_channel_test.exs
 ```
