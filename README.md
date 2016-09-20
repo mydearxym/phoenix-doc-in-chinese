@@ -57,9 +57,7 @@
 
 未完成的部分主要包括3类：
 
-* 官方文档仓库中也没有，比如测试的
-[controller](https://github.com/phoenixframework/phoenix_guides/blob/master/testing/G_controllers.md)
-和 [views](https://github.com/phoenixframework/phoenix_guides/blob/master/testing/H_views.md) 的章节。
+* 官方文档仓库中也没有，比如测试的[views](https://github.com/phoenixframework/phoenix_guides/blob/master/testing/H_views.md) 的章节。
 * 不和国情的内容，比如 heroku 的部署章节，国内无法访问。
 * 即将被遗弃的内容，比如 exrm 部署章节，即将被[distillery](https://github.com/bitwalker/distillery)替代。
 
