@@ -144,30 +144,18 @@ import socket from "./socket"
 <input id="chat-input" type="text"></input>
 ```
 
-我们还需要在 `web/templates/layout/app.html.eex` 布局文件中引入 jQuery。
-
-```html
-  ...
-    <%= render @view_module, @view_template, assigns %>
-
-  </div> <!-- /container -->
-  <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
-  <script src="<%= static_path(@conn, "/js/app.js") %>"></script>
-</body>
-```
-
 然后在 `web/static/js/socket.js` 中添加一些事件监听 (event listeners)。
 
 ```javascript
 ...
 let channel           = socket.channel("rooms:lobby", {})
-let chatInput         = $("#chat-input")
-let messagesContainer = $("#messages")
+let chatInput         = document.querySelector("#chat-input")
+let messagesContainer = document.querySelector("#messages")
 
-chatInput.on("keypress", event => {
+chatInput.addEventListener("keypress", event => {
   if(event.keyCode === 13){
-    channel.push("new_msg", {body: chatInput.val()})
-    chatInput.val("")
+    channel.push("new_msg", {body: chatInput.value})
+    chatInput.value = ""
   }
 })
 
@@ -177,24 +165,25 @@ channel.join()
 
 export default socket
 ```
-
 我们监听 "new_msg" 然后将其添加到页面的消息容器中。
 
 ```javascript
 ...
 let channel           = socket.channel("rooms:lobby", {})
-let chatInput         = $("#chat-input")
-let messagesContainer = $("#messages")
+let chatInput         = document.querySelector("#chat-input")
+let messagesContainer = document.querySelector("#messages")
 
-chatInput.on("keypress", event => {
+chatInput.addEventListener("keypress", event => {
   if(event.keyCode === 13){
-    channel.push("new_msg", {body: chatInput.val()})
-    chatInput.val("")
+    channel.push("new_msg", {body: chatInput.value})
+    chatInput.value = ""
   }
 })
 
 channel.on("new_msg", payload => {
-  messagesContainer.append(`<br/>[${Date()}] ${payload.body}`)
+  let messageItem = document.createElement("li");
+  messageItem.innerText = `[${Date()}] ${payload.body}`
+  messagesContainer.appendChild(messageItem)
 })
 
 channel.join()
