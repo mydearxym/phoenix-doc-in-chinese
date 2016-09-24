@@ -486,6 +486,12 @@ Check your digested files at 'priv/static'.
 * 在文件名中包含指纹的文件。
 * 压缩过的、在文件名中包含指纹的文件。
 
+我们还可以使用 `:gzippable_exts` 选项来对某些后缀的文件启用 gzip 压缩 :
+
+```elixir
+config :phoenix, :gzippable_exts, ~w(.js .css)
+```
+
 > 注意: 我们可以给 `phoenix.digest` 任务指定目标编译目录（第一个参数） -- 如果我们想把他们放在其他目录的话。
 
 ```console
