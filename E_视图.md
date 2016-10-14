@@ -7,7 +7,7 @@ to consume. ), 如果你熟悉装饰器或者 facade pattern (更好的翻译？
 
 ## 渲染模板
 
-Phoenix 遵循习惯优于配置的原则，即 `PageController` 需要一个 `PageView` 来渲染位于 `web/templates/page`目录下的模板。
+Phoenix 遵循约定优于配置的原则，即 `PageController` 需要一个 `PageView` 来渲染位于 `web/templates/page`目录下的模板。
 
 如果你愿意，你甚至可以改变模板根目录 (the template root)。Phoenix 为我们提供了一个 `view/0` 函数( 用法是将目录
 名称赋值给 :key 键 ) 用来改变 root 目录，该函数定义在 `HelloPhoenix.Web` 模块的 `web/web.ex` 文件中。
