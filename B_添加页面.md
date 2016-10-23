@@ -19,19 +19,29 @@
 
 ```console
 ├── channels
+    └── user_socket.ex
 ├── controllers
 │   └── page_controller.ex
 ├── models
-├── router.ex
+├── static
+│   ├── assets
+│   |   ├── images
+|   |   |   └── phoenix.png
+|   |   └── favicon.ico
+|   |   └── robots.txt
+│   |   ├── vendor
 ├── templates
 │   ├── layout
 │   │   └── app.html.eex
 │   └── page
 │       └── index.html.eex
 └── views
+|   ├── error_helpers.ex
 |   ├── error_view.ex
 |   ├── layout_view.ex
 |   └── page_view.ex
+├── router.ex
+├── gettext.ex
 └── web.ex
 ```
 
@@ -53,12 +63,12 @@ priv
 ```
 web
 └── static
-    ├── css
-    |   └── app.scss
-    ├── js
-    │   └── app.js
-    └── vendor
-        └── phoenix.js
+    ├── assets
+    |   ├── css
+    |   |   └── app.css
+    |   ├── js
+    |   │   └── app.js
+    |   └── vendor
 ```
 
 我们同样需要了解一下 `lib` 目录, 我们应用的 endpoint 位于 `lib/hello_phoenix/endpoint.ex`, 而我们的应用
@@ -202,8 +212,9 @@ Phoenix 默认使用的模板引擎是`eex`,意思是
 [嵌入式 Elixir (Embedded Elixir)](http://elixir-lang.org/docs/stable/eex/),
 所以我们的模板文件都会带有`.eex`后缀。
 
-模板被视图所限定，视图又被控制器所限定，在实际开发中，我们通常根据控制器的名字在 `web/templates` 目录下建立一
-个文件夹。在我们这个hello应用中，这意味着我们需要在`web/templates`目录下面建立一个hello文件夹，再在里面建立一
+模板被视图所限定，视图又被控制器所限定，Phoenix 为我们创建了一个 `web/templates`
+目录来容纳这些文件，最佳实践就是使用命名空间来组织它们。所以在我们这个hello应用
+中，这意味着我们需要在`web/templates`目录下面建立一个hello文件夹，再在里面建立一
 个`index.html.eex`文件，内容如下。
 
 ```html
