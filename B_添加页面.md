@@ -255,7 +255,7 @@ scope "/", HelloPhoenix do
 end
 ```
 
->*注意* 这个原子写法：`:messenger`, Phoenix 会把 messenger 作为键，并把用户输入在这个地址后的任何输入作为值，组成一个`字典结构(dict)` 传递给 controller。
+>*注意* 这个原子写法：`:messenger`, Phoenix 会把 messenger 作为键，并把用户输入在这个地址后的任何输入作为值，组成一个`Map` 传递给 controller。
 
 比如，如果我们在浏览器输入 [http://localhost:4000/hello/Frank](http://localhost:4000/hello/Frank), ":messenger" 的值就会是 "Frank" 。
 
@@ -295,7 +295,7 @@ end
 </div>
 ```
 
-这里的@messenger并不是什么模块的属性，而是一个元编程的语法糖，表示 `dict.get(assigns, :messenger)`。只是这种写法对于模板来说更加友好。
+这里的@messenger并不是什么模块的属性，而是一个元编程的语法糖，表示 `Map.get(assigns, :messenger)`。只是这种写法对于模板来说更加友好。
 
 一切就绪，现在让我们打开 [http://localhost:4000/hello/Frank](http://localhost:4000/hello/Frank) 来检验成果吧！
 
