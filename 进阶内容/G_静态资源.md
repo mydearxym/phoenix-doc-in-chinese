@@ -240,7 +240,7 @@ module.exports =
 - 可以控制编译文件的生成顺序，尤其对于 `vendor` 目录下的第三方库（它们可能有相互依赖），这个特性是很重要的。
 - 除了直接拷贝第三方文件到`web/static/vender`, 我们还可以使用[Bower 来安装他们](https://github.com/brunch/brunch-guide/blob/master/content/en/chapter05-using-third-party-registries.md).
 
-更多的细节请查看 [Brunch 文档](https://github.com/brunch/brunch/tree/master/docs).
+更多的细节请查看 [Brunch 文档](http://brunch.io/docs/getting-started).
 
 #### 不使用 Brunch
 
