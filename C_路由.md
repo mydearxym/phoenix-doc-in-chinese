@@ -180,12 +180,12 @@ iex> HelloPhoenix.Router.Helpers.page_path(HelloPhoenix.Endpoint, :index)
 "/"
 ```
 
-这是很有用的的，意味着我们可以在模板中用 `page_path` 代表项目的根目录。注意,如果你嫌上面那个函数写起来太麻烦
-，这里有个解决办法，你可以在视图中引入这个模块 `import HelloPhoenix.Router.Helpers`。
+这是很有用的的，意味着我们可以在模板中用 `page_path` 代表项目的根目录。
 
 ```html
 <a href="<%= page_path(@conn, :index) %>">To the Welcome Page!</a>
 ```
+`page_path` 函数使用 `use HelloPhoenix.Web, :view` 被引入模板。
 更多的细节在 [视图指北](https://github.com/mydearxym/phoenix-doc-in-chinese/blob/master/E_%E8%A7%86%E5%9B%BE.md)。
 
 这为我们省去了大量的体力工作，因为`page_path`是动态生成的，即便我们在 router 中改了路径，这个 helper 还是会一样的工作。
