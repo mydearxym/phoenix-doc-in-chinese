@@ -9,15 +9,15 @@
 
 让我们开始吧！
 
-我们可以在任意目录运行` mix phonenix.new` 来建立一个工程，`Phoenix`可以识别绝对或相对路径，假设项目名字为 hello_phoenix，以下两种写法均可。
+我们可以在任意目录运行` mix phx.new` 来建立一个工程，`Phoenix`可以识别绝对或相对路径，假设项目名字为 hello_phoenix，以下两种写法均可。
 
 
 ```console
-$ mix phoenix.new /Users/me/work/elixir-stuff/hello_phoenix
+$ mix phx.new /Users/me/work/elixir-stuff/hello_phoenix
 ```
 
 ```console
-$ mix phoenix.new hello_phoenix
+$ mix phx.new hello_phoenix
 ```
 
 >关于 `Brunch.io`: Phoenix 默认使用 Brunch.io 作为web资源管理工具，Brunch.io的安装是通过node.js而不是自身的mix, Brunch.io的依赖项会在我们执行 mix phonenix.new 后提示我们安装，如果我们输入 no 并且之后也不通过 npm 手动安装 Brunch, 我们的应用在启动的时候就会报错，我们的资源也不会正确的载入,如果你不需要Brunch.io，你可以在建立工程的时候传递 --no-brunch 参数.
@@ -25,13 +25,13 @@ $ mix phoenix.new hello_phoenix
 现在让我们使用相对路径来创建一个 phonenix 应用。
 
 ```console
-mix phoenix.new hello_phoenix
+mix phx.new hello_phoenix
 * creating hello_phoenix/config/config.exs
 * creating hello_phoenix/config/dev.exs
 * creating hello_phoenix/config/prod.exs
 ...
-* creating hello_phoenix/web/views/layout_view.ex
-* creating hello_phoenix/web/views/page_view.ex
+* creating hello_phoenix/lib/hello_phoenix/web/views/layout_view.ex
+* creating hello_phoenix/lib/hello_phoenix/web/views/page_view.ex
 
 Fetch and install dependencies? [Yn]
 ```
@@ -49,12 +49,12 @@ Fetch and install dependencies? [Yn] y
 然后进入项目目录：
 ```bash
 $ cd hello_phoenix
-$ mix phoenix.server
+$ mix phx.server
 
 ```
 你也可以用交互式`Elixir(IEx)`的方法运行：
 ```bash
-$ iex -S mix phoenix.server
+$ iex -S mix phx.server
 ```
 
 Phoenix 会假设我们的 PostgreSQL 数据库有一个 `postgres` 账户（有相应的权限和密码），如果你对这个有疑问，
@@ -79,8 +79,8 @@ The database for HelloPhoenix.Repo has been created.
 最后，我们来启动应用。
 
 ```console
-$ mix phoenix.server
-[info] Running HelloPhoenix.Endpoint with Cowboy on http://localhost:4000
+$ mix phx.server
+[info] Running HelloPhoenix.Web.Endpoint with Cowboy on http://0.0.0.0:4000
 23 Nov 05:25:14 - info: compiled 5 files into 2 files, copied 3 in 1724ms
 ```
 
@@ -95,14 +95,13 @@ Fetch and install dependencies? [Yn] n
 ```bash
 $ cd hello_phoenix
 $ mix deps.get
-$ mix ecto.create
-$ mix phoenix.server
+$ cd assets && npm install && node node_modules/brunch/bin/brunch build
 ```
 
 你也可以这样在 IEx (交互式Elixir) 中运行 Phoenix 项目。
 
 ```bash
-$ iex -S mix phoenix.server
+$ iex -S mix phx.server
 ```
 
 接下来用你最喜欢的浏览器打开 [http://localhost:4000](http://localhost:4000) ，你应该能看到 Phoenix 在欢迎你了。

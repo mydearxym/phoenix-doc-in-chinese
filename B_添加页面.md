@@ -1,97 +1,89 @@
 
 ### 添加页面
 
-我们的目标是给我们的 `Phoenix` 应用增加两个新的页面，一个是纯静态页面，另一个则从 `url` 里面截取一部分作为输入，
-然后传递给模板显示。从这两个简单的例子中我们将会熟悉一个 `Phoenix` 应用的基本构成: 路由，控制器，视图以及模板。
+我们的目标是给我们的 `Phoenix` 项目增加两个新的页面，一个是纯静态页面，另一个则从 `url` 里面截取一部分作为输入，
+然后传递给模板显示。从这两个简单的例子中我们将会熟悉一个 `Phoenix` 项目的基本构成: 路由，控制器，视图以及模板。
 
-当我们用命令产生一个 `Phoenix` 应用后，默认的目录结构如下：
+当我们用命令产生一个 `Phoenix` 项目后，默认的目录结构如下：
+
 
 ```console
 ├── _build
+├── assets
 ├── config
 ├── deps
 ├── lib
+│   └── hello_phoenix
+│   │   └── web
 ├── priv
 ├── test
-├── web
 ```
-我们教程中涉及的大部分内容都在 `web` 目录下，她的结构展开如下图：
+
+我们这里涉及的大部分内容都在 `lib/hello_phoenix/web` 目录下，也就是和 web 相关的
+部分，它的结构展开如下图：
 
 ```console
 ├── channels
-    └── user_socket.ex
+│   └── user_socket.ex
 ├── controllers
 │   └── page_controller.ex
-├── models
-├── static
-│   ├── assets
-│   |   ├── images
-|   |   |   └── phoenix.png
-|   |   └── favicon.ico
-|   |   └── robots.txt
-│   |   ├── vendor
 ├── templates
 │   ├── layout
 │   │   └── app.html.eex
 │   └── page
 │       └── index.html.eex
 └── views
-|   ├── error_helpers.ex
-|   ├── error_view.ex
-|   ├── layout_view.ex
-|   └── page_view.ex
+│   ├── error_helpers.ex
+│   ├── error_view.ex
+│   ├── layout_view.ex
+│   └── page_view.ex
 ├── router.ex
 ├── gettext.ex
-└── web.ex
+├── web.ex
 ```
 
 在 `controllers`, `templates` 和 `views` 目录里的所有文件都是用于创建我们之前看到的那个
 `Welcome to Phenix` 欢迎页面的,我们之后将重用这里的一些代码。根据惯例，在开发模式下，每一
 次新的请求到达，`web` 目录都会自动重新编译。
 
-我们应用所需的所有静态资源都在 `priv/static` 目录下（按照css,images或者js分类）, 编译过程
-会把 `priv/static` 里对应的 js, css 文件分别编译到 `web/static` 目录的 `app.js` / `app.css`。
-, 我们现在不会深入，只是留个印象。
+我们应用所需的所有静态资源都在 `assets` 目录下（按照css,images或者js分类）, 编译
+过程(brunch或其他前端工具)会把这里对应的 js, css 文件分别编译到 `priv/static` ,
+我们现在不会深入，只是留个印象。
 
 ```console
-priv
-└── static
-    └── images
-        └── phoenix.png
-
-```
-```
-web
-└── static
-    ├── assets
-    |   ├── css
-    |   |   └── app.css
-    |   ├── js
-    |   │   └── app.js
-    |   └── vendor
+├── assets
+│   ├── css
+│   │   └── app.css
+│   ├── js
+│   │   └── app.js
+│   └── static
+│   └── node_modules
+│   └── vendor
 ```
 
-我们同样需要了解一下 `lib` 目录, 我们应用的 endpoint 位于 `lib/hello_phoenix/endpoint.ex`, 而我们的应用
-启动文件(负责启动我们的应用以及 supervision 监测树)位于 `lib/hello_phoenix.ex`。
+我还需要了解一下 "非 web 相关的部分"。我的应用文件(负责启动我们的 Elixir 应用和
+监测树)位于 `lib/hello_phoenix/application.ex`. 以及 Ecto 的 Repo 文件
+`lib/hello_phoenix/repo.ex` 负责和数据库交互. 我们会在稍后谈及 Ecto.
 
 ```console
 lib
-├── hello_phoenix
-|   ├── endpoint.ex
-│   └── repo.ex
-└── hello_phoenix.ex
+└── hello_phoenix
+    ├── application.ex
+    ├── repo.ex
+    └── web
+        └── endpoint.ex
 ```
 
-与 `web` 目录不同的是，Phoenix 不会为每次请求都重新编译(recompile)`lib` 目录。`web` 和 `lib` 目录提供了
-两种不同的状态管理策略， `web` 目录处理的状态范围只限定在一次 web 请求中，而 `lib` 目录所负责管理的状态则包
-含共享的模块之间和那些超出一次 web 请求之外的那些状态。
+我们的 web 相关的文件 -- 路由，控制器，模板，通道等都在 `lib/hello_phoenix/web`
+目录下，而其他的部分都在 `lib/hello_phoenix/` 下，你可以像其他任何的 Elixir 应用
+一样来组织他们。
 
 唠叨的差不多了，现在让我们编写一个新的 `Phoenix` 页面吧！
 
 ####  一个新路由
 
 路由将给定并唯一的 `HTTP 动词/路径(verb/path)` 映射到处理他们的 `controller/action  `, `Phoenix`的路由
-配置信息在 `web/router.ex`文件，让我们打开来看看。
+配置信息在 `lib/hello_phoenix/web/router.ex` 文件，让我们打开来看看。
 
 欢迎页面对应的路由是这条语句：
 
@@ -101,12 +93,12 @@ get "/", PageController, :index
 
 让我们看看这代表什么意思呢，浏览器访问 [http://localhost:4000/](http://localhost:4000/) 会给我们网站的根
 目录发出一个`GET`请求，这个请求会被 `HelloPhoenix.pageController` 中的 `index` 函数处理，后者定义在
-`web/controllers/page_controller.ex`文件中.
+`lib/hello_phoenix/web/controllers/page_controller.ex`文件中.
 
 我们要建立的页面功能是：当浏览器访问 [http://localhost:4000/hello](http://localhost:4000/hello) 时，简单
 的在页面上显示 'Hello World from Phoenix'.
 
-首先我们要为这个页面增加一个路由，现在`web/route.ex`看起来如下：
+首先我们要为这个页面增加一个路由，现在`lib/hello_phoenix/web/router.ex`看起来如下：
 
 ```Elixir
 defmodule HelloPhoenix.Router do
@@ -157,13 +149,14 @@ scope "/", HelloPhoenix do
   get "/hello", HelloController, :index
 end
 ```
+
 #### 一个新控制器
 
 `控制器` 里面其实就是 Elixir 的模块、`action` 和定义在其中的`Elixir` 函数，`action` 的作用是
 收集和处理渲染页面所需的数据和某些操作 (gather any data and perform any tasks needed for rendering )。
 我们现在要建立一个模块 `HelloPhoenix.HelloController`, 里面包含 `index/2` 这个action ( /2，意思是需要两个参数的意思)。
 
-具体的，我们建立文件`web/controllers//hello_controller.ex`, 然后加入以下内容：
+具体的，我们建立文件 `lib/hello_phoenix/web/controllers/hello_controller.ex`, 然后加入以下内容：
 
 ```Elixir
 defmodule HelloPhoenix.HelloController do
@@ -182,7 +175,8 @@ end
 第二个是`params`--请求参数，我们的例子不需要`params`, 所以加一个前缀 `_`表示忽略该参数，否则编译过程会产生警告。
 
 这个 `action` 的核心语句是 `render conn, "index.html"`, Phoenix 会根据这条语句寻找一个叫做 `index.html.eex`
-的模板并且渲染出来，查找规则是遵循 `controller` 的命名,即 `web/templates/hello` 目录。
+的模板并且渲染出来，查找规则是遵循 `controller` 的命名,即
+`lib/hello_phoenix/web/templates/hello` 目录。
 
 >*注意* 这里用原子(atom)的简写法也是可以的，比如`render conn, :index`,这是渲染机制就会根据请求头的规则自动寻找合适的模板,如 `index.html` 或者 `index.json`等等。
 
@@ -198,7 +192,8 @@ end
 去做这件事，然后在模板里调用这个函数，这种解决方案会让模板变得干净且更加灵活。
 
 为了能让我们的 `HelloController` 渲染模板，我们需要一个 `HelloView`。这里的命名同样具有特殊意义-- 'Hello' 要和
-控制器的'Hello'相对应，让我们先创建一个 `web/views/hello_view.ex` 文件（稍后解释细节），内容如下：
+控制器的'Hello'相对应，让我们先创建一个
+`lib/hello_phoenix/web/views/hello_view.ex` 文件（稍后解释细节），内容如下：
 
 ```Elixir
 defmodule HelloPhoenix.HelloView do
@@ -212,9 +207,9 @@ Phoenix 默认使用的模板引擎是`eex`,意思是
 [嵌入式 Elixir (Embedded Elixir)](http://elixir-lang.org/docs/stable/eex/),
 所以我们的模板文件都会带有`.eex`后缀。
 
-模板被视图所限定，视图又被控制器所限定，Phoenix 为我们创建了一个 `web/templates`
+模板被视图所限定，视图又被控制器所限定，Phoenix 为我们创建了一个 `lib/hello_phoenix/web/templates`
 目录来容纳这些文件，最佳实践就是使用命名空间来组织它们。所以在我们这个hello应用
-中，这意味着我们需要在`web/templates`目录下面建立一个hello文件夹，再在里面建立一
+中，这意味着我们需要在`lib/hello_phoenix/web/templates`目录下面建立一个hello文件夹，再在里面建立一
 个`index.html.eex`文件，内容如下。
 
 ```html
@@ -231,7 +226,7 @@ Phoenix 默认使用的模板引擎是`eex`,意思是
 
 这里有些知识点需要注意：首先，改动代码以后，我们并不需要重启服务器，`Phoenix` 有代码热更新 ( hot code re-loading) 机制。另外，
 尽管我们的 `index.html.eex` 文件只包含了一个`div`标签，我们依然得到了一个"完整的"页面，我们的模板被渲染进了应
-用布局(application layout) -- `web/templates/layout/app.html.eex`。 如果你打开她，就会发现有这样一行内容`<%=
+用布局(application layout) -- `lib/hello_phoenix/web/templates/layout/app.html.eex`。 如果你打开她，就会发现有这样一行内容`<%=
 @inner %>`, 意思在被送往浏览器之前，你自己的模板会被"插入"到这里。
 
 
@@ -262,7 +257,7 @@ end
 #### 新的 action
 
 新的请求会被 `HelloPhoenix.HelloController` 的 `show` action 处理，我们复用之前的
-`web/controllers/hello_controller.ex`文件，
+`lib/hello_phoenix/web/controllers/hello_controller.ex`文件，
 在其中添加 show action 如下（注意其中字典的写法）：
 
 ```Elixir
