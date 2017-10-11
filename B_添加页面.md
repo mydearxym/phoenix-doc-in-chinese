@@ -6,15 +6,16 @@
 
 当我们用命令产生一个 `Phoenix` 项目后，默认的目录结构如下：
 
-
 ```console
 ├── _build
 ├── assets
 ├── config
 ├── deps
 ├── lib
-│   └── hello_phoenix
-│   │   └── web
+│   └── hello
+│   └── hello_web
+│   └── hello.ex
+│   └── hello_web.ex
 ├── priv
 ├── test
 ```
@@ -37,13 +38,13 @@
 │   ├── error_view.ex
 │   ├── layout_view.ex
 │   └── page_view.ex
-├── router.ex
+├── endpoint.ex
 ├── gettext.ex
-├── web.ex
+├── router.ex
 ```
 
 在 `controllers`, `templates` 和 `views` 目录里的所有文件都是用于创建我们之前看到的那个
-`Welcome to Phenix` 欢迎页面的,我们之后将重用这里的一些代码。根据惯例，在开发模式下，每一
+`Welcome to Phenix` 欢迎页面的,我们之后将重用这里的一些代码。在开发模式下，每一
 次新的请求到达，`web` 目录都会自动重新编译。
 
 我们应用所需的所有静态资源都在 `assets` 目录下（按照css,images或者js分类）, 编译
@@ -62,20 +63,26 @@
 ```
 
 我还需要了解一下 "非 web 相关的部分"。我的应用文件(负责启动我们的 Elixir 应用和
-监测树)位于 `lib/hello_phoenix/application.ex`. 以及 Ecto 的 Repo 文件
-`lib/hello_phoenix/repo.ex` 负责和数据库交互. 我们会在稍后谈及 Ecto.
+监测树)位于 `lib/hello/application.ex`. 以及 Ecto Repo
+`lib/hello_phoenix/repo.ex` 负责和数据库交互. 我们会在后面的章节介绍 Ecto.
 
 ```console
 lib
-└── hello_phoenix
-    ├── application.ex
-    ├── repo.ex
-    └── web
-        └── endpoint.ex
+├── hello
+|   ├── application.ex
+|   └── repo.ex
+├── hello_web
+|   ├── channels
+|   ├── controllers
+|   ├── templates
+|   ├── views
+|   ├── endpoint.ex
+|   ├── gettext.ex
+|   └── router.ex
 ```
 
-我们的 web 相关的文件 -- 路由，控制器，模板，通道等都在 `lib/hello_phoenix/web`
-目录下，而其他的部分都在 `lib/hello_phoenix/` 下，你可以像其他任何的 Elixir 应用
+我们的 web 相关的文件 -- 路由，控制器，模板，通道等都在 `lib/hello_web`
+目录下，而其他的部分都在 `lib/hello/` 下，你可以像其他任何的 Elixir 应用
 一样来组织他们。
 
 唠叨的差不多了，现在让我们编写一个新的 `Phoenix` 页面吧！
@@ -83,7 +90,7 @@ lib
 ####  一个新路由
 
 路由将给定并唯一的 `HTTP 动词/路径(verb/path)` 映射到处理他们的 `controller/action  `, `Phoenix`的路由
-配置信息在 `lib/hello_phoenix/web/router.ex` 文件，让我们打开来看看。
+配置信息在 `lib/hello_web/router.ex` 文件，让我们打开来看看。
 
 欢迎页面对应的路由是这条语句：
 
@@ -93,16 +100,16 @@ get "/", PageController, :index
 
 让我们看看这代表什么意思呢，浏览器访问 [http://localhost:4000/](http://localhost:4000/) 会给我们网站的根
 目录发出一个`GET`请求，这个请求会被 `HelloPhoenix.pageController` 中的 `index` 函数处理，后者定义在
-`lib/hello_phoenix/web/controllers/page_controller.ex`文件中.
+`lib/hello_web/controllers/page_controller.ex`文件中.
 
 我们要建立的页面功能是：当浏览器访问 [http://localhost:4000/hello](http://localhost:4000/hello) 时，简单
 的在页面上显示 'Hello World from Phoenix'.
 
 首先我们要为这个页面增加一个路由，现在`lib/hello_phoenix/web/router.ex`看起来如下：
 
-```Elixir
-defmodule HelloPhoenix.Router do
-  use HelloPhoenix.Web, :router
+```elixir
+defmodule HelloWeb.Router do
+  use HelloWeb, :router
 
   pipeline :browser do
     plug :accepts, ["html"]
@@ -116,14 +123,14 @@ defmodule HelloPhoenix.Router do
     plug :accepts, ["json"]
   end
 
-  scope "/", HelloPhoenix do
+  scope "/", HelloWeb do
     pipe_through :browser # Use the default browser stack
 
     get "/", PageController, :index
   end
 
   # Other scopes may use custom stacks.
-  # scope "/api", HelloPhoenix do
+  # scope "/api", HelloWeb do
   #   pipe_through :api
   # end
 end
@@ -133,7 +140,7 @@ end
 现在，我们先不管 `pipelines` 和 `scope` 部分（如果你好奇的话，可以阅读 [路由指北](https://mydearxym.gitbooks.io/phoenix-doc-in-chinese/content/C_%E8%B7%AF%E7%94%B1.html))
 ）.
 
-让我们为 `/hello` 的 `GET` 请求创建一个路由吧, 对应的文件 --- `HelloPhoenix`文件稍后创建。
+让我们为 `/hello` 的 `GET` 请求创建一个路由吧, 在稍后创建的`HelloWeb.HelloController` 的index 部分。
 
 ```Elixir
 get "/hello", HelloController, :index
@@ -158,9 +165,9 @@ end
 
 具体的，我们建立文件 `lib/hello_phoenix/web/controllers/hello_controller.ex`, 然后加入以下内容：
 
-```Elixir
-defmodule HelloPhoenix.HelloController do
-  use HelloPhoenix.Web, :controller
+```elixir
+defmodule HelloWeb.HelloController do
+  use HelloWeb, :controller
 
   def index(conn, _params) do
     render conn, "index.html"
@@ -175,17 +182,16 @@ end
 第二个是`params`--请求参数，我们的例子不需要`params`, 所以加一个前缀 `_`表示忽略该参数，否则编译过程会产生警告。
 
 这个 `action` 的核心语句是 `render conn, "index.html"`, Phoenix 会根据这条语句寻找一个叫做 `index.html.eex`
-的模板并且渲染出来，查找规则是遵循 `controller` 的命名,即
-`lib/hello_phoenix/web/templates/hello` 目录。
+的模板并且渲染出来，查找规则是遵循 `controller` 的命名,即 `lib/hello_web/templates/hello`。
 
->*注意* 这里用原子(atom)的简写法也是可以的，比如`render conn, :index`,这是渲染机制就会根据请求头的规则自动寻找合适的模板,如 `index.html` 或者 `index.json`等等。
+> *注意* 这里用原子(atom)的简写法也是可以的，比如`render conn, :index`,这是渲染机制就会根据请求头的规则自动寻找合适的模板,如 `index.html` 或者 `index.json`等等。
 
 负责具体渲染的模块是`视图(views)`,我们现在就来建立一个。
 
 #### 一个新的视图
 
-`视图(views)` 负责几个重要的工作，她渲染模板，并且作为 `controller` 里 `裸数据(raw data)` 的展示层(presentation layer)，
-以及一些有用的函数将这些数据处理后供模板使用。
+`视图(views)` 负责几个重要的工作，它渲染模板，并且作为 `controller` 里 `裸数据
+(raw data)` 的 `展示层(presentation layer)`， 以及一些有用的函数将这些数据处理后供模板使用。
 
 举个栗子，比如我们有一个包含了 `first_name` 字段和 `last_name` 的用户数据，然后在模板里，我们想显示这个
 用户的全名。我们可以在模板里写函数把它们拼接起来，但更好的办法是在 `视图(view)` 里写一个函数
@@ -193,11 +199,11 @@ end
 
 为了能让我们的 `HelloController` 渲染模板，我们需要一个 `HelloView`。这里的命名同样具有特殊意义-- 'Hello' 要和
 控制器的'Hello'相对应，让我们先创建一个
-`lib/hello_phoenix/web/views/hello_view.ex` 文件（稍后解释细节），内容如下：
+`lib/hello_web/views/hello_view.ex` 文件（稍后解释细节），内容如下：
 
 ```Elixir
-defmodule HelloPhoenix.HelloView do
-  use HelloPhoenix.Web, :view
+defmodule HelloWeb.HelloView do
+  use HelloWeb, :view
 end
 ```
 
@@ -226,9 +232,8 @@ Phoenix 默认使用的模板引擎是`eex`,意思是
 
 这里有些知识点需要注意：首先，改动代码以后，我们并不需要重启服务器，`Phoenix` 有代码热更新 ( hot code re-loading) 机制。另外，
 尽管我们的 `index.html.eex` 文件只包含了一个`div`标签，我们依然得到了一个"完整的"页面，我们的模板被渲染进了应
-用布局(application layout) -- `lib/hello_phoenix/web/templates/layout/app.html.eex`。 如果你打开她，就会发现有这样一行内容`<%=
-@inner %>`, 意思在被送往浏览器之前，你自己的模板会被"插入"到这里。
-
+用布局(application layout) -- `lib/hello_web/templates/layout/app.html.eex`。 如
+果你打开它，就会发现有这样一行内容`<%= render @view_module, @view_template, assigns %>`, 意思在被送往浏览器之前，你自己的模板会被"插入"到这里。
 
 #### 另一个新页面
 
@@ -241,7 +246,7 @@ Phoenix 默认使用的模板引擎是`eex`,意思是
 在这个练习中，我们复用之前创建的 `HelloController` 然后添加一个新的 `show` action, 增加的路由如下：
 
 ```Elixir
-scope "/", HelloPhoenix do
+scope "/", HelloWeb do
   pipe_through :browser # Use the default browser stack.
 
   get "/", PageController, :index
@@ -249,15 +254,14 @@ scope "/", HelloPhoenix do
   get "/hello/:messenger", HelloController, :show
 end
 ```
-
->*注意* 这个原子写法：`:messenger`, Phoenix 会把 messenger 作为键，并把用户输入在这个地址后的任何输入作为值，组成一个`Map` 传递给 controller。
+> *注意* 这个原子写法：`:messenger`, Phoenix 会把 messenger 作为键，并把用户输入在这个地址后的任何输入作为值，组成一个`Map` 传递给 controller。
 
 比如，如果我们在浏览器输入 [http://localhost:4000/hello/Frank](http://localhost:4000/hello/Frank), ":messenger" 的值就会是 "Frank" 。
 
 #### 新的 action
 
-新的请求会被 `HelloPhoenix.HelloController` 的 `show` action 处理，我们复用之前的
-`lib/hello_phoenix/web/controllers/hello_controller.ex`文件，
+新的请求会被 `HelloWeb.HelloController` 的 `show` action 处理，我们复用之前的
+`lib/hello_web/controllers/hello_controller.ex`文件，
 在其中添加 show action 如下（注意其中字典的写法）：
 
 ```Elixir
@@ -265,7 +269,7 @@ def show(conn, %{"messenger" => messenger}) do
   render conn, "show.html", messenger: messenger
 end
 ```
->*注意* 如果你想要得到 params 的所有参数并绑定 messenger 变量，我们可以这样定义（类似js es6 的解构写法）：
+> *注意* 如果你想要得到 params 的所有参数并绑定 messenger 变量，我们可以这样定义（类似js es6 的解构写法）：
 
 ```Elixir
 def show(conn, %{"messenger" => messenger} = params) do
@@ -277,7 +281,7 @@ end
 
 #### 新的模板
 
-终于到最后一步了，一个新的模板。根据命名规则，`Phoenix`会去 `web/templates/hello` 文件夹下寻找
+终于到最后一道菜了，一个新的模板。根据命名规则，`Phoenix`会去 `web/templates/hello` 文件夹下寻找
 `show.html.eex`文件。她和之前的 `index.eex` 模板长的很像，除了一个 Elixir 表达式：`<%= %>` ,
 注意标签里有个`<%=`符号。这表示这个便签里的 Elixir 代码会被执行并且结果会覆盖这个标签，如果我们不
 加 `=` , 里面的 Elixir 代码依然会执行，但是结果却不会出现在页面上。
@@ -295,4 +299,6 @@ end
 一切就绪，现在让我们打开 [http://localhost:4000/hello/Frank](http://localhost:4000/hello/Frank) 来检验成果吧！
 
 [![Gyazo](https://i.gyazo.com/d8d266a9bf995f7e97636b7734c0d773.png)](https://gyazo.com/d8d266a9bf995f7e97636b7734c0d773)
+
+现在无论的在 `/hello/` 后面输入什么，它都会出现在页面上了。
 
