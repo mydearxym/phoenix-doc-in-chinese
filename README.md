@@ -5,7 +5,7 @@
 
 * [Gitbook 阅读地址](https://mydearxym.gitbooks.io/phoenix-doc-in-chinese/content/)
 
-* [官方文档地址](https://github.com/phoenixframework/phoenix_guides)
+* [官方文档地址](https://hexdocs.pm/phoenix/overview.html)
 
 * [官方网站地址](http://www.phoenixframework.org/)
 
