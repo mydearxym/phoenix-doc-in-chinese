@@ -1,3 +1,4 @@
+
 # 视图
 
 Phoenix 视图 (views) 有两个主要的工作，第一个，也是最重要的一个是渲染 `模板(template)`, 这里用到的核心函数
@@ -7,28 +8,28 @@ to consume. ), 如果你熟悉装饰器或者 facade pattern (更好的翻译？
 
 ## 渲染模板
 
-Phoenix 遵循约定优于配置的原则，即 `PageController` 需要一个 `PageView` 来渲染位于 `lib/hello_phoenix/web/templates/page`目录下的模板。
+Phoenix 遵循约定优于配置的原则，即 `PageController` 需要一个 `PageView` 来渲染位于 `lib/hello_web/templates/page`目录下的模板。
 
 如果你愿意，你甚至可以改变模板根目录 (the template root)。Phoenix 为我们提供了一个 `view/0` 函数( 用法是将目录
-名称赋值给 :key 键 ) 用来改变 root 目录，该函数定义在 `HelloPhoenix.Web` 模块的 `lib/hello_phoenix/web/web.ex` 文件中。
+名称赋值给 :key 键 ) 用来改变 root 目录，该函数定义在 `HelloWeb` 模块的 `lib/hello_web/web.ex` 文件中。
 
-一个新生成的 Phoenix 应用有三个默认视图模块 (view modules) - `ErrorView`, `LayoutView`, 以及 `PageView`, 它们位于 `web/views` 目录下。
+一个新生成的 Phoenix 应用有三个默认视图模块 (view modules) - `ErrorView`, `LayoutView`, 以及 `PageView`, 它们位于 `lib/hello_web/views` 目录下。
 
 让我们看看 `LayoutView`。
 
 ```elixir
-defmodule HelloPhoenix.Web.LayoutView do
+defmodule HelloWeb.LayoutView do
   use HelloPhoenix.Web, :view
 end
 ```
 
-很简单，只有一行代码, `use HelloPhoenix.Web, :view`。这行代码调用了我们上面提到的 `view/0` 函数, 同时它也允许
+很简单，只有一行代码, `use HelloWeb, :view`。这行代码调用了我们上面提到的 `view/0` 函数, 同时它也允许
 改变模板的根目录，`view/0` 使用了 `__using__` 宏( 定义在 `Phoenix.View` 中). 它同时会为我们处理好(下一步可能用
 到的)引入的模块或者 view 模块中的别名等。
 
 在这篇文档的最开头，我们提到了可以在视图（views）里放置一些在 templates 中使用的函数，我们来尝试一下。
 
-我们打开文件 `lib/hello_phoenix/templates/layout/app.html.eex` , 然后改变这行代码。
+我们打开文件 `lib/hello_web/templates/layout/app.html.eex` , 然后改变这行代码。
 
 ```html
 <title>Hello Phoenix!</title>
@@ -58,15 +59,10 @@ end
 包裹在其中，`=` 符号告诉 EEx 输出出结果，如果不加 `=` 符号, EEx 依然会执行代码，只是不会将结果输出出来。在这个
 例子中，我们调用 `LayoutView` 中的 `title/0` 函数，然后将结果输出到模板的 title 标签 ( title tag ) 去中。
 
-
-Note that we didn't need to fully qualify `title/0` with `HelloPhoenix.Web.LayoutView` because our `LayoutView` actually does the rendering.
-
-
-由于我们使用了 `use HelloPhoenix.Web, :view`, 我们还得到了额外的好处，因为 `view/0` 函数 imports 了
-`HelloWhoenix.Router.Helpers`, 我们就不用再在 templates 显式的引用 path helpers 了，我们改变一下 欢
+由于我们使用了 `use HelloWeb, :view`, 我们还得到了额外的好处，因为 `view/0` 函数 imports 了`HelloWeb.Router.Helpers`, 我们就不用再在 templates 显式的引用 path helpers 了，我们改变一下 欢
 迎页面的 template 来看一个实际的例子。
 
-我们打开 `lib/hello_phoenix/templates/page/index.html.eex` 看一看。
+我们打开 `lib/hello_web/templates/page/index.html.eex` 看一看。
 
 ```html
 <div class="jumbotron">
@@ -101,11 +97,11 @@ didn't need to qualify it with `Phoenix.View`.)
 `Phoenix.View` 通过这行 `use Phoenix.Template` 宏获得模板（template, 也就是 `Phoenix.Template` ）的提供的
 各种方便的方法，比如 -- 查找，抽象名字和路径等等。
 
-我们在 Phoenix 默认生成的 `lib/hello_phoenix/web/views/page_view.ex` 文件中做个小实验，我们增加一个 `message/0` 函数，像这样：
+我们在 Phoenix 默认生成的 `lib/hello_web/views/page_view.ex` 文件中做个小实验，我们增加一个 `message/0` 函数，像这样：
 
 ```elixir
-defmodule HelloPhoenix.Web.PageView do
-  use HelloPhoenix.Web, :view
+defmodule HelloWeb.PageView do
+  use HelloWeb, :view
 
   def message do
     "Hello from the view!"
@@ -113,7 +109,7 @@ defmodule HelloPhoenix.Web.PageView do
 end
 ```
 
-然后我们创建一个新的模板 `lib/hello_phoenix/web/templates/page/test.html.eex`。
+然后我们创建一个新的模板 `lib/hello_web/templates/page/test.html.eex`。
 
 ```html
 This is the message: <%= message %>
@@ -122,7 +118,7 @@ This is the message: <%= message %>
 `iex -S mix`, 然后明确的渲染我们的模板。
 
 ```console
-iex(1)> Phoenix.View.render(HelloPhoenix.Web.PageView, "test.html", %{})
+iex(1)> Phoenix.View.render(HelloWeb.PageView, "test.html", %{})
   {:safe, [["" | "This is the message: "] | "Hello from the view!"]}
 ```
 
@@ -147,13 +143,13 @@ This is the message: <%= message() %>
 注意上面那行中的 `@` 符号, 现在当我们改变函数调用，就会看到 `PageView` 模块渲染出了不同的结果。
 
 ```console
-iex(2)> r HelloPhoenix.Web.PageView
-warning: redefining module HelloPhoenix.Web.PageView (current version loaded from _build/dev/lib/hello_phoenix/ebin/Elixir.HelloPhoenix.Web.PageView.beam)
-  lib/hello_phoenix/web/views/page_view.ex:1
+iex(2)> r HelloWeb.PageView
+warning: redefining module HelloWeb.PageView (current version loaded from _build/dev/lib/hello_web/ebin/Elixir.HelloWeb.PageView.beam)
+  lib/hello_web/views/page_view.ex:1
 
-{:reloaded, HelloPhoenix.Web.PageView, [HelloPhoenix.Web.PageView]}
+{:reloaded, HelloWeb.PageView, [HelloWeb.PageView]}
 
-iex(3)> Phoenix.View.render(HelloPhoenix.Web.PageView, "test.html", message: "Assigns has an @.")
+iex(3)> Phoenix.View.render(HelloWeb.PageView, "test.html", message: "Assigns has an @.")
 {:safe,
   [[[["" | "I came from assigns: "] | "Assigns has an @."] |
   "\nThis is the message: "] | "Hello from the view!"]}
@@ -161,7 +157,7 @@ iex(3)> Phoenix.View.render(HelloPhoenix.Web.PageView, "test.html", message: "As
  我们再测试一下 HTML 的转义, just for fun 。
 
 ```console
-iex(4)> Phoenix.View.render(HelloPhoenix.Web.PageView, "test.html", message: "<script>badThings();</script>")
+iex(4)> Phoenix.View.render(HelloWeb.PageView, "test.html", message: "<script>badThings();</script>")
 {:safe,
   [[[["" | "I came from assigns: "] |
      "&lt;script&gt;badThings();&lt;/script&gt;"] |
@@ -171,17 +167,16 @@ iex(4)> Phoenix.View.render(HelloPhoenix.Web.PageView, "test.html", message: "<s
 如果我们只想得到字符串而不是整个元组，我们可以使用 `render_to_iodata/3`。
 
  ```console
- iex(5)> Phoenix.View.render_to_iodata(HelloPhoenix.Web.PageView, "test.html", message: "Assigns has an @.")
+ iex(5)> Phoenix.View.render_to_iodata(HelloWeb.PageView, "test.html", message: "Assigns has an @.")
  [[[["" | "I came from assigns: "] | "Assigns has an @."] |
    "\nThis is the message: "] | "Hello from the view!"]
   ```
 
 ### 关于布局 ( A Word About Layouts )
 
-布局 (Layouts) 实际上就是 模板 (templates), 所以它也有视图(view), 就像其他模板一样。 在新生成的应用中，就是
-`lib/hello_phoenix/web/views/layout_view.ex`。你也许会好奇渲染出的内容是怎么被塞进布局 (Layouts) 中的。
+布局 (Layouts) 实际上就是 模板 (templates), 所以它也有视图(view), 就像其他模板一样。 在新生成的应用中，就是`lib/hello_web/views/layout_view.ex`。你也许会好奇渲染出的内容是怎么被塞进布局 (Layouts) 中的。
 
-我们看看 `lib/hello_phoenix/web/templates/layout/app.html.eex` 文件，大概在 `<body>` 的中间部分，有这样一行代码。
+我们看看 `lib/hello_web/templates/layout/app.html.eex` 文件，大概在 `<body>` 的中间部分，有这样一行代码。
 
 ```html
 <%= render @view_module, @view_template, assigns %>
@@ -191,12 +186,12 @@ iex(4)> Phoenix.View.render(HelloPhoenix.Web.PageView, "test.html", message: "<s
 
 ### 错误页面 (The ErrorView)
 
-Phoenix 最近为每个生成的应用添加了一个新的视图 (view), 即`ErrorView` (位置在 `lib/hello_phoenix/web/views/error_view.ex` )。它的
-作用主要是处理两种最常见的错误 -- `404 not found` 以及 `500 internal error` -- 让我们看看这个文件的内容。
+Phoenix 最近为每个生成的应用添加了一个新的视图 (view), 即`ErrorView` (位置在 `lib/hello_web/views/error_view.ex` )。它的作用主要是处理两种最常见的错误 -- `404 not found` 以及 `500 internal error` -- 让我们看看这个文件的内容。
+
 
 ```elixir
-defmodule HelloPhoenix.Web.ErrorView do
-  use HelloPhoenix.Web, :view
+defmodule HelloWeb.ErrorView do
+  use HelloWeb, :view
 
   def render("404.html", _assigns) do
     "Page not found"
@@ -214,15 +209,12 @@ defmodule HelloPhoenix.Web.ErrorView do
 end
 ```
 
-在我们深入探讨之前，先来看看这个 `404 not found` 在浏览器中是怎样的。在开发环境(development enviroment)下,
-Phoenix 会默认调试错误，并展示给我们一个详细的 debug 页面，这也是我们想要的，但是，我现在想看的是在生产环境下
-的页面的样子，我们需要设置 `config/dev.exs` 文件中的 `debug_errors : false`。
-
+在我们深入探讨之前，先来看看这个 `404 not found` 在浏览器中是怎样的。在开发环境(development enviroment)下,Phoenix 会默认调试错误，并展示给我们一个详细的 debug 页面，这也是我们想要的，但是，我现在想看的是在生产环境下的页面的样子，我们需要设置 `config/dev.exs` 文件中的 `debug_errors : false`。
 
 ```elixir
 use Mix.Config
 
-config :hello_phoenix, HelloPhoenix.Web.Endpoint,
+config :hello, HelloWeb.Endpoint,
   http: [port: 4000],
   debug_errors: false,
   code_reloader: true,
@@ -244,16 +236,13 @@ def render("404.html", _assigns) do
 end
 ```
 
-注意这里的  `render` 函数, 它接收一个模板的名字以及一个 `assigns` 键值对（这个例子中被忽略）。 这个 render
-函数实在什么地方被调用的呢？
+注意这里的  `render` 函数, 它接收一个模板的名字以及一个 `assigns` 键值对（这个例子中被忽略）。 这个 render函数实在什么地方被调用的呢？
 
-`render` 函数定义在 `Phoenix.Endpoint.ErrorHandler` 模块中。这个模块的使命就是捕捉错误并用一个视图将它们渲染
-出来，在这里，就是 `HelloPhoenix.Web.ErrorView`。
+`render` 函数定义在 `Phoenix.Endpoint.ErrorHandler` 模块中。这个模块的使命就是捕捉错误并用一个视图将它们渲染出来，在这里，就是 `HelloWeb.ErrorView`。
 
 知道了所以然，我们来编写一个更好的错误页面吧。
 
-Phoenix 默认为我们提供了 `ErrorView`, 但是却并没有为我们生成 `lib/hello_phoenix/web/templates/error` 目录。现在我们自己创建这个
-目录，并在其中添加一个模板 `not_found.html.eex`, 内容如下:
+Phoenix 默认为我们提供了 `ErrorView`, 但是却并没有为我们生成 `lib/hello_phoenix/web/templates/error` 目录。现在我们自己创建这个目录，并在其中添加一个模板 `not_found.html.eex`, 内容如下:
 
 
 ```html
@@ -301,14 +290,12 @@ def render("404.html", _assigns) do
 end
 ```
 
-我们重新访问 [http://localhost:4000/such/a/wrong/path](http://localhost:4000/such/a/wrong/path), 会得到
-一个不错的页面了。
+我们重新访问 [http://localhost:4000/such/a/wrong/path](http://localhost:4000/such/a/wrong/path), 会得到一个不错的页面了。
 
 需要指出的是，尽管我们想让错误页面和这个网站的风格保持一致，但这里并没有将 `not_found.html.eex` 模板装入应用的
 布局中。 (之后一句不知道怎么翻：The main reason is that it's easy to run into edge case issues while handling errors globally.)
 
-如果我们想在应用的布局已经 `not_found.html.eex` 模板之间减少重复，我们可以复用 header 和 footer 的部分，详情
-可以参考 [Template Guide](http://www.phoenixframework.org/docs/templates#section-shared-templates-across-views)。
+如果我们想在应用的布局已经 `not_found.html.eex` 模板之间减少重复，我们可以复用 header 和 footer 的部分，详情可以参考 [Template Guide](http://www.phoenixframework.org/docs/templates#section-shared-templates-across-views)。
 
 类似的我们可以在 `ErrorView` 中定义 `def render("500.html", _assigns) do` 。
 
@@ -325,8 +312,8 @@ Maps 转化为 JSON 格式， 所以我们要做的就是将我们在视图中�
 让我们看一个 `PageController` 的例子，它返回 JSON 格式而不是之前的 HTML 。
 
 ```elixir
-defmodule HelloPhoenix.Web.PageController do
-  use HelloPhoenix.Web, :controller
+defmodule HelloWeb.PageController do
+  use HelloWeb, :controller
 
   def show(conn, _params) do
     page = %{title: "foo"}
@@ -345,16 +332,17 @@ end
 这里，我们使用 `show/2` 和 `index/2` action 返回页面数据。和之前我们将 `"show.html"` 传递给 `render/2` 函数不
 同， 这次我们传递 `"show.json"` 。 这样，我们就可以在视图中使用模式匹配灵活的处理 html 和 json 类型了。
 
+
 ```elixir
-defmodule HelloPhoenix.Web.PageView do
-  use HelloPhoenix.Web, :view
+defmodule HelloWeb.PageView do
+  use HelloWeb, :view
 
   def render("index.json", %{pages: pages}) do
-    %{data: render_many(pages, HelloPhoenix.Web.PageView, "page.json")}
+    %{data: render_many(pages, HelloWeb.PageView, "page.json")}
   end
 
   def render("show.json", %{page: page}) do
-    %{data: render_one(page, HelloPhoenix.Web.PageView, "page.json")}
+    %{data: render_one(page, HelloWeb.PageView, "page.json")}
   end
 
   def render("page.json", %{page: page}) do
@@ -363,8 +351,7 @@ defmodule HelloPhoenix.Web.PageView do
 end
 ```
 
-在视图中我们看到 `render/2` 函数`模式匹配` 了 `"index.json"`, `"show.json"` 和 `"page.json"`。在我们的控制器
-`show/2` action 中， `render conn, "show.json", page: page` 将会被视图中的 `render/3` 函数匹配。
+在视图中我们看到 `render/2` 函数`模式匹配` 了 `"index.json"`, `"show.json"` 和 `"page.json"`。在我们的控制器`show/2` action 中， `render conn, "show.json", page: page` 将会被视图中的 `render/3` 函数匹配。
 
 也就是 `render conn, "index.json", pages: pages` 会调用视图中的 `render("index.json", %{pages: pages})`。
 
@@ -402,12 +389,13 @@ end
 我们需要将 `author` 和 `page` 信息一起发送回去。我们可以像下面这样：
 
 ```elixir
-defmodule HelloPhoenix.Web.PageView do
-  use HelloPhoenix.Web, :view
+defmodule HelloWeb.PageView do
+  use HelloWeb, :view
+  alias HelloWeb.AuthorView
 
   def render("page_with_authors.json", %{page: page}) do
     %{title: page.title,
-      authors: render_many(page.authors, HelloPhoenix.Web.AuthorView, "author.json")}
+      authors: render_many(page.authors, AuthorView, "author.json")}
   end
 
   def render("page.json", %{page: page}) do
@@ -415,3 +403,13 @@ defmodule HelloPhoenix.Web.PageView do
   end
 end
 ```
+
+assigns 里使用名字是由 view 决定的，比如 `PageView` 会使用 `%{page: page}`,`AuthorView` 使用 `%{author: author}`, 你可以使用 `as` 该覆盖这条规则, 比如你想让 author 视图使用 `%{writer: writer}` 而不是原先的 `%{author: author}`:
+
+```elixir
+  def render("page_with_authors.json", %{page: page}) do
+    %{title: page.title,
+      authors: render_many(page.authors, AuthorView, "author.json", as: :writer)}
+  end
+```
+
