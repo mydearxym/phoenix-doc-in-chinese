@@ -1,3 +1,4 @@
+
 ### 通道
 
 频道 (Channels) 是 Phoenix 中一个激动人心并且十分强大的功能模块，它允许我们轻松的给应用添加软实时（soft-realtime）功能。Channels 的理念十分简单 -- 即发送和接收消息。发送者 (Senders) 按照主题（topics）广播消息，接收者（Receivers）通过订阅主题来接收这些消息。`发送者` 和 `接收者` 可以随时互换角色。
@@ -270,9 +271,10 @@ Sockets 将这些值以 map 的形式存储在 `socket.assigns`。
 
 当我们连接服务器的时候通常需要对客户端进行鉴权， 这可以简单的通过 [Phoenix.Token](https://hexdocs.pm/phoenix/Phoenix.Token.html) 分四步完成。
 
-**Step 1 - Assign a Token in the Connection**
+**第一步 - 在连接上赋值 Token**
 
-Let's say we have an authentication plug in our app called `OurAuth`. When `OurAuth` authenticates a user, it sets a value for the `:current_user` key in `conn.assigns`. Since the `current_user` exists, we can simply assign the user's token in the connection for use in the layout. We can wrap that behavior up in a private function plug, `put_user_token/2`. This could also be put in its own module as well. To make this all work, we just add `OurAuth` and `put_user_token/2` to the browser pipeline.
+比如我们现在有一个处理权限的 plug 叫做 `OurAuth`。 当 `OurAuth` 鉴权一个用户的时候，它会在`conn.assigns` 给 `:current_user` 赋值, 然后当下面的处理中判断有已鉴权
+的用户后, 我们在给它加上 token, 我们把这个功能用 `put_user_token/2` 封装起来，然后将 `OurAuth` 和 `put_user_token/2` 一起加到 browser pipeline 中.
 
 ```elixir
 pipeline :browser do
@@ -291,19 +293,19 @@ defp put_user_token(conn, _) do
 end
 ```
 
-Now our `conn.assigns` contains the `current_user` and `user_token`.
+现在我们的 `conn.assigns` 就包含了 `current_user` 和 `user_token`.
 
-**Step 2 - Pass the Token to the JavaScript**
+**第二步 - 将 Token 传递给 Javascript**
 
-Next we need to pass this token to JavaScript. We can do so inside a script tag in `web/templates/layout/app.html.eex`, as follows:
+具体细节请看  `web/templates/layout/app.html.eex`: 
 
 ```html
 <script>window.userToken = "<%= assigns[:user_token] %>";</script>
 ```
 
-**Step 3 - Pass the Token to the Socket Constructor and Verify**
+**第三步 - 将 Token 传到 Socket 并验证**
 
-We also need to pass the `:params` to the socket constructor and verify the user token in the `connect/2` function. To do so, edit `web/channels/user_socket.ex`, as follows:
+具体请看 `web/channels/user_socket.ex`:
 
 ```elixir
 def connect(%{"token" => token}, socket) do
@@ -317,24 +319,22 @@ def connect(%{"token" => token}, socket) do
 end
 ```
 
-In our JavaScript, we can use the token set previously when to pass the token when constructing the Socket:
+在 JavaScript 端，我们可以在连接的时候将 token 作为参数一起传入。
 
 ```javascript
 let socket = new Socket("/socket", {params: {token: window.userToken}})
 ```
 
-We used `Phoenix.Token.verify/4` to verify the user token provided by the client. `Phoenix.Token.verify/4` returns either `{:ok, user_id}` or `{:error, reason}`. We can pattern match on that return in a `case` statement. With a verified token, we set the user's id as the value to `:current_user` in the socket. Otherwise, we return `:error`.
+**第四步 - 在 javascript 中连接 socket**
 
-**Step 4 - Connect to the socket in JavaScript**
-
-With authentication set up, we can connect to sockets and channels from JavaScript.
+当权限 token 设置好以后，直接连接即可：
 
 ```javascript
 let socket = new Socket("/socket", {params: {token: window.userToken}})
 socket.connect()
 ```
 
-Now that we are connected, we can join channels with a topic:
+现在我们可以进入一个特定的 topic:
 
 ```elixir
 let channel = socket.channel("topic:subtopic", {})
@@ -345,27 +345,28 @@ channel.join()
 export default socket
 ```
 
-Note that token authentication is preferable since it's transport agnostic and well-suited for long running-connections like channels, as opposed to using sessions or authentication approaches.
+注意,相对于 sessions 或其他的 token 授权机制，这种介绍的方式是更适合长期连接，比如 channels 的场景。
 
-#### Fault Tolerance and Reliability Guarantees
+#### 错误处理和可靠性保证
 
-Servers restart, networks split, and clients lose connectivity. In order to design robust systems, we need to understand how Phoenix responds to these events and what guarantees it offers.
+为了设计可靠的系统，我们要考虑很多类似服务器重启，网络抖动，客户端失去连接等等的情况，我们需要了解 Phoenix 怎样处理这些情况。
 
-### Handling Reconnection
+### 处理重连
 
-Clients subscribe to topics, and Phoenix stores those subscriptions in an in-memory ETS table. If a channel crashes, the clients will need to reconnect to the topics they had previously subscribed to. Fortunately, the Phoenix JavaScript client knows how to do this. The server will notify all the clients of the crash. This will trigger each client's `Channel.onError` callback. The clients will attempt to reconnect to the server using an exponential back off strategy. Once they reconnect, they'll attempt to rejoin the topics they had previously subscribed to. If they are successful, they'll start receiving messages from those topics as before.
+客户端订阅主题后， Phoenix 会将订阅存储到内存中的 ETS 表中，一旦某个 channel 奔溃，服务器会自动通知客户端，触发其 `Channel.onError` 回调实现重连，继续接收之前订阅的主题，这一切都是自动实现的的。
 
-### Resending Client Messages
+### 客户端消息重发
 
-Channel clients queue outgoing messages into a `PushBuffer`, and send them to the server when there is a connection. If no connection is available, the client holds on to the messages until it can establish a new connection. With no connection, the client will hold the messages in memory until it establishes a connection, or until it receives a `timeout` event. The default timeout is set to 5000 milliseconds. The client won't persist the messages in the browser's local storage, so if the browser tab closes, the messages will be gone.
+客户端会将将要发送的消息存在 `PushBuffer` 中，当连接正常时发送。如果当前连接不可用,客户端会等待连接恢复，或者 `timeout` 事件被触发，默认超时时间是 5 秒。注意客户端不会将消息持久化到浏览器的本地存储中，所以一旦该 tab 页被关闭，消息将丢失。
 
-### Resending Server Messages
+### 服务器端消息重发
 
-Phoenix uses an at-most-once strategy when sending messages to clients. If the client is offline and misses the message, Phoenix won't resend it. Phoenix doesn't persist messages on the server. If the server restarts, unsent messages will be gone. If our application needs stronger guarantees around message delivery, we'll need to write that code ourselves. Common approaches involve persisting messages on the server and having clients request missing messages. For an example, see Chris McCord's Phoenix training: [client code](https://github.com/chrismccord/elixirconf_training/blob/master/web/static/js/app.js#L38-L39) and [server code](https://github.com/chrismccord/elixirconf_training/blob/master/web/channels/document_channel.ex#L13-L19).
+Phoenix 遵循 `最多一次` 的消息发送机制。如果客户端因为离线或其他原因没有收到消息，Phoenix 不会重发该消息。Phoenix 不会将消息存储在服务器上，也就是说如果服务器重启了，消息也会丢失。如果你需要更好的方式，你需要自己实现，常见的思路是在服务器存储消息，并让客户端请求丢失的消息等。 作为例子，你可以参考 Chris McCord's 所写的:[client code](https://github.com/chrismccord/elixirconf_training/blob/master/web/static/js/app.js#L38-L39) 和[server code](https://github.com/chrismccord/elixirconf_training/blob/master/web/channels/document_channel.ex#L13-L19).
 
-### Presence
+### 持久化
 
-Phoenix ships with a way of handling online users that is built on top of Phoenix.PubSub and Phoenix channels. The usage of presence is covered in the [presence guide](presence.html).
+Phoenix 有一个构建在 `Phoenix.PubSub` 和 `Phoenix channels` 之上处理在线用户的解决方案，具体请看这里[presence章节](https://github.com/phoenixframework/phoenix/blob/master/guides/docs/presence.md)(TODO)
+
 
 #### 实列应用
 
